@@ -1,0 +1,211 @@
+# overrides.yml
+paths:
+  # ───────────── custom_metadata_fields ─────────────
+  /v1/customMetadataFields:
+    post:
+      x-fern-sdk-group-name: [custom_metadata_fields]
+      x-fern-sdk-method-name: create
+    get:
+      x-fern-sdk-group-name: [custom_metadata_fields]
+      x-fern-sdk-method-name: list
+  /v1/customMetadataFields/{id}:
+    patch:
+      x-fern-sdk-group-name: [custom_metadata_fields]
+      x-fern-sdk-method-name: update
+    delete:
+      x-fern-sdk-group-name: [custom_metadata_fields]
+      x-fern-sdk-method-name: delete
+
+  # ───────────────────── files (top-level) ─────────────────────
+  /api/v1/files/upload:
+    post:
+      x-fern-sdk-group-name:
+        - files
+      x-fern-sdk-method-name: upload
+
+  /api/v2/files/upload:
+    post:
+      x-fern-sdk-group-name:
+        - beta
+        - v2
+        - files
+      x-fern-sdk-method-name: upload
+
+  /v1/files:
+    get:
+      x-fern-sdk-group-name: [assets]
+      x-fern-sdk-method-name: list
+
+  /v1/files/{fileId}:
+    delete:
+      x-fern-sdk-group-name: [files]
+      x-fern-sdk-method-name: delete
+  /v1/files/copy:
+    post:
+      x-fern-sdk-group-name: [files]
+      x-fern-sdk-method-name: copy
+  /v1/files/move:
+    post:
+      x-fern-sdk-group-name: [files]
+      x-fern-sdk-method-name: move
+  /v1/files/rename:
+    put:
+      x-fern-sdk-group-name: [files]
+      x-fern-sdk-method-name: rename
+
+  # ───────────────────── files.details ─────────────────────
+  /v1/files/{fileId}/details:
+    get:
+      x-fern-sdk-group-name: [files, details]
+      x-fern-sdk-method-name: retrieve
+    patch:
+      x-fern-sdk-group-name: [files, details]
+      x-fern-sdk-method-name: update
+
+  # ───────────────────── files.batch ─────────────────────
+  /v1/files/batch/deleteByFileIds:
+    post:
+      x-fern-sdk-group-name: [files, batch]
+      x-fern-sdk-method-name: delete
+
+  /v1/files/addTags:
+    post:
+      x-fern-sdk-group-name: [files, batch]
+      x-fern-sdk-method-name: add_tags
+  /v1/files/removeTags:
+    post:
+      x-fern-sdk-group-name: [files, batch]
+      x-fern-sdk-method-name: remove_tags
+  /v1/files/removeAITags:
+    post:
+      x-fern-sdk-group-name: [files, batch]
+      x-fern-sdk-method-name: remove_AI_tags
+
+  # ───────────────────── files.versions ─────────────────────
+  /v1/files/{fileId}/versions:
+    get:
+      x-fern-sdk-group-name: [files, versions]
+      x-fern-sdk-method-name: list
+  /v1/files/{fileId}/versions/{versionId}:
+    get:
+      x-fern-sdk-group-name: [files, versions]
+      x-fern-sdk-method-name: retrieve
+    delete:
+      x-fern-sdk-group-name: [files, versions]
+      x-fern-sdk-method-name: delete
+  /v1/files/{fileId}/versions/{versionId}/restore:
+    put:
+      x-fern-sdk-group-name: [files, versions]
+      x-fern-sdk-method-name: restore
+
+  # ───────────────────── files.purge ─────────────────────
+  /v1/files/purge:
+    post:
+      x-fern-sdk-group-name: [files, purge]
+      x-fern-sdk-method-name: execute
+  /v1/files/purge/{requestId}:
+    get:
+      x-fern-sdk-group-name: [files, purge]
+      x-fern-sdk-method-name: status
+
+  # ───────────────────── files.metadata ─────────────────────
+  /v1/files/{fileId}/metadata:
+    get:
+      x-fern-sdk-group-name: [files, metadata]
+      x-fern-sdk-method-name: retrieve
+  /v1/files/metadata:
+    get:
+      x-fern-sdk-group-name: [files, metadata]
+      x-fern-sdk-method-name: from_url
+
+  # ───────────────────── bulk_jobs ─────────────────────
+  /v1/bulkJobs/copyFolder:
+    post:
+      x-fern-sdk-group-name: [bulk_jobs]
+      x-fern-sdk-method-name: copy_folder
+  /v1/bulkJobs/moveFolder:
+    post:
+      x-fern-sdk-group-name: [bulk_jobs]
+      x-fern-sdk-method-name: move_folder
+  /v1/bulkJobs/renameFolder:
+    post:
+      x-fern-sdk-group-name: [bulk_jobs]
+      x-fern-sdk-method-name: rename_folder
+  /v1/bulkJobs/{jobId}:
+    get:
+      x-fern-sdk-group-name: [bulk_jobs]
+      x-fern-sdk-method-name: status
+
+  # ───────────────────── folder ─────────────────────
+  /v1/folder:
+    post:
+      x-fern-sdk-group-name: [folders]
+      x-fern-sdk-method-name: create
+    delete:
+      x-fern-sdk-group-name: [folders]
+      x-fern-sdk-method-name: delete
+
+  # acccount management
+  /v1/accounts/usage:
+    get:
+      x-fern-sdk-group-name:
+        - accounts
+      x-fern-sdk-method-name: usage
+
+  /v1/accounts/origins:
+    get:
+      x-fern-sdk-group-name:
+        - accounts
+        - origins
+      x-fern-sdk-method-name: list
+    post:
+      x-fern-sdk-group-name:
+        - accounts
+        - origins
+      x-fern-sdk-method-name: create
+
+  /v1/accounts/origins/{id}:
+    get:
+      x-fern-sdk-group-name:
+        - accounts
+        - origins
+      x-fern-sdk-method-name: retrieve
+    put:
+      x-fern-sdk-group-name:
+        - accounts
+        - origins
+      x-fern-sdk-method-name: update
+    delete:
+      x-fern-sdk-group-name:
+        - accounts
+        - origins
+      x-fern-sdk-method-name: delete
+
+  /v1/accounts/url-endpoints:
+    get:
+      x-fern-sdk-group-name:
+        - accounts
+        - url_endpoints
+      x-fern-sdk-method-name: list
+    post:
+      x-fern-sdk-group-name:
+        - accounts
+        - url_endpoints
+      x-fern-sdk-method-name: create
+
+  /v1/accounts/url-endpoints/{id}:
+    get:
+      x-fern-sdk-group-name:
+        - accounts
+        - url_endpoints
+      x-fern-sdk-method-name: retrieve
+    put:
+      x-fern-sdk-group-name:
+        - accounts
+        - url_endpoints
+      x-fern-sdk-method-name: update
+    delete:
+      x-fern-sdk-group-name:
+        - accounts
+        - url_endpoints
+      x-fern-sdk-method-name: delete
