@@ -8,7 +8,7 @@ info:
     email: developer@imagekit.io
     name: ImageKit Team
     url: https://imagekit.io
-  termsOfService: 'https://imagekit.io/terms/'
+  termsOfService: "https://imagekit.io/terms/"
 servers:
   - url: https://api.imagekit.io
 paths:
@@ -22,7 +22,7 @@ paths:
       summary: Upload file V1
       description: |
         ImageKit.io allows you to upload files directly from both the server and client sides. For server-side uploads, private API key authentication is used. For client-side uploads, generate a one-time `token`, `signature`, and `expiration` from your secure backend using private API. [Learn more](/docs/api-reference/upload-file/upload-file#how-to-implement-client-side-file-upload) about how to implement client-side file upload.
-        
+
         The [V2 API](/docs/api-reference/upload-file/upload-file-v2) enhances security by verifying the entire payload using JWT.
 
         **File size limit** \
@@ -36,15 +36,15 @@ paths:
         - A full-fledged [upload widget using Uppy](https://github.com/imagekit-samples/uppy-uploader), supporting file selections from local storage, URL, Dropbox, Google Drive, Instagram, and more.
         - [Quick start guides](/docs/quick-start-guides) for various frameworks and technologies.
       requestBody:
-       content:
+        content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/FileUploadV1'
+              $ref: "#/components/schemas/FileUploadV1"
       responses:
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: File uploaded successfully.
           content:
@@ -81,19 +81,19 @@ paths:
                   message:
                     type: string
                     examples:
-                    - Your request is missing file parameter.
-                    - Your request contains both signature and basic auth parameter. Use only one method, you might be exposing your private API key.
-                    - Your request contains invalid expire parameter. Expire parameter should be a Unix time in less than 1 hour into the future.
-                    - A file with the same name already exists at the exact location. We could not overwrite it because both overwriteFile and useUniqueFileName are set to false.
-                    - Your request contains invalid file parameter. The file size exceeds limits.
-                    - Upload Limit Exceeded.
-                    - Extensions quota exceeded.
-                    - The file could not be uploaded because the transformation field is invalid.
-                    - The file could not be uploaded because transformations are supported only for image and video files.
-                    - The file could not be uploaded because the detected file type & post-transformation are incompatible.
-                    - You have sent too many requests to update the file recently. Please try again later.
-                    - Your request contains invalid syntax for the checks parameter.
-                    - Your request failed 'checks' validation.
+                      - Your request is missing file parameter.
+                      - Your request contains both signature and basic auth parameter. Use only one method, you might be exposing your private API key.
+                      - Your request contains invalid expire parameter. Expire parameter should be a Unix time in less than 1 hour into the future.
+                      - A file with the same name already exists at the exact location. We could not overwrite it because both overwriteFile and useUniqueFileName are set to false.
+                      - Your request contains invalid file parameter. The file size exceeds limits.
+                      - Upload Limit Exceeded.
+                      - Extensions quota exceeded.
+                      - The file could not be uploaded because the transformation field is invalid.
+                      - The file could not be uploaded because transformations are supported only for image and video files.
+                      - The file could not be uploaded because the detected file type & post-transformation are incompatible.
+                      - You have sent too many requests to update the file recently. Please try again later.
+                      - Your request contains invalid syntax for the checks parameter.
+                      - Your request failed 'checks' validation.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
@@ -117,19 +117,19 @@ paths:
         A file can have a maximum of 100 versions.
 
         **Demo applications**
-        
+
         - A full-fledged [upload widget using Uppy](https://github.com/imagekit-samples/uppy-uploader), supporting file selections from local storage, URL, Dropbox, Google Drive, Instagram, and more.
         - [Quick start guides](/docs/quick-start-guides) for various frameworks and technologies.
       requestBody:
-       content:
+        content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/FileUploadV2'
+              $ref: "#/components/schemas/FileUploadV2"
       responses:
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: File uploaded successfully.
           content:
@@ -166,22 +166,22 @@ paths:
                   message:
                     type: string
                     examples:
-                    - Your request is missing file parameter.
-                    - Your request contains both token and basic auth parameter. Use only one method, you might be exposing your private API key.
-                    - Your request contains invalid payload. It does not match with the payload used to generate token.
-                    - Your request is missing token parameter.
-                    - Your request contains expired token.
-                    - Your request has invalid token.
-                    - A file with the same name already exists at the exact location. We could not overwrite it because both overwriteFile and useUniqueFileName are set to false.
-                    - Your request contains invalid file parameter. The file size exceeds limits.
-                    - Upload Limit Exceeded.
-                    - Extensions quota exceeded.
-                    - The file could not be uploaded because the transformation field is invalid.
-                    - The file could not be uploaded because transformations are supported only for image and video files.
-                    - The file could not be uploaded because the detected file type & post-transformation are incompatible.
-                    - You have sent too many requests to update the file recently. Please try again later.
-                    - Your request contains invalid syntax for the checks parameter.
-                    - Your request failed 'checks' validation.
+                      - Your request is missing file parameter.
+                      - Your request contains both token and basic auth parameter. Use only one method, you might be exposing your private API key.
+                      - Your request contains invalid payload. It does not match with the payload used to generate token.
+                      - Your request is missing token parameter.
+                      - Your request contains expired token.
+                      - Your request has invalid token.
+                      - A file with the same name already exists at the exact location. We could not overwrite it because both overwriteFile and useUniqueFileName are set to false.
+                      - Your request contains invalid file parameter. The file size exceeds limits.
+                      - Upload Limit Exceeded.
+                      - Extensions quota exceeded.
+                      - The file could not be uploaded because the transformation field is invalid.
+                      - The file could not be uploaded because transformations are supported only for image and video files.
+                      - The file could not be uploaded because the detected file type & post-transformation are incompatible.
+                      - You have sent too many requests to update the file recently. Please try again later.
+                      - Your request contains invalid syntax for the checks parameter.
+                      - Your request failed 'checks' validation.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
@@ -291,11 +291,11 @@ paths:
                 maxValue: 3000
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "201":
           description: Custom metadata field created successfully.
           content:
@@ -344,11 +344,11 @@ paths:
           default: false
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: Array of custom metadata field objects.
           content:
@@ -389,11 +389,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: File details object.
           content:
@@ -481,7 +481,7 @@ paths:
         content:
           application/json:
             schema:
-              oneOf: 
+              oneOf:
                 - title: Update file details
                   type: object
                   properties:
@@ -494,7 +494,7 @@ paths:
                           enum: ["all"]
                       description: |
                         An array of AITags associated with the file that you want to remove, e.g. `["car", "vehicle", "motorsports"]`. 
-                        
+
                         If you want to remove all AITags associated with the file, send a string - "all".
 
                         Note: The remove operation for `AITags` executes before any of the `extensions` are processed.
@@ -506,8 +506,8 @@ paths:
                       type: array
                       items:
                         anyOf:
-                          - $ref: '#/components/schemas/RemovedotBGExtension'
-                          - $ref: '#/components/schemas/AutoTaggingExtension'
+                          - $ref: "#/components/schemas/RemovedotBGExtension"
+                          - $ref: "#/components/schemas/AutoTaggingExtension"
                       description: >
                         Array of extensions to be applied to the asset. Each extension can be configured with specific parameters based on the extension type.
                     tags:
@@ -548,7 +548,7 @@ paths:
                           type: boolean
                           description: |
                             Set to `true` to publish/unpublish all versions of the file. Set to `false` to publish/unpublish only the current version of the file.
-                        
+
             example:
               removeAITags: ["car", "vehicle", "motorsports"]
               webhookUrl: https://webhook.site/0d6b6c7a-8e5a-4b3a-8b7c-0d6b6c7a8e5a
@@ -571,11 +571,11 @@ paths:
               customMetadata: { "brand": "Nike", "color": "red" }
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: Updated file details object.
           content:
@@ -658,8 +658,8 @@ paths:
                   message:
                     type: string
                     examples:
-                    - Invalid custom metadata.
-                    - Your request contains invalid fileId parameter.
+                      - Invalid custom metadata.
+                      - Your request contains invalid fileId parameter.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
@@ -763,11 +763,11 @@ paths:
                 maxValue: 3000
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "400":
           description: Bad request.
           content:
@@ -778,13 +778,13 @@ paths:
                   message:
                     type: string
                     examples:
-                     - Cannot update a deleted custom metadata fields.
-                     - Either label or schema should be provided.
-                     - A custom metadata field with this label already exists.
-                     - Invalid schema object.
-                     - Name cannot be updated.
-                     - Missing id parameter.
-                     - Your request contains invalid ID parameter.
+                      - Cannot update a deleted custom metadata fields.
+                      - Either label or schema should be provided.
+                      - A custom metadata field with this label already exists.
+                      - Invalid schema object.
+                      - Name cannot be updated.
+                      - Missing id parameter.
+                      - Your request contains invalid ID parameter.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
@@ -833,11 +833,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "400":
           description: Bad request.
           content:
@@ -848,8 +848,8 @@ paths:
                   message:
                     type: string
                     examples:
-                     - Missing id parameter.
-                     - Your request contains invalid ID parameter.
+                      - Missing id parameter.
+                      - Your request contains invalid ID parameter.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
@@ -972,11 +972,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: List of assets.
           content:
@@ -1056,7 +1056,7 @@ paths:
                   name: summer
                   createdAt: "2023-04-21T03:03:00.869Z"
                   updatedAt: "2023-04-21T03:10:22.374Z"
-                  folderPath: "/sale"     
+                  folderPath: "/sale"
         "400":
           description: Bad Request.
           content:
@@ -1066,7 +1066,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    examples: 
+                    examples:
                       - The value of skip parameter should be greater than or equal to 0. Value sent is -1.
                       - Minimum value of limit parameter is 1. Value sent is 0.
                       - Maximum value of limit parameter is 1000. Value sent is 2000.
@@ -1097,11 +1097,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "204":
           description: File deleted successfully.
         "404":
@@ -1163,11 +1163,11 @@ paths:
                 - 598821f949c0a938d57563be
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: Files deleted successfully.
           content:
@@ -1218,10 +1218,10 @@ paths:
                   message:
                     type: string
                     examples:
-                     - fileIds parameter is missing.
-                     - fileIds cannot have more than 100 items.
-                     - fileIds should be an Array.
-                     - fileIds is empty.
+                      - fileIds parameter is missing.
+                      - fileIds cannot have more than 100 items.
+                      - fileIds should be an Array.
+                      - fileIds is empty.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
@@ -1281,11 +1281,11 @@ paths:
                   example: false
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "204":
           description: File copied successfully.
           content:
@@ -1360,11 +1360,11 @@ paths:
                   example: /folder/to/move/into/
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "204":
           description: File moved successfully.
           content:
@@ -1457,11 +1457,11 @@ paths:
                   example: true
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: On success, you will receive `purgeRequestId` in the response body, which can be used to get the purge request status. This is only sent if the `purgeCache` is set to `true` in the request. Otherwise, the response is an empty JSON.
           content:
@@ -1489,7 +1489,7 @@ paths:
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
-        
+
         "404":
           description: If no file is found at the specified filePath in the media library, then a 404 response is returned.
           content:
@@ -1560,11 +1560,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: Array of file version objects.
           content:
@@ -1638,7 +1638,7 @@ paths:
                         brand: Nike
                         color: red
                       createdAt: "2019-08-24T06:15:41.313Z"
-                      updatedAt: "2019-08-24T06:15:41.313Z" 
+                      updatedAt: "2019-08-24T06:15:41.313Z"
         "404":
           description: File not found.
           content:
@@ -1690,11 +1690,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: File version details object.
           content:
@@ -1733,7 +1733,7 @@ paths:
                   brand: Nike
                   color: red
                 createdAt: "2019-08-24T06:15:41.313Z"
-                updatedAt: "2019-08-24T06:15:41.313Z"        
+                updatedAt: "2019-08-24T06:15:41.313Z"
         "404":
           description: File version not found.
           content:
@@ -1789,11 +1789,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "204":
           description: File version deleted successfully.
           content:
@@ -1809,10 +1809,10 @@ paths:
                 properties:
                   message:
                     type: string
-                    examples: 
-                    - You cannot delete current version of a file.
-                    - Your request contains invalid fileId parameter.
-                    - Your request contains invalid versionId parameter.
+                    examples:
+                      - You cannot delete current version of a file.
+                      - Your request contains invalid fileId parameter.
+                      - Your request contains invalid versionId parameter.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
@@ -1855,11 +1855,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: Restored file details object.
           content:
@@ -1968,11 +1968,11 @@ paths:
                 - sale2019
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: Tags added successfully.
           content:
@@ -2012,7 +2012,7 @@ paths:
                           description: |
                             Error message for the file that was not updated.
                     description: |
-                      An array of fileIds that were not updated and the error.      
+                      An array of fileIds that were not updated and the error.
         "404":
           description: File not found.
           content:
@@ -2041,7 +2041,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    examples: 
+                    examples:
                       - fileIds parameter is missing.
                       - fileIds is empty.
                       - A maximum of 50 files can be edited at a time.
@@ -2092,11 +2092,11 @@ paths:
                 - sale2019
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: Tags removed successfully.
           content:
@@ -2136,7 +2136,7 @@ paths:
                           description: |
                             Error message for the file that was not updated.
                     description: |
-                      An array of fileIds that were not updated and the error.        
+                      An array of fileIds that were not updated and the error.
         "404":
           description: File not found.
           content:
@@ -2216,11 +2216,11 @@ paths:
                 - sale2019
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: AITags removed successfully.
           content:
@@ -2260,7 +2260,7 @@ paths:
                           description: |
                             Error message for the file that was not updated.
                     description: |
-                      An array of fileIds that were not updated and the error. 
+                      An array of fileIds that were not updated and the error.
         "404":
           description: File not found.
           content:
@@ -2329,11 +2329,11 @@ paths:
               parentFolderPath: /product/images/
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "201":
           description: Folder created successfully.
           content:
@@ -2380,11 +2380,11 @@ paths:
               folderPath: /folder/to/delete/
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "204":
           description: Folder deleted successfully.
           content:
@@ -2458,11 +2458,11 @@ paths:
                   example: true
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: Job submitted successfully. A `jobId` will be returned.
           content:
@@ -2542,11 +2542,11 @@ paths:
                   example: /path/of/destination/folder
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: Job submitted successfully. A `jobId` will be returned.
           content:
@@ -2659,16 +2659,16 @@ paths:
                 properties:
                   message:
                     type: string
-                    examples: 
+                    examples:
                       - folderPath cannot be root.
                       - folderPath parameter is missing.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "404":
           description: Folder not found
           content:
@@ -2710,7 +2710,7 @@ paths:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
   /v1/bulkJobs/{jobId}:
     get:
       tags:
@@ -2730,11 +2730,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: |
             On success, you will receive the status of the bulk job in the response body.
@@ -2795,11 +2795,11 @@ paths:
                   example: https://ik.imagekit.io/your_imagekit_id/default-image.jpg
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "201":
           description: Purge request submitted successfully. A `requestId` will be returned.
           content:
@@ -2842,11 +2842,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: |
             On success, you will receive the status of the purge request in the response body.
@@ -2896,11 +2896,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: File metadata object.
           content:
@@ -2909,10 +2909,10 @@ paths:
                 $ref: "#/components/schemas/Metadata"
               examples:
                 Image:
-                  value: 
+                  value:
                     $ref: "#/components/examples/ImageMetadata"
                 Video:
-                  value: 
+                  value:
                     $ref: "#/components/examples/VideoMetadata"
         "404":
           description: File not found.
@@ -2958,11 +2958,11 @@ paths:
             type: string
       responses:
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
         "200":
           description: File metadata object.
           content:
@@ -2971,10 +2971,10 @@ paths:
                 $ref: "#/components/schemas/Metadata"
               examples:
                 Image:
-                  value: 
+                  value:
                     $ref: "#/components/examples/ImageMetadata"
                 Video:
-                  value: 
+                  value:
                     $ref: "#/components/examples/VideoMetadata"
         "404":
           description: File not found.
@@ -3066,19 +3066,19 @@ paths:
                   message:
                     type: string
                     examples:
-                    - startDate and endDate should be within 90 days.
-                    - startDate and endDate are required in query parameters.
-                    - startDate and endDate should be in format YYYY-MM-DD.
-                    - startDate should be before endDate.
+                      - startDate and endDate should be within 90 days.
+                      - startDate and endDate are required in query parameters.
+                      - startDate and endDate should be in format YYYY-MM-DD.
+                      - startDate should be before endDate.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
         "429":
-          $ref: '#/components/responses/RateLimitExceeded'
+          $ref: "#/components/responses/RateLimitExceeded"
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: '#/components/responses/Forbidden'
+          $ref: "#/components/responses/Forbidden"
   /v1/accounts/origins:
     get:
       summary: List origins
@@ -3097,14 +3097,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OriginResponseArray"
-        "401":
-          &a1
+        "401": &a1
           $ref: "#/components/responses/Unauthorized"
-        "403":
-          &a2
+        "403": &a2
           $ref: "#/components/responses/Forbidden"
-        "429":
-          &a3
+        "429": &a3
           $ref: "#/components/responses/RateLimitExceeded"
     post:
       summary: Create origin
@@ -3166,11 +3163,13 @@ paths:
           in: path
           name: id
           schema:
-            description: Unique identifier for the origin. This is generated by ImageKit
+            description:
+              Unique identifier for the origin. This is generated by ImageKit
               when you create a new origin.
             type: string
           required: true
-          description: Unique identifier for the origin. This is generated by ImageKit
+          description:
+            Unique identifier for the origin. This is generated by ImageKit
             when you create a new origin.
       responses:
         "200":
@@ -3387,12 +3386,14 @@ paths:
           in: path
           name: id
           schema:
-            description: Unique identifier for the URL-endpoint. This is generated by
+            description:
+              Unique identifier for the URL-endpoint. This is generated by
               ImageKit when you create a new URL-endpoint. For the default
               URL-endpoint, this is always `default`.
             type: string
           required: true
-          description: Unique identifier for the URL-endpoint. This is generated by
+          description:
+            Unique identifier for the URL-endpoint. This is generated by
             ImageKit when you create a new URL-endpoint. For the default
             URL-endpoint, this is always `default`.
       responses:
@@ -3964,7 +3965,8 @@ components:
           minLength: 1
           maxLength: 1000
         urlPrefix:
-          description: Path segment appended to your base URL to form the endpoint
+          description:
+            Path segment appended to your base URL to form the endpoint
             (letters, digits, and hyphens only — or empty for the default
             endpoint).
           example: product-images
@@ -3972,7 +3974,8 @@ components:
           type: string
           maxLength: 100
         origins:
-          description: Ordered list of origin IDs to try when the file isn’t in the Media
+          description:
+            Ordered list of origin IDs to try when the file isn’t in the Media
             Library; ImageKit checks them in the sequence provided. Origin must
             be created before it can be used in a URL endpoint.
           example:
@@ -3982,7 +3985,8 @@ components:
           maxItems: 10
           type: array
           items:
-            description: Unique identifier for the origin. This is generated by ImageKit
+            description:
+              Unique identifier for the origin. This is generated by ImageKit
               when you create a new origin.
             type: string
         urlRewriter:
@@ -3996,7 +4000,8 @@ components:
                   enum:
                     - CLOUDINARY
                 preserveAssetDeliveryTypes:
-                  description: Whether to preserve `<asset_type>/<delivery_type>` in the rewritten
+                  description:
+                    Whether to preserve `<asset_type>/<delivery_type>` in the rewritten
                     URL.
                   example: true
                   default: false
@@ -4071,7 +4076,8 @@ components:
               example: raw-assets
             id:
               readOnly: true
-              description: Unique identifier for the origin. This is generated by ImageKit
+              description:
+                Unique identifier for the origin. This is generated by ImageKit
                 when you create a new origin.
               type: string
           required:
@@ -4127,7 +4133,8 @@ components:
               type: boolean
             id:
               readOnly: true
-              description: Unique identifier for the origin. This is generated by ImageKit
+              description:
+                Unique identifier for the origin. This is generated by ImageKit
                 when you create a new origin.
               type: string
           required:
@@ -4175,7 +4182,8 @@ components:
               example: raw-assets
             id:
               readOnly: true
-              description: Unique identifier for the origin. This is generated by ImageKit
+              description:
+                Unique identifier for the origin. This is generated by ImageKit
                 when you create a new origin.
               type: string
           required:
@@ -4220,7 +4228,8 @@ components:
               type: boolean
             id:
               readOnly: true
-              description: Unique identifier for the origin. This is generated by ImageKit
+              description:
+                Unique identifier for the origin. This is generated by ImageKit
                 when you create a new origin.
               type: string
           required:
@@ -4257,7 +4266,8 @@ components:
               format: uri
             id:
               readOnly: true
-              description: Unique identifier for the origin. This is generated by ImageKit
+              description:
+                Unique identifier for the origin. This is generated by ImageKit
                 when you create a new origin.
               type: string
           required:
@@ -4304,7 +4314,8 @@ components:
               pattern: ^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$
             id:
               readOnly: true
-              description: Unique identifier for the origin. This is generated by ImageKit
+              description:
+                Unique identifier for the origin. This is generated by ImageKit
                 when you create a new origin.
               type: string
           required:
@@ -4354,7 +4365,8 @@ components:
               maxLength: 100
             id:
               readOnly: true
-              description: Unique identifier for the origin. This is generated by ImageKit
+              description:
+                Unique identifier for the origin. This is generated by ImageKit
                 when you create a new origin.
               type: string
           required:
@@ -4395,7 +4407,8 @@ components:
               example: https://akeneo.company.com
             id:
               readOnly: true
-              description: Unique identifier for the origin. This is generated by ImageKit
+              description:
+                Unique identifier for the origin. This is generated by ImageKit
                 when you create a new origin.
               type: string
           required:
@@ -4422,7 +4435,8 @@ components:
           minLength: 1
           maxLength: 1000
         urlPrefix:
-          description: Path segment appended to your base URL to form the endpoint
+          description:
+            Path segment appended to your base URL to form the endpoint
             (letters, digits, and hyphens only — or empty for the default
             endpoint).
           example: product-images
@@ -4430,7 +4444,8 @@ components:
           type: string
           maxLength: 100
         origins:
-          description: Ordered list of origin IDs to try when the file isn’t in the Media
+          description:
+            Ordered list of origin IDs to try when the file isn’t in the Media
             Library; ImageKit checks them in the sequence provided. Origin must
             be created before it can be used in a URL endpoint.
           example:
@@ -4440,7 +4455,8 @@ components:
           maxItems: 10
           type: array
           items:
-            description: Unique identifier for the origin. This is generated by ImageKit
+            description:
+              Unique identifier for the origin. This is generated by ImageKit
               when you create a new origin.
             type: string
         urlRewriter:
@@ -4454,7 +4470,8 @@ components:
                   enum:
                     - CLOUDINARY
                 preserveAssetDeliveryTypes:
-                  description: Whether to preserve `<asset_type>/<delivery_type>` in the rewritten
+                  description:
+                    Whether to preserve `<asset_type>/<delivery_type>` in the rewritten
                     URL.
                   example: true
                   default: false
@@ -4486,7 +4503,8 @@ components:
           type: object
         id:
           readOnly: true
-          description: Unique identifier for the URL-endpoint. This is generated by
+          description:
+            Unique identifier for the URL-endpoint. This is generated by
             ImageKit when you create a new URL-endpoint. For the default
             URL-endpoint, this is always `default`.
           type: string
@@ -4516,12 +4534,12 @@ components:
           type: string
           description: >
             The name with which the file has to be uploaded.
-            
+
             The file name can contain:
-            
+
               - Alphanumeric Characters: `a-z`, `A-Z`, `0-9`.
               - Special Characters: `.`, `-`
-            
+
             Any other character including space will be replaced by `_`
         publicKey:
           type: string
@@ -4532,7 +4550,7 @@ components:
           description: >
             HMAC-SHA1 digest of the token+expire using your ImageKit.io private API key as a key. Learn how to create a signature on the page below. This should be in lowercase.
 
-            
+
             Signature must be calculated on the server-side. This field is only required for authentication when uploading a file from the client side.
         expire:
           type: string
@@ -4550,11 +4568,11 @@ components:
           default: "true"
           description: >
             Whether to use a unique filename for this file or not.
-            
-            
+
+
             If `true`, ImageKit.io will add a unique suffix to the filename parameter to get a unique filename.
-            
-            
+
+
             If `false`, then the image is uploaded with the provided filename parameter, and any existing file with the same name is replaced.
           enum:
             - "true"
@@ -4563,12 +4581,12 @@ components:
           type: string
           description: >
             Set the tags while uploading the file.
-            
-            
+
+
             Comma-separated value of tags in the format `tag1,tag2,tag3`.
             The maximum length of all characters should not exceed 500. `%` is not allowed.
-            
-            
+
+
             If this field is not specified and the file is overwritten then the tags will be removed.
           example: "t-shirt,round-neck,men"
         folder:
@@ -4576,13 +4594,13 @@ components:
           description: >
             The folder path in which the image has to be uploaded.
             If the folder(s) didn't exist before, a new folder(s) is created.
-            
-            
+
+
             The folder name can contain:
-            
+
               - Alphanumeric Characters: `a-z` , `A-Z` , `0-9`
               - Special Characters: `/` , `_` , `-`
-            
+
             Using multiple `/` creates a nested folder.
           default: "/"
         isPrivateFile:
@@ -4590,8 +4608,8 @@ components:
           default: "false"
           description: >
             Whether to mark the file as private or not.
-            
-            
+
+
             If `true`, the file is marked as private and is accessible only using named transformation or signed URL.
           enum:
             - "true"
@@ -4601,11 +4619,11 @@ components:
           default: "true"
           description: >
             Whether to upload file as published or not.
-            
-            
+
+
             If `false`, the file is marked as unpublished, which restricts access to the file only via the media library. Files in draft or unpublished state can only be publicly accessed after being published.
-            
-            
+
+
             The option to upload in draft state is only available in custom enterprise pricing plans.
           enum:
             - "true"
@@ -4687,16 +4705,16 @@ components:
           type: string
           description: >
             Stringified JSON object with properties for pre and post transformations:
-            
-            
+
+
             `pre` - Accepts a "string" containing a valid transformation used for requesting a pre-transformation for an image or a video file.
-            
-            
+
+
             `post` - Accepts an array of objects with properties:
               - `type`: One of `transformation`, `gif-to-video`, `thumbnail`, or `abs` (Adaptive bitrate streaming).
               - `value`: A "string" corresponding to the required transformation. Required if `type` is `transformation` or `abs`. Optional if `type` is `gif-to-video` or `thumbnail`.
               - `protocol`: Either `hls` or `dash`, applicable only if `type` is `abs`.
-            
+
             Read more about [Adaptive bitrate streaming (ABS)](/docs/adaptive-bitrate-streaming).
           example: |
             '{"pre":"width:300,height:300,quality:80","post":[{"type":"thumbnail","value":"width:100,height:100"}]}'
@@ -4704,7 +4722,7 @@ components:
           type: string
           description: >
             Server-side checks to run on the asset.
-            
+
             Read more about [Upload API checks](/docs/api-reference/upload-file/upload-file#upload-api-checks).
           example: >
             "request.folder" : "marketing/"
@@ -4745,11 +4763,11 @@ components:
           default: "true"
           description: >
             Whether to use a unique filename for this file or not.
-            
-            
+
+
             If `true`, ImageKit.io will add a unique suffix to the filename parameter to get a unique filename.
-            
-            
+
+
             If `false`, then the image is uploaded with the provided filename parameter, and any existing file with the same name is replaced.
           enum:
             - "true"
@@ -4758,12 +4776,12 @@ components:
           type: string
           description: >
             Set the tags while uploading the file.
-            
-            
+
+
             Comma-separated value of tags in the format `tag1,tag2,tag3`.
             The maximum length of all characters should not exceed 500. `%` is not allowed.
-            
-            
+
+
             If this field is not specified and the file is overwritten then the tags will be removed.
           example: "t-shirt,round-neck,men"
         folder:
@@ -4776,8 +4794,8 @@ components:
           default: "false"
           description: >
             Whether to mark the file as private or not.
-            
-            
+
+
             If `true`, the file is marked as private and is accessible only using named transformation or signed URL.
           enum:
             - "true"
@@ -4787,11 +4805,11 @@ components:
           default: "true"
           description: >
             Whether to upload file as published or not.
-            
-            
+
+
             If `false`, the file is marked as unpublished, which restricts access to the file only via the media library. Files in draft or unpublished state can only be publicly accessed after being published.
-            
-            
+
+
             The option to upload in draft state is only available in custom enterprise pricing plans.
           enum:
             - "true"
@@ -4873,16 +4891,16 @@ components:
           type: string
           description: >
             Stringified JSON object with properties for pre and post transformations:
-            
-            
+
+
             `pre` - Accepts a "string" containing a valid transformation used for requesting a pre-transformation for an image or a video file.
-            
-            
+
+
             `post` - Accepts an array of objects with properties:
               - `type`: One of `transformation`, `gif-to-video`, `thumbnail`, or `abs` (Adaptive bitrate streaming).
               - `value`: A "string" corresponding to the required transformation. Required if `type` is `transformation` or `abs`. Optional if `type` is `gif-to-video` or `thumbnail`.
               - `protocol`: Either `hls` or `dash`, applicable only if `type` is `abs`.
-            
+
             Read more about [Adaptive bitrate streaming (ABS)](/docs/adaptive-bitrate-streaming).
           example: |
             '{"pre":"width:300,height:300,quality:80","post":[{"type":"thumbnail","value":"width:100,height:100"}]}'
@@ -4890,7 +4908,7 @@ components:
           type: string
           description: >
             Server-side checks to run on the asset.
-            
+
             Read more about [Upload API checks](/docs/api-reference/upload-file/upload-file-v2#upload-api-checks).
           example: >
             "request.folder" : "marketing/"
@@ -4902,7 +4920,7 @@ components:
       properties:
         name:
           type: string
-          enum: ['remove-bg']
+          enum: ["remove-bg"]
           description: Specifies the background removal extension.
         options:
           type: object
@@ -4929,23 +4947,23 @@ components:
               description: >
                 Sets a background image from a URL. If this parameter is set, `bg_color` must be empty.
     AutoTaggingExtension:
-        title: Auto tagging
-        type: object
-        required:
-          - name
-          - minConfidence
-          - maxTags
-        properties:
-          name:
-            type: string
-            enum: ['google-auto-tagging', 'aws-auto-tagging']
-            description: Specifies the auto-tagging extension used.
-          minConfidence:
-            type: integer
-            description: Minimum confidence level for tags to be considered valid.
-          maxTags:
-            type: integer
-            description: Maximum number of tags to attach to the asset.
+      title: Auto tagging
+      type: object
+      required:
+        - name
+        - minConfidence
+        - maxTags
+      properties:
+        name:
+          type: string
+          enum: ["google-auto-tagging", "aws-auto-tagging"]
+          description: Specifies the auto-tagging extension used.
+        minConfidence:
+          type: integer
+          description: Minimum confidence level for tags to be considered valid.
+        maxTags:
+          type: integer
+          description: Maximum number of tags to attach to the asset.
     FileDetails:
       description: Object containing details of a file or file version.
       type: object
@@ -4964,13 +4982,13 @@ components:
           description: |
             Path of the file. This is the path you would use in the URL to access the file. For example, if the file is at the root of the media library, the path will be `/file.jpg`. If the file is inside a folder named `images`, the path will be `/images/file.jpg`.
         tags:
-          type: [array, 'null']
+          type: [array, "null"]
           items:
             type: string
           description: |
             An array of tags assigned to the file. Tags are used to search files in the media library.
         AITags:
-          type: [array, 'null']
+          type: [array, "null"]
           items:
             type: object
             properties:
@@ -5005,7 +5023,7 @@ components:
           description: |
             Specifies if the file is published or not.
         customCoordinates:
-          type: [string, 'null']
+          type: [string, "null"]
           description: |
             An string with custom coordinates of the file.
         url:
@@ -5178,8 +5196,7 @@ components:
         embeddedMetadata:
           type: object
           additionalProperties: true
-          description:
-            Consolidated embedded metadata associated with the file. It includes exif, iptc, and xmp data. Send `embeddedMetadata` in `responseFields` in API request to get embeddedMetadata in the upload API response.
+          description: Consolidated embedded metadata associated with the file. It includes exif, iptc, and xmp data. Send `embeddedMetadata` in `responseFields` in API request to get embeddedMetadata in the upload API response.
     ExifImage:
       description: Object containing EXIF image information.
       type: object
@@ -5341,15 +5358,15 @@ components:
           type: object
           properties:
             image:
-              $ref: '#/components/schemas/ExifImage'
+              $ref: "#/components/schemas/ExifImage"
             thumbnail:
-              $ref: '#/components/schemas/Thumbnail'
+              $ref: "#/components/schemas/Thumbnail"
             exif:
-              $ref: '#/components/schemas/ExifDetails'
+              $ref: "#/components/schemas/ExifDetails"
             gps:
-              $ref: '#/components/schemas/Gps'
+              $ref: "#/components/schemas/Gps"
             interoperability:
-              $ref: '#/components/schemas/Interoperability'
+              $ref: "#/components/schemas/Interoperability"
             makernote:
               type: object
               additionalProperties: true
@@ -5449,6 +5466,176 @@ components:
               description: |
                 Maximum length of string. Only set if `type` is set to `Text` or `Textarea`.
               type: number
+    VideoWebhookRequestInfo:
+      type: object
+      properties:
+        x_request_id:
+          type: string
+          description: Unique ID for the originating request.
+        url:
+          type: string
+          format: uri
+          description: URL of the submitted request.
+        user_agent:
+          type: string
+          description: User-Agent header of the originating request.
+      required: [x_request_id, url]
+
+    VideoAsset:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Source asset URL.
+      required: [url]
+
+    VideoTransformationOptions:
+      type: object
+      properties:
+        video_codec:
+          type: string
+          enum: [h264, vp9]
+        audio_codec:
+          type: string
+          enum: [aac, opus]
+        auto_rotate:
+          type: boolean
+        quality:
+          type: integer
+        format:
+          type: string
+          enum: [mp4, webm, jpg, png, webp]
+        stream_protocol:
+          type: string
+          enum: [HLS, DASH]
+        variants:
+          type: array
+          items:
+            type: string
+            description: Representation label, e.g. "360", "480", "720", "1028".
+
+    VideoTransformationBase:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [video-transformation, gif-to-video, video-thumbnail]
+        options:
+          $ref: '#/components/schemas/VideoTransformationOptions'
+      required: [type]
+
+    # ---- Event: accepted ----
+    VideoTransformationAcceptedEvent:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [video.transformation.accepted]
+        id:
+          type: string
+          description: Unique identifier for the event.
+        created_at:
+          type: string
+          format: date-time
+        request:
+          $ref: '#/components/schemas/VideoWebhookRequestInfo'
+        data:
+          type: object
+          properties:
+            asset:
+              $ref: '#/components/schemas/VideoAsset'
+            transformation:
+              $ref: '#/components/schemas/VideoTransformationBase'
+          required: [asset, transformation]
+      required: [type, id, created_at, request, data]
+
+    # ---- Event: ready ----
+    VideoTransformationReadyEvent:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [video.transformation.ready]
+        id:
+          type: string
+          description: Unique identifier for the event.
+        created_at:
+          type: string
+          format: date-time
+        request:
+          $ref: '#/components/schemas/VideoWebhookRequestInfo'
+        timings:
+          type: object
+          properties:
+            download_duration:
+              type: integer
+              description: Milliseconds spent downloading the source.
+            encoding_duration:
+              type: integer
+              description: Milliseconds spent encoding.
+        data:
+          type: object
+          properties:
+            asset:
+              $ref: '#/components/schemas/VideoAsset'
+            transformation:
+              allOf:
+                - $ref: '#/components/schemas/VideoTransformationBase'
+                - type: object
+                  properties:
+                    output:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          format: uri
+                        video_metadata:
+                          type: object
+                          properties:
+                            duration: { type: number }
+                            width:    { type: integer }
+                            height:   { type: integer }
+                            bitrate:  { type: integer }
+                          required: [duration, width, height, bitrate]
+                      required: [url]
+          required: [asset, transformation]
+      required: [type, id, created_at, request, data]
+
+    # ---- Event: error ----
+    VideoTransformationErrorEvent:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [video.transformation.error]
+        id:
+          type: string
+          description: Unique identifier for the event.
+        created_at:
+          type: string
+          format: date-time
+        request:
+          $ref: '#/components/schemas/VideoWebhookRequestInfo'
+        data:
+          type: object
+          properties:
+            asset:
+              $ref: '#/components/schemas/VideoAsset'
+            transformation:
+              allOf:
+                - $ref: '#/components/schemas/VideoTransformationBase'
+                - type: object
+                  properties:
+                    error:
+                      type: object
+                      properties:
+                        reason:
+                          type: string
+                          enum: [encoding_failed, download_failed, internal_server_error]
+                      required: [reason]
+          required: [asset, transformation]
+      required: [type, id, created_at, request, data]
   examples:
     UploadResponseWithEmbeddedMetadata:
       fileId: 6673f88237b244ef54d60180
@@ -5487,10 +5674,10 @@ components:
             ExifOffset: 260
           thumbnail: {}
           exif:
-            ExifVersion: '0232'
+            ExifVersion: "0232"
             DateTimeOriginal: 2019:10:16 19:01:03
             ComponentsConfiguration: "\x01\x02\x03\0"
-            FlashpixVersion: '0100'
+            FlashpixVersion: "0100"
             ColorSpace: 65535
             ExifImageWidth: 1000
             ExifImageHeight: 500
@@ -5500,28 +5687,28 @@ components:
         pHash: 17949d3d3573ebca
       embeddedMetadata:
         Orientation: Horizontal (normal)
-        ExifVersion: '0232'
+        ExifVersion: "0232"
         ImageDescription: The description aka caption (ref2019.1)
         XResolution: 72
         YResolution: 72
         ResolutionUnit: inches
         Artist: Creator1 (ref2019.1)
         Copyright: Copyright (Notice) 2019.1 IPTC - www.iptc.org  (ref2019.1)
-        DateTimeOriginal: '2019-10-16T19:01:03.000Z'
+        DateTimeOriginal: "2019-10-16T19:01:03.000Z"
         OffsetTimeOriginal: "+00:00"
         ComponentsConfiguration: Y,Cb,Cr,-
-        FlashpixVersion: '0100'
+        FlashpixVersion: "0100"
         ColorSpace: Uncalibrated
         ObjectAttributeReference: A Genre (ref2019.1)
         ObjectName: The Title (ref2019.1)
         SubjectReference:
-        - IPTC:1ref2019.1
-        - IPTC:2ref2019.1
-        - IPTC:3ref2019.1
+          - IPTC:1ref2019.1
+          - IPTC:2ref2019.1
+          - IPTC:3ref2019.1
         Keywords:
-        - Keyword1ref2019.1
-        - Keyword2ref2019.1
-        - Keyword3ref2019.1
+          - Keyword1ref2019.1
+          - Keyword2ref2019.1
+          - Keyword3ref2019.1
         SpecialInstructions: An Instruction (ref2019.1)
         TimeCreated: 19:01:03+00:00
         Byline: Creator1 (ref2019.1)
@@ -5536,50 +5723,50 @@ components:
         WriterEditor: Description Writer (ref2019.1)
         ApplicationRecordVersion: 4
         CountryCode: R19
-        CreatorCity: 'Creator''s CI: City (ref2019.1)'
-        CreatorCountry: 'Creator''s CI: Country (ref2019.1)'
-        CreatorAddress: 'Creator''s CI: Address, line 1 (ref2019.1)'
-        CreatorPostalCode: 'Creator''s CI: Postcode (ref2019.1)'
-        CreatorRegion: 'Creator''s CI: State/Province (ref2019.1)'
-        CreatorWorkEmail: 'Creator''s CI: Email@1, Email@2 (ref2019.1)'
-        CreatorWorkTelephone: 'Creator''s CI: Phone # 1, Phone # 2 (ref2019.1)'
+        CreatorCity: "Creator's CI: City (ref2019.1)"
+        CreatorCountry: "Creator's CI: Country (ref2019.1)"
+        CreatorAddress: "Creator's CI: Address, line 1 (ref2019.1)"
+        CreatorPostalCode: "Creator's CI: Postcode (ref2019.1)"
+        CreatorRegion: "Creator's CI: State/Province (ref2019.1)"
+        CreatorWorkEmail: "Creator's CI: Email@1, Email@2 (ref2019.1)"
+        CreatorWorkTelephone: "Creator's CI: Phone # 1, Phone # 2 (ref2019.1)"
         CreatorWorkURL: http://www.Creators.CI/WebAddress/ref2019.1
         IntellectualGenre: A Genre (ref2019.1)
         Location: Sublocation (Core) (ref2019.1)
         Scene:
-        - IPTC-Scene-Code1 (ref2019.1)
-        - IPTC-Scene-Code2 (ref2019.1)
+          - IPTC-Scene-Code1 (ref2019.1)
+          - IPTC-Scene-Code2 (ref2019.1)
         SubjectCode:
-        - IPTC:1ref2019.1
-        - IPTC:2ref2019.1
-        - IPTC:3ref2019.1
+          - IPTC:1ref2019.1
+          - IPTC:2ref2019.1
+          - IPTC:3ref2019.1
         AboutCvTermCvId: http://example.com/cv/about/ref2019.1
         AboutCvTermId: http://example.com/cv/about/ref2019.1/code987
         AboutCvTermName: CV-Term Name 1 (ref2019.1)
         AboutCvTermRefinedAbout: http://example.com/cv/refinements2/ref2019.1/codeX145
         AdditionalModelInformation: Additional Model Info (ref2019.1)
-        ArtworkCircaDateCreated: 'AO Circa Date: between 1550 and 1600 (ref2019.1)'
+        ArtworkCircaDateCreated: "AO Circa Date: between 1550 and 1600 (ref2019.1)"
         ArtworkContentDescription: AO Content Description 1 (ref2019.1)
         ArtworkContributionDescription: AO Contribution Description 1 (ref2019.1)
         ArtworkCopyrightNotice: AO Copyright Notice 1 (ref2019.1)
         ArtworkCreator:
-        - AO Creator Name 1a (ref2019.1)
-        - AO Creator Name 1b (ref2019.1)
+          - AO Creator Name 1a (ref2019.1)
+          - AO Creator Name 1b (ref2019.1)
         ArtworkCreatorID:
-        - AO Creator Id 1a (ref2019.1)
-        - AO Creator Id 1b (ref2019.1)
+          - AO Creator Id 1a (ref2019.1)
+          - AO Creator Id 1b (ref2019.1)
         ArtworkCopyrightOwnerID: AO Current Copyright Owner ID 1 (ref2019.1)
         ArtworkCopyrightOwnerName: AO Current Copyright Owner Name 1 (ref2019.1)
         ArtworkLicensorID: AO Current Licensor ID 1 (ref2019.1)
         ArtworkLicensorName: AO Current Licensor Name 1 (ref2019.1)
-        ArtworkDateCreated: '1919-10-16T19:01:00.000Z'
+        ArtworkDateCreated: "1919-10-16T19:01:00.000Z"
         ArtworkPhysicalDescription: AO Physical Description 1 (ref2019.1)
         ArtworkSource: AO Source 1 (ref2019.1)
         ArtworkSourceInventoryNo: AO Source Inventory No 1 (ref2019.1)
         ArtworkSourceInvURL: AO Source Inventory URL (ref2019.1)
         ArtworkStylePeriod:
-        - AO Style Baroque (ref2019.1)
-        - AO Style Italian Baroque (ref2019.1)
+          - AO Style Baroque (ref2019.1)
+          - AO Style Italian Baroque (ref2019.1)
         ArtworkTitle: AO Title 1 (ref2019.1)
         DigitalImageGUID: http://example.com/imageGUIDs/TestGUID12345/ref2019.1
         DigitalSourceType: http://cv.iptc.org/newscodes/digitalsourcetype/softwareImage
@@ -5592,71 +5779,71 @@ components:
         GenreCvTermName: Genre CV-Term Name 1 (ref2019.1)
         GenreCvTermRefinedAbout: http://example.com/cv/genrerefinements2/ref2019.1/codeY864
         ImageRegionName:
-        - Listener 1
-        - Listener 2
-        - Speaker 1
+          - Listener 1
+          - Listener 2
+          - Speaker 1
         ImageRegionOrganisationInImageName:
-        - Organisation name no 1 in region persltr2 (ref2019.1)
-        - Organisation name no 1 in region persltr2 (ref2019.1)
-        - Organisation name no 1 in region persltr3 (ref2019.1)
+          - Organisation name no 1 in region persltr2 (ref2019.1)
+          - Organisation name no 1 in region persltr2 (ref2019.1)
+          - Organisation name no 1 in region persltr3 (ref2019.1)
         ImageRegionPersonInImage:
-        - Person name no 1 in region persltr2 (ref2019.1)
-        - Person name no 1 in region persltr3 (ref2019.1)
-        - Person name no 1 in region persltr1 (ref2019.1)
+          - Person name no 1 in region persltr2 (ref2019.1)
+          - Person name no 1 in region persltr3 (ref2019.1)
+          - Person name no 1 in region persltr1 (ref2019.1)
         ImageRegionBoundaryH:
-        - 0.385
+          - 0.385
         ImageRegionBoundaryShape:
-        - rectangle
-        - circle
-        - polygon
+          - rectangle
+          - circle
+          - polygon
         ImageRegionBoundaryUnit:
-        - relative
-        - relative
-        - relative
+          - relative
+          - relative
+          - relative
         ImageRegionBoundaryW:
-        - 0.127
+          - 0.127
         ImageRegionBoundaryX:
-        - 0.31
-        - 0.59
+          - 0.31
+          - 0.59
         ImageRegionBoundaryY:
-        - 0.18
-        - 0.426
+          - 0.18
+          - 0.426
         ImageRegionCtypeName:
-        - Region Boundary Content Type Name (ref2019.1)
-        - Region Boundary Content Type Name (ref2019.1)
-        - Region Boundary Content Type Name (ref2019.1)
+          - Region Boundary Content Type Name (ref2019.1)
+          - Region Boundary Content Type Name (ref2019.1)
+          - Region Boundary Content Type Name (ref2019.1)
         ImageRegionCtypeIdentifier:
-        - https://example.org/rctype/type2019.1a
-        - https://example.org/rctype/type2019.1b
-        - https://example.org/rctype/type2019.1a
-        - https://example.org/rctype/type2019.1b
-        - https://example.org/rctype/type2019.1a
-        - https://example.org/rctype/type2019.1b
+          - https://example.org/rctype/type2019.1a
+          - https://example.org/rctype/type2019.1b
+          - https://example.org/rctype/type2019.1a
+          - https://example.org/rctype/type2019.1b
+          - https://example.org/rctype/type2019.1a
+          - https://example.org/rctype/type2019.1b
         ImageRegionID:
-        - persltr2
-        - persltr3
-        - persltr1
+          - persltr2
+          - persltr3
+          - persltr1
         ImageRegionRoleName:
-        - Region Boundary Content Role Name (ref2019.1)
-        - Region Boundary Content Role Name (ref2019.1)
-        - Region Boundary Content Role Name (ref2019.1)
+          - Region Boundary Content Role Name (ref2019.1)
+          - Region Boundary Content Role Name (ref2019.1)
+          - Region Boundary Content Role Name (ref2019.1)
         ImageRegionRoleIdentifier:
-        - https://example.org/rrole/role2019.1a
-        - https://example.org/rrole/role2019.1b
-        - https://example.org/rrole/role2019.1a
-        - https://example.org/rrole/role2019.1b
-        - https://example.org/rrole/role2019.1a
-        - https://example.org/rrole/role2019.1b
+          - https://example.org/rrole/role2019.1a
+          - https://example.org/rrole/role2019.1b
+          - https://example.org/rrole/role2019.1a
+          - https://example.org/rrole/role2019.1b
+          - https://example.org/rrole/role2019.1a
+          - https://example.org/rrole/role2019.1b
         ImageRegionBoundaryRx:
-        - 0.068
+          - 0.068
         ImageRegionBoundaryVerticesX:
-        - 0.05
-        - 0.148
-        - 0.375
+          - 0.05
+          - 0.148
+          - 0.375
         ImageRegionBoundaryVerticesY:
-        - 0.713
-        - 0.041
-        - 0.863
+          - 0.713
+          - 0.041
+          - 0.863
         LinkedEncodedRightsExpr: http://example.org/linkedrightsexpression/id986/ref2019.1
         LinkedEncodedRightsExprType: IANA Media Type of ERE (ref2019.1)
         LinkedEncodedRightsExprLangID: http://example.org/RELids/id4712/ref2019.1
@@ -5672,112 +5859,112 @@ components:
         LocationCreatedGPSLatitude: 48,16.5N
         LocationCreatedGPSLongitude: 16,20.28E
         LocationShownCity:
-        - City (Location shown1) (ref2019.1)
-        - City (Location shown2) (ref2019.1)
+          - City (Location shown1) (ref2019.1)
+          - City (Location shown2) (ref2019.1)
         LocationShownCountryCode:
-        - R17
-        - R17
+          - R17
+          - R17
         LocationShownCountryName:
-        - CountryName (Location shown1) (ref2019.1)
-        - CountryName (Location shown2) (ref2019.1)
+          - CountryName (Location shown1) (ref2019.1)
+          - CountryName (Location shown2) (ref2019.1)
         LocationShownLocationId:
-        - Location Id 1a(Location shown1) (ref2019.1)
-        - Location Id 1b(Location shown1) (ref2019.1)
-        - Location Id 2a(Location shown2) (ref2019.1)
-        - Location Id 2b(Location shown2) (ref2019.1)
+          - Location Id 1a(Location shown1) (ref2019.1)
+          - Location Id 1b(Location shown1) (ref2019.1)
+          - Location Id 2a(Location shown2) (ref2019.1)
+          - Location Id 2b(Location shown2) (ref2019.1)
         LocationShownLocationName:
-        - Location Name (Location shown1) (ref2019.1)
-        - Location Name (Location shown2) (ref2019.1)
+          - Location Name (Location shown1) (ref2019.1)
+          - Location Name (Location shown2) (ref2019.1)
         LocationShownProvinceState:
-        - Province/State (Location shown1) (ref2019.1)
-        - Province/State (Location shown2) (ref2019.1)
+          - Province/State (Location shown1) (ref2019.1)
+          - Province/State (Location shown2) (ref2019.1)
         LocationShownSublocation:
-        - Sublocation (Location shown1) (ref2019.1)
-        - Sublocation (Location shown2) (ref2019.1)
+          - Sublocation (Location shown1) (ref2019.1)
+          - Sublocation (Location shown2) (ref2019.1)
         LocationShownWorldRegion:
-        - Worldregion (Location shown1) (ref2019.1)
-        - Worldregion (Location shown2) (ref2019.1)
+          - Worldregion (Location shown1) (ref2019.1)
+          - Worldregion (Location shown2) (ref2019.1)
         LocationShownGPSAltitude:
-        - 140 m
-        - 120 m
+          - 140 m
+          - 120 m
         LocationShownGPSLatitude:
-        - 48,8.82N
-        - 47,57.12N
+          - 48,8.82N
+          - 47,57.12N
         LocationShownGPSLongitude:
-        - 17,5.88E
-        - 16,49.8E
+          - 17,5.88E
+          - 16,49.8E
         MaxAvailHeight: 20
         MaxAvailWidth: 19
         ModelAge:
-        - 25
-        - 27
-        - 30
+          - 25
+          - 27
+          - 30
         OrganisationInImageCode:
-        - Organisation Code 1 (ref2019.1)
-        - Organisation Code 2 (ref2019.1)
-        - Organisation Code 3 (ref2019.1)
+          - Organisation Code 1 (ref2019.1)
+          - Organisation Code 2 (ref2019.1)
+          - Organisation Code 3 (ref2019.1)
         OrganisationInImageName:
-        - Organisation Name 1 (ref2019.1)
-        - Organisation Name 2 (ref2019.1)
-        - Organisation Name 3 (ref2019.1)
+          - Organisation Name 1 (ref2019.1)
+          - Organisation Name 2 (ref2019.1)
+          - Organisation Name 3 (ref2019.1)
         PersonInImage:
-        - Person Shown 1 (ref2019.1)
-        - Person Shown 2 (ref2019.1)
+          - Person Shown 1 (ref2019.1)
+          - Person Shown 2 (ref2019.1)
         PersonInImageCvTermCvId:
-        - http://example.com/cv/test99/ref2019.1
+          - http://example.com/cv/test99/ref2019.1
         PersonInImageCvTermId:
-        - http://example.com/cv/test99/code987/ref2019.1
+          - http://example.com/cv/test99/code987/ref2019.1
         PersonInImageCvTermName:
-        - Person Characteristic Name 1 (ref2019.1)
+          - Person Characteristic Name 1 (ref2019.1)
         PersonInImageCvTermRefinedAbout:
-        - http://example.com/cv/refinements987/codeY765/ref2019.1
+          - http://example.com/cv/refinements987/codeY765/ref2019.1
         PersonInImageDescription:
-        - Person Description 1 (ref2019.1)
+          - Person Description 1 (ref2019.1)
         PersonInImageId:
-        - http://wikidata.org/item/Q123456789/ref2019.1
-        - http://freebase.com/m/987654321/ref2019.1
+          - http://wikidata.org/item/Q123456789/ref2019.1
+          - http://freebase.com/m/987654321/ref2019.1
         PersonInImageName:
-        - Person Name 1 (ref2019.1)
+          - Person Name 1 (ref2019.1)
         ProductInImageDescription:
-        - Product Description 1 (ref2019.1)
+          - Product Description 1 (ref2019.1)
         ProductInImageGTIN:
-        - 123456782019.1
+          - 123456782019.1
         ProductInImageName:
-        - Product Name 1 (ref2019.1)
+          - Product Name 1 (ref2019.1)
         RegistryEntryRole:
-        - Registry Entry Role ID 1 (ref2019.1)
-        - Registry Entry Role ID 2 (ref2019.1)
+          - Registry Entry Role ID 1 (ref2019.1)
+          - Registry Entry Role ID 2 (ref2019.1)
         RegistryItemID:
-        - Registry Image ID 1 (ref2019.1)
-        - Registry Image ID 2 (ref2019.1)
+          - Registry Image ID 1 (ref2019.1)
+          - Registry Image ID 2 (ref2019.1)
         RegistryOrganisationID:
-        - Registry Organisation ID 1 (ref2019.1)
-        - Registry Organisation ID 2 (ref2019.1)
+          - Registry Organisation ID 1 (ref2019.1)
+          - Registry Organisation ID 2 (ref2019.1)
         Creator: Creator1 (ref2019.1)
         Description: The description aka caption (ref2019.1)
         Rights: Copyright (Notice) 2019.1 IPTC - www.iptc.org  (ref2019.1)
         Subject:
-        - Keyword1ref2019.1
-        - Keyword2ref2019.1
-        - Keyword3ref2019.1
+          - Keyword1ref2019.1
+          - Keyword2ref2019.1
+          - Keyword3ref2019.1
         Title: The Title (ref2019.1)
         AuthorsPosition: Creator&#39;s Job Title  (ref2019.1)
         CaptionWriter: Description Writer (ref2019.1)
         City: City (Core) (ref2019.1)
         Country: Country (Core) (ref2019.1)
         Credit: Credit Line (ref2019.1)
-        DateCreated: '2019-10-16T00:00:00.000Z'
+        DateCreated: "2019-10-16T00:00:00.000Z"
         Headline: The Headline (ref2019.1)
         Instructions: An Instruction (ref2019.1)
         Source: Source (ref2019.1)
         State: Province/State(Core)(ref2019.1)
         TransmissionReference: Job Id (ref2019.1)
         CopyrightOwnerID:
-        - Copyright Owner Id 1 (ref2019.1)
-        - Copyright Owner Id 2 (ref2019.1)
+          - Copyright Owner Id 1 (ref2019.1)
+          - Copyright Owner Id 2 (ref2019.1)
         CopyrightOwnerName:
-        - Copyright Owner Name 1 (ref2019.1)
-        - Copyright Owner Name 2 (ref2019.1)
+          - Copyright Owner Name 1 (ref2019.1)
+          - Copyright Owner Name 2 (ref2019.1)
         ImageCreatorID: Image Creator Id 1 (ref2019.1)
         ImageCreatorName: Image Creator Name 1 (ref2019.1)
         ImageCreatorImageID: Image Creator Image ID (ref2019.1)
@@ -5785,51 +5972,51 @@ components:
         ImageSupplierName: Image Supplier Name (ref2019.1)
         ImageSupplierImageID: Image Supplier Image ID (ref2019.1)
         LicensorCity:
-        - Licensor City 1 (ref2019.1)
-        - Licensor City 2 (ref2019.1)
+          - Licensor City 1 (ref2019.1)
+          - Licensor City 2 (ref2019.1)
         LicensorCountry:
-        - Licensor Country 1 (ref2019.1)
-        - Licensor Country 2 (ref2019.1)
+          - Licensor Country 1 (ref2019.1)
+          - Licensor Country 2 (ref2019.1)
         LicensorEmail:
-        - Licensor Email 1 (ref2019.1)
-        - Licensor Email 2 (ref2019.1)
+          - Licensor Email 1 (ref2019.1)
+          - Licensor Email 2 (ref2019.1)
         LicensorExtendedAddress:
-        - Licensor Ext Addr 1 (ref2019.1)
-        - Licensor Ext Addr 2 (ref2019.1)
+          - Licensor Ext Addr 1 (ref2019.1)
+          - Licensor Ext Addr 2 (ref2019.1)
         LicensorID:
-        - Licensor ID 1 (ref2019.1)
-        - Licensor ID 2 (ref2019.1)
+          - Licensor ID 1 (ref2019.1)
+          - Licensor ID 2 (ref2019.1)
         LicensorName:
-        - Licensor Name 1 (ref2019.1)
-        - Licensor Name 2 (ref2019.1)
+          - Licensor Name 1 (ref2019.1)
+          - Licensor Name 2 (ref2019.1)
         LicensorPostalCode:
-        - Licensor Postcode 1 (ref2019.1)
-        - Licensor Postcode 2 (ref2019.1)
+          - Licensor Postcode 1 (ref2019.1)
+          - Licensor Postcode 2 (ref2019.1)
         LicensorRegion:
-        - Licensor Region 1 (ref2019.1)
-        - Licensor Region 2 (ref2019.1)
+          - Licensor Region 1 (ref2019.1)
+          - Licensor Region 2 (ref2019.1)
         LicensorStreetAddress:
-        - Licensor Street Addr 1 (ref2019.1)
-        - Licensor Street Addr 2 (ref2019.1)
+          - Licensor Street Addr 1 (ref2019.1)
+          - Licensor Street Addr 2 (ref2019.1)
         LicensorTelephone1:
-        - Licensor Phone1 1 (ref2019.1)
-        - Licensor Phone1 2 (ref2019.1)
+          - Licensor Phone1 1 (ref2019.1)
+          - Licensor Phone1 2 (ref2019.1)
         LicensorTelephone2:
-        - Licensor Phone2 1 (ref2019.1)
-        - Licensor Phone2 2 (ref2019.1)
+          - Licensor Phone2 1 (ref2019.1)
+          - Licensor Phone2 2 (ref2019.1)
         LicensorURL:
-        - Licensor URL 1 (ref2019.1)
-        - Licensor URL 2 (ref2019.1)
+          - Licensor URL 1 (ref2019.1)
+          - Licensor URL 2 (ref2019.1)
         ModelReleaseID:
-        - Model Release ID 1 (ref2019.1)
-        - Model Release ID 2 (ref2019.1)
+          - Model Release ID 1 (ref2019.1)
+          - Model Release ID 2 (ref2019.1)
         PropertyReleaseID:
-        - Property Release ID 1 (ref2019.1)
-        - Property Release ID 2 (ref2019.1)
+          - Property Release ID 1 (ref2019.1)
+          - Property Release ID 2 (ref2019.1)
         Rating: 1
         UsageTerms: Rights Usage Terms (ref2019.1)
         WebStatement: http://www.WebStatementOfRights.org/2019.1
-        DateTimeCreated: '2019-10-16T00:00:00.000Z'
+        DateTimeCreated: "2019-10-16T00:00:00.000Z"
         Caption: The description aka caption (ref2019.1)
         Writer: Description Writer (ref2019.1)
     UploadResponseImage:
@@ -5968,7 +6155,7 @@ components:
             properties:
               message:
                 type: string
-                examples: 
+                examples:
                   - Your account cannot be authenticated.
                   - Your request contains expired private API key.
                   - Your account is disabled.
@@ -6011,5 +6198,49 @@ components:
               message:
                 type: string
                 description: A description of the error, providing details about why the rate limit has been exceeded.
+
+webhooks:
+  video.transformation.accepted:
+    post:
+      operationId: video-transformation-accepted
+      summary: Video transformation accepted
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VideoTransformationAcceptedEvent"
+      responses:
+        "200":
+          description: Acknowledge
+
+  video.transformation.ready:
+    post:
+      operationId: video-transformation-ready
+      summary: Video transformation ready
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VideoTransformationReadyEvent"
+      responses:
+        "200":
+          description: Acknowledge
+
+  video.transformation.error:
+    post:
+      operationId: video-transformation-error
+      summary: Video transformation error
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VideoTransformationErrorEvent"
+      responses:
+        "200":
+          description: Acknowledge
+
 security:
   - basicAuth: []
