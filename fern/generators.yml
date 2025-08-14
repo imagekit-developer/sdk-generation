@@ -15,3 +15,54 @@ groups:
         config:
           namespaceExport: ImageKit
           enableInlineTypes: true
+      - name: fernapi/fern-php-sdk
+        version: 1.16.5
+        output:
+          location: local-file-system
+          path: ../sdks/php
+        config:
+          clientName: ImageKit
+      - name: fernapi/fern-python-sdk
+        version: 4.25.6
+        output:
+          location: local-file-system
+          path: ../sdks/python
+        config:
+          client:
+            class_name: ImageKit
+            filename: client.py
+          pydantic_config:
+            skip_validation: true
+          exclude_types_from_init_exports: true
+      - name: fernapi/fern-go-sdk
+        version: 1.1.0
+        output:
+          location: local-file-system
+          path: ../sdks/go
+        config:
+          union: v1
+          includeLegacyClientOptions: true
+      - name: fernapi/fern-java-sdk
+        version: 2.7.0
+        output:
+          location: local-file-system
+          path: ../sdks/java
+        config:
+          client-class-name: ImageKit
+          disable-required-property-builder-checks: false
+      - name: fernapi/fern-ruby-sdk
+        version: 0.3.3
+        output:
+          location: local-file-system
+          path: ../sdks/ruby
+        config:
+          clientClassName: ImageKit
+      
+      # .NET/C#
+      - name: fernapi/fern-csharp-sdk
+        version: 2.1.10
+        output:
+          location: local-file-system
+          path: ../sdks/csharp
+        config:
+          client_class_name: ImageKit
