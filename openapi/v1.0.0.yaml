@@ -217,7 +217,7 @@ paths:
                       type: string
                       enum:
                         - Text
-                        - TextArea
+                        - Textarea
                         - Number
                         - Date
                         - Boolean
@@ -334,14 +334,14 @@ paths:
       summary: List all fields
       description: This API returns the array of created custom metadata field objects. By default the API returns only non deleted field objects, but you can include deleted fields in the API response.
       parameters:
-        - description: |
-            Set it to `true` to include deleted field objects in the API response. Default value is `false`.
-          in: query
+        - in: query
+          description: |
+            Set it to `true` to include deleted field objects in the API response.
           name: includeDeleted
           required: false
           schema:
             type: boolean
-          default: false
+            default: false
       responses:
         "429":
           $ref: "#/components/responses/RateLimitExceeded"
@@ -433,6 +433,7 @@ paths:
                 customMetadata:
                   brand: Nike
                   color: red
+                description: "A product description"
                 createdAt: "2019-08-24T06:14:41.313Z"
                 updatedAt: "2019-08-24T06:14:41.313Z"
         "404":
@@ -500,6 +501,7 @@ paths:
                         Note: The remove operation for `AITags` executes before any of the `extensions` are processed.
                     webhookUrl:
                       type: string
+                      format: uri
                       description: |
                         The final status of extensions after they have completed execution will be delivered to this endpoint as a POST request. [Learn more](/docs/api-reference/digital-asset-management-dam/managing-assets/update-file-details#webhook-payload-structure) about the webhook payload structure.
                     extensions:
@@ -532,6 +534,10 @@ paths:
                       type: object
                       description: |
                         A key-value data to be associated with the asset. To unset a key, send `null` value for that key. Before setting any custom metadata on an asset you have to create the field using custom metadata fields API.
+                    description:
+                      type: string
+                      description: |
+                        Optional text to describe the contents of the file.
                 - title: Change publication status
                   type: object
                   properties:
@@ -566,6 +572,7 @@ paths:
                     "minConfidence": 80,
                     "maxTags": 10,
                   },
+                  { "name": "ai-auto-description" },
                 ]
               tags: ["tag1", "tag2"]
               customCoordinates: "10,10,100,100"
@@ -596,6 +603,9 @@ paths:
                             type: string
                             enum: ["success", "pending", "failed"]
                           remove-bg:
+                            type: string
+                            enum: ["success", "pending", "failed"]
+                          ai-auto-description:
                             type: string
                             enum: ["success", "pending", "failed"]
               example:
@@ -886,9 +896,12 @@ paths:
           name: type
           required: false
           description: |
-            Limit search to one of `file`, `file-version`, or `folder`. Pass `all` to include `files` and `folders` in search results (`file-version` will not be included in this case).
+            Filter results by asset type.
 
-            Default value - `file`
+            - `file` — returns only files  
+            - `file-version` — returns specific file versions  
+            - `folder` — returns only folders  
+            - `all` — returns both files and folders (excludes `file-version`)
           schema:
             type: string
             enum:
@@ -896,27 +909,36 @@ paths:
               - file-version
               - folder
               - all
+            default: file
         - in: query
           name: sort
           required: false
           description: |
-            You can sort based on the following fields:
-
-            1. name - `ASC_NAME` or `DESC_NAME`
-            2. createdAt - `ASC_CREATED` or `DESC_CREATED`
-            3. updatedAt - `ASC_UPDATED` or `DESC_UPDATED`
-            4. height - `ASC_HEIGHT` or `DESC_HEIGHT`
-            5. width - `ASC_WIDTH` or `DESC_WIDTH`
-            6. size - `ASC_SIZE` or `DESC_SIZE`
-
-            Default value - `ASC_CREATED`
+            Sort the results by one of the supported fields in ascending or descending order.
           schema:
             type: string
+            enum:
+              - ASC_NAME
+              - DESC_NAME
+              - ASC_CREATED
+              - DESC_CREATED
+              - ASC_UPDATED
+              - DESC_UPDATED
+              - ASC_HEIGHT
+              - DESC_HEIGHT
+              - ASC_WIDTH
+              - DESC_WIDTH
+              - ASC_SIZE
+              - DESC_SIZE
+            default: ASC_CREATED
         - in: query
           name: path
           required: false
           description: |
             Folder path if you want to limit the search within a specific folder. For example, `/sales-banner/` will only search in folder sales-banner.
+
+            Note : If your use case involves searching within a folder as well as its subfolders, you can use `path` parameter in `searchQuery` with appropriate operator.
+            Checkout [Supported parameters](/docs/api-reference/digital-asset-management-dam/list-and-search-assets#supported-parameters) for more information.
           schema:
             type: string
         - in: query
@@ -938,15 +960,18 @@ paths:
           name: fileType
           required: false
           description: |
-            Type of files to include in the result set. Accepts three values:
+            Filter results by file type.
 
-            `all` - include all types of files in the result set.
-            `image` - only search in image type files.
-            `non-image` - only search in files that are not images, e.g., JS or CSS or video files.
-
-            Default value - `all`
+            - `all` — include all file types  
+            - `image` — include only image files  
+            - `non-image` — include only non-image files (e.g., JS, CSS, video)
           schema:
             type: string
+            enum:
+              - all
+              - image
+              - non-image
+            default: all
         - in: query
           name: limit
           required: false
@@ -980,7 +1005,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/FileDetails"
+                  oneOf:
+                    - $ref: "#/components/schemas/FileDetails"
+                    - $ref: "#/components/schemas/FolderDetails"
               example:
                 - fileId: 598821f949c0a938d57563bd
                   type: file
@@ -2508,6 +2535,21 @@ paths:
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
+        "423":
+          description: Locked resource - A bulk operation is currently running on the folder.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    examples:
+                      - A bulk job is running on given folder path, please try after sometime.
+                      - Destination folder path is already locked. Please try after sometime.
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
   /v1/bulkJobs/moveFolder:
     post:
       tags:
@@ -2590,6 +2632,21 @@ paths:
                       - SAME_SOURCE_AND_DESTINATION
                       - INVALID_FOLDER_PATH
                       - INVALID_DESTINATION_PATH
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+        "423":
+          description: Locked resource - A bulk operation is currently running on the folder.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    examples:
+                      - A bulk job is running on given folder path, please try after sometime.
+                      - Destination folder path is already locked. Please try after sometime.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
@@ -2746,15 +2803,51 @@ paths:
                   type:
                     type: string
                     description: |
-                      Type of the bulk job. Possible values - `COPY_FOLDER`, `MOVE_FOLDER`.
+                      Type of the bulk job. Possible values - `COPY_FOLDER`, `MOVE_FOLDER`, `RENAME_FOLDER`.
                   status:
                     type: string
                     description: |
                       Status of the bulk job. Possible values - `Pending`, `Completed`.
+                  purgeRequestId:
+                    type: string
+                    description: |
+                      Unique identifier of the purge request. This will be present only if `purgeCache` is set to `true` in the rename folder API request.
                 example:
                   jobId: 5d5b1a9b4c8c4c0001f3e4a2
                   type: COPY_FOLDER
                   status: Completed
+        "207":
+          description: |
+            Partial success – the folder was renamed, but purge cache failed for nested files. It is only returned when `purgeCache` is set `true` in the rename folder API request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                    description: |
+                      Unique identifier of the bulk job.
+                  type:
+                    type: string
+                    description: |
+                      Type of the bulk job. It is only possible for `RENAME_FOLDER`.
+                  status:
+                    type: string
+                    description: |
+                      Status of the bulk job. It will be `Partial success`.
+                  message:
+                    type: string
+                    example: Folder renamed successfully but purging cache on nested files failed.
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+                example:
+                  jobId: 5d5b1a9b4c8c4c0001f3e4a2
+                  type: RENAME_FOLDER
+                  status: Partial success
+                  message: Folder renamed successfully but purging cache on nested files failed.
+                  help: For support kindly contact us at support@imagekit.io.
         "404":
           description: Job not found
           content:
@@ -2786,6 +2879,7 @@ paths:
               properties:
                 url:
                   type: string
+                  format: uri
                   description: |
                     The full URL of the file to be purged.
                   example: https://ik.imagekit.io/your_imagekit_id/default-image.jpg
@@ -2952,6 +3046,7 @@ paths:
           required: true
           schema:
             type: string
+            format: uri
       responses:
         "429":
           $ref: "#/components/responses/RateLimitExceeded"
@@ -4518,7 +4613,7 @@ components:
       properties:
         file:
           type: string
-          format: binary            # multipart/form-data file upload
+          format: binary # multipart/form-data file upload
           contentEncoding: binary # For our docs try it
           description: |
             The API accepts any of the following:
@@ -4643,7 +4738,7 @@ components:
               - customMetadata
               - metadata
           description: |
-            Array of response field keys to include in the API response.
+            Array of response field keys to include in the API response body.
           example:
             - tags
             - customCoordinates
@@ -4694,46 +4789,13 @@ components:
           type: object
           additionalProperties: true
           description: >
-            JSON key-value data to be associated with the asset. Please create custom metadata fields before setting values.
+            JSON key-value pairs to associate with the asset. Create the custom metadata fields before setting these values.
           example:
             brand: "Nike"
             color: "red"
         transformation:
           type: object
-          properties:
-            pre:
-              type: string
-              description: >
-                A valid transformation string used for requesting a pre-transformation for an image or a video file.
-              example: "width:300,height:300,quality:80"
-            post:
-              type: array
-              items:
-                type: object
-                properties:
-                  type:
-                    type: string
-                    enum: ["transformation", "gif-to-video", "thumbnail", "abs"]
-                    description: Type of post-transformation.
-                  value:
-                    type: string
-                    description: >
-                      Transformation string. Required if `type` is `transformation` or `abs`. Optional if `type` is `gif-to-video` or `thumbnail`.
-                  protocol:
-                    type: string
-                    enum: ["hls", "dash"]
-                    description: Protocol for adaptive bitrate streaming. Only applicable if `type` is `abs`.
-                required: ["type"]
-              description: >
-                Array of post-transformation objects.
-          additionalProperties: true
-          description: >
-            Object with properties for pre and post transformations. Read more about [Adaptive bitrate streaming (ABS)](/docs/adaptive-bitrate-streaming).
-          example:
-            pre: "width:300,height:300,quality:80"
-            post:
-              - type: "thumbnail"
-                value: "width:100,height:100"
+          $ref: "#/components/schemas/TransformationObject"
         checks:
           type: string
           description: >
@@ -4742,6 +4804,11 @@ components:
             Read more about [Upload API checks](/docs/api-reference/upload-file/upload-file#upload-api-checks).
           example: >
             "request.folder" : "marketing/"
+        description:
+          type: string
+          description: |
+            Optional text to describe the contents of the file.
+          example: "Running shoes"
     FileUploadV2:
       type: object
       required:
@@ -4749,15 +4816,17 @@ components:
         - fileName
       properties:
         file:
-          anyOf:
-            - type: string
-              description: >
-                Pass the HTTP URL or base64 string. When passing a URL in the file parameter, please ensure that our servers can access the URL. In case ImageKit is unable to download the file from the specified URL, a `400` error response is returned. This will also result in a `400` error if the file download request is aborted if response headers are not received in 8 seconds.
-              example: "https://www.example.com/rest-of-the-image-path.jpg"
-            - type: string
-              description: >
-                Pass binary data. Accepts stream too.
-              format: binary
+          type: string
+          format: binary # multipart/form-data file upload
+          contentEncoding: binary # For our docs try it
+          description: |
+            The API accepts any of the following:
+
+            - **Binary data** – send the raw bytes as `multipart/form-data`.
+            - **HTTP / HTTPS URL** – a publicly reachable URL that ImageKit’s servers can fetch.
+            - **Base64 string** – the file encoded as a Base64 data URI or plain Base64.
+
+            When supplying a URL, the server must receive the response headers within 8 seconds; otherwise the request fails with 400 Bad Request.
         fileName:
           type: string
           description: >
@@ -4775,8 +4844,8 @@ components:
 
             **⚠️Warning**: JWT must be generated on the server-side because it is generated using your account's private API key. This field is required for authentication when uploading a file from the client-side.
         useUniqueFileName:
-          type: string
-          default: "true"
+          type: boolean
+          default: true
           description: >
             Whether to use a unique filename for this file or not.
 
@@ -4785,40 +4854,38 @@ components:
 
 
             If `false`, then the image is uploaded with the provided filename parameter, and any existing file with the same name is replaced.
-          enum:
-            - "true"
-            - "false"
         tags:
-          type: string
+          type: array
+          items:
+            type: string
           description: >
             Set the tags while uploading the file.
 
+            Provide an array of tag strings (e.g. `["tag1", "tag2", "tag3"]`).
+            The combined length of all tag characters must not exceed 500, and the `%` character
+            is not allowed.
 
-            Comma-separated value of tags in the format `tag1,tag2,tag3`.
-            The maximum length of all characters should not exceed 500. `%` is not allowed.
-
-
-            If this field is not specified and the file is overwritten then the tags will be removed.
-          example: "t-shirt,round-neck,men"
+            If this field is not specified and the file is overwritten, the existing tags will be removed.
+          example:
+            - t-shirt
+            - round-neck
+            - men
         folder:
           type: string
           description: >
             The folder path in which the image has to be uploaded. If the folder(s) didn't exist before, a new folder(s) is created. Using multiple `/` creates a nested folder.
           default: "/"
         isPrivateFile:
-          type: string
-          default: "false"
+          type: boolean
+          default: false
           description: >
             Whether to mark the file as private or not.
 
 
             If `true`, the file is marked as private and is accessible only using named transformation or signed URL.
-          enum:
-            - "true"
-            - "false"
         isPublished:
-          type: string
-          default: "true"
+          type: boolean
+          default: true
           description: >
             Whether to upload file as published or not.
 
@@ -4827,9 +4894,6 @@ components:
 
 
             The option to upload in draft state is only available in custom enterprise pricing plans.
-          enum:
-            - "true"
-            - "false"
         customCoordinates:
           type: string
           description: >
@@ -4839,87 +4903,76 @@ components:
               - Can be used with fo-customtransformation.
               - If this field is not specified and the file is overwritten, then customCoordinates will be removed.
         responseFields:
-          type: string
+          type: array
+          items:
+            type: string
+            enum:
+              - tags
+              - customCoordinates
+              - isPrivateFile
+              - embeddedMetadata
+              - isPublished
+              - customMetadata
+              - metadata
           description: |
-            Comma-separated values of the fields that you want the API to return in the response.
-
-
-            For example, set the value of this field to `tags,customCoordinates,isPrivateFile` to get the value of `tags`, `customCoordinates`, and `isPrivateFile` in the response.
-
-
-            Accepts combination of `tags`, `customCoordinates`, `isPrivateFile`, `embeddedMetadata`, `isPublished`, `customMetadata`, and `metadata`.
+            Array of response field keys to include in the API response body.
+          example:
+            - tags
+            - customCoordinates
+            - isPrivateFile
         extensions:
-          type: string
+          type: array
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/RemovedotBGExtension"
+              - $ref: "#/components/schemas/AutoTaggingExtension"
+              - $ref: "#/components/schemas/AutoDescriptionExtension"
           description: >
-            Stringified JSON object with an array of extensions to be applied to the image. Refer to extensions schema in [update file API request body](/docs/api-reference/digital-asset-management-dam/managing-assets/update-file-details#request-body).
-          example: |
-            "
-            [
-              {"name":"remove-bg","options":{"add_shadow":true,"bg_colour":"green"}},
-              {"name":"google-auto-tagging","maxTags":5,"minConfidence":95}
-            ]
-            "
+            Array of extensions to be applied to the image. Each extension can be configured with specific parameters based on the extension type.
+          example:
+            - name: "remove-bg"
+              options:
+                add_shadow: true
+                bg_colour: "green"
+            - name: "google-auto-tagging"
+              maxTags: 5
+              minConfidence: 95
         webhookUrl:
           type: string
+          format: uri
           description: >
             The final status of extensions after they have completed execution will be delivered to this endpoint as a POST request. [Learn more](/docs/api-reference/digital-asset-management-dam/managing-assets/update-file-details#webhook-payload-structure) about the webhook payload structure.
         overwriteFile:
-          type: string
-          default: "true"
+          type: boolean
+          default: true
           description: >
             If `false` and `useUniqueFileName` is also `false`, and a file already exists at the exact location, upload API will return an error immediately.
         overwriteAITags:
-          type: string
-          default: "true"
+          type: boolean
+          default: true
           description: >
             If set to `true` and a file already exists at the exact location, its AITags will be removed. Set `overwriteAITags` to `false` to preserve AITags.
-          enum:
-            - "true"
-            - "false"
         overwriteTags:
-          type: string
-          default: "true"
+          type: boolean
+          default: true
           description: >
             If the request does not have `tags`, and a file already exists at the exact location, existing tags will be removed.
-          enum:
-            - "true"
-            - "false"
         overwriteCustomMetadata:
-          type: string
-          default: "true"
+          type: boolean
+          default: true
           description: >
             If the request does not have `customMetadata`, and a file already exists at the exact location, existing customMetadata will be removed.
-          enum:
-            - "true"
-            - "false"
         customMetadata:
-          type: string
+          type: object
+          additionalProperties: true
           description: >
-            Stringified JSON key-value data to be associated with the asset.
-          example: |
-            "
-              {
-                "brand": "Nike",
-                "color":"red"
-              }
-            "
+            JSON key-value pairs to associate with the asset. Create the custom metadata fields before setting these values.
+          example:
+            brand: "Nike"
+            color: "red"
         transformation:
-          type: string
-          description: >
-            Stringified JSON object with properties for pre and post transformations:
-
-
-            `pre` - Accepts a "string" containing a valid transformation used for requesting a pre-transformation for an image or a video file.
-
-
-            `post` - Accepts an array of objects with properties:
-              - `type`: One of `transformation`, `gif-to-video`, `thumbnail`, or `abs` (Adaptive bitrate streaming).
-              - `value`: A "string" corresponding to the required transformation. Required if `type` is `transformation` or `abs`. Optional if `type` is `gif-to-video` or `thumbnail`.
-              - `protocol`: Either `hls` or `dash`, applicable only if `type` is `abs`.
-
-            Read more about [Adaptive bitrate streaming (ABS)](/docs/adaptive-bitrate-streaming).
-          example: |
-            '{"pre":"width:300,height:300,quality:80","post":[{"type":"thumbnail","value":"width:100,height:100"}]}'
+          type: object
+          $ref: "#/components/schemas/TransformationObject"
         checks:
           type: string
           description: >
@@ -4928,6 +4981,125 @@ components:
             Read more about [Upload API checks](/docs/api-reference/upload-file/upload-file-v2#upload-api-checks).
           example: >
             "request.folder" : "marketing/"
+        description:
+          type: string
+          description: |
+            Optional text to describe the contents of the file.
+          example: "Running shoes"
+    TransformationObject:
+      type: object
+      additionalProperties: false
+      description: |
+        Configure pre-processing (`pre`) and post-processing (`post`) transformations.
+
+        - `pre` — applied before the file is uploaded to the Media Library.  
+          Useful for reducing file size or applying basic optimizations upfront (e.g., resize, compress).
+
+        - `post` — applied immediately after upload.  
+          Ideal for generating transformed versions (like video encodes or thumbnails) in advance, so they're ready for delivery without delay.
+
+        You can mix and match any combination of post-processing types.
+      properties:
+        pre:
+          type: string
+          description: |
+            Transformation string to apply before uploading the file to the Media Library. Useful for optimizing files at ingestion.
+          example: "w-300,h-300,q-80"
+        post:
+          type: array
+          description: |
+            List of transformations to apply *after* the file is uploaded.  
+            Each item must match one of the following types:
+            `transformation`, `gif-to-video`, `thumbnail`, `abs`.
+          items:
+            oneOf:
+              # ───────────── simple transformation ─────────────
+              - type: object
+                title: Simple post-transformation
+                required: [type, value]
+                additionalProperties: false
+                properties:
+                  type:
+                    type: string
+                    enum: ["transformation"]
+                    description: Transformation type.
+                  value:
+                    type: string
+                    description: |
+                      Transformation string (e.g. `w-200,h-200`).  
+                      Same syntax as ImageKit URL-based transformations.
+                example:
+                  type: "transformation"
+                  value: "w-400,h-400,q-70"
+
+              # ───────────── GIF → video ─────────────
+              - type: object
+                title: Convert GIF to video
+                required: [type]
+                additionalProperties: false
+                properties:
+                  type:
+                    type: string
+                    enum: ["gif-to-video"]
+                    description: Converts an animated GIF into an MP4.
+                  value:
+                    type: string
+                    description: |
+                      Optional transformation string to apply to the output video.  
+                      **Example**: `q-80`
+                example:
+                  type: "gif-to-video"
+                  value: "q-90"
+
+              # ───────────── thumbnail ─────────────
+              - type: object
+                title: Generate a thumbnail
+                required: [type]
+                additionalProperties: false
+                properties:
+                  type:
+                    type: string
+                    enum: ["thumbnail"]
+                    description: Generates a thumbnail image.
+                  value:
+                    type: string
+                    description: |
+                      Optional transformation string.  
+                      **Example**: `w-150,h-150`
+                example:
+                  type: "thumbnail"
+                  value: "w-150,h-150"
+
+              # ───────────── ABS ─────────────
+              - type: object
+                title: Adaptive Bitrate Streaming
+                required: [type, value, protocol]
+                additionalProperties: false
+                properties:
+                  type:
+                    type: string
+                    enum: ["abs"]
+                    description: Adaptive Bitrate Streaming (ABS) setup.
+                  value:
+                    type: string
+                    description: |
+                      List of different representations you want to create separated by an underscore.
+                  protocol:
+                    type: string
+                    enum: ["hls", "dash"]
+                    description: Streaming protocol to use (`hls` or `dash`).
+                example:
+                  type: "abs"
+                  value: "sr-240_360_480_720_1080"
+                  protocol: "hls"
+
+      example:
+        post:
+          - type: "thumbnail"
+            value: "w-150,h-150"
+          - type: "abs"
+            value: "sr-240_360_480_720_1080"
+            protocol: "dash"
     RemovedotBGExtension:
       title: Remove background
       type: object
@@ -4988,9 +5160,10 @@ components:
       properties:
         name:
           type: string
-          enum: ['ai-auto-description']
+          enum: ["ai-auto-description"]
           description: Specifies the auto description extension.
     FileDetails:
+      title: File & File Version
       description: Object containing details of a file or file version.
       type: object
       properties:
@@ -5096,6 +5269,33 @@ components:
           type: string
           description: |
             Date and time when the file was last updated. The date and time is in ISO8601 format.
+    FolderDetails:
+      title: Folder
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of the asset.
+          enum: 
+            - folder
+        folderId:
+          type: string
+          description: Unique identifier of the asset.
+        name:
+          type: string
+          description: Name of the asset.
+        folderPath:
+          type: string
+          description: |
+            Path of the folder. This is the path you would use in the URL to access the folder. For example, if the folder is at the root of the media library, the path will be /folder. If the folder is inside another folder named images, the path will be /images/folder.
+        createdAt:
+          type: string
+          description: |
+            Date and time when the folder was created. The date and time is in ISO8601 format.
+        updatedAt:
+          type: string
+          description: |
+            Date and time when the folder was last updated. The date and time is in ISO8601 format.
     Upload:
       description: Object containing details of a successful upload.
       type: object
@@ -5427,7 +5627,7 @@ components:
               type: string
               enum:
                 - Text
-                - TextArea
+                - Textarea
                 - Number
                 - Date
                 - Boolean
@@ -5548,7 +5748,7 @@ components:
           type: string
           enum: [video-transformation, gif-to-video, video-thumbnail]
         options:
-          $ref: '#/components/schemas/VideoTransformationOptions'
+          $ref: "#/components/schemas/VideoTransformationOptions"
       required: [type]
 
     # ---- Event: accepted ----
@@ -5565,14 +5765,14 @@ components:
           type: string
           format: date-time
         request:
-          $ref: '#/components/schemas/VideoWebhookRequestInfo'
+          $ref: "#/components/schemas/VideoWebhookRequestInfo"
         data:
           type: object
           properties:
             asset:
-              $ref: '#/components/schemas/VideoAsset'
+              $ref: "#/components/schemas/VideoAsset"
             transformation:
-              $ref: '#/components/schemas/VideoTransformationBase'
+              $ref: "#/components/schemas/VideoTransformationBase"
           required: [asset, transformation]
       required: [type, id, created_at, request, data]
 
@@ -5590,7 +5790,7 @@ components:
           type: string
           format: date-time
         request:
-          $ref: '#/components/schemas/VideoWebhookRequestInfo'
+          $ref: "#/components/schemas/VideoWebhookRequestInfo"
         timings:
           type: object
           properties:
@@ -5604,10 +5804,10 @@ components:
           type: object
           properties:
             asset:
-              $ref: '#/components/schemas/VideoAsset'
+              $ref: "#/components/schemas/VideoAsset"
             transformation:
               allOf:
-                - $ref: '#/components/schemas/VideoTransformationBase'
+                - $ref: "#/components/schemas/VideoTransformationBase"
                 - type: object
                   properties:
                     output:
@@ -5620,9 +5820,9 @@ components:
                           type: object
                           properties:
                             duration: { type: number }
-                            width:    { type: integer }
-                            height:   { type: integer }
-                            bitrate:  { type: integer }
+                            width: { type: integer }
+                            height: { type: integer }
+                            bitrate: { type: integer }
                           required: [duration, width, height, bitrate]
                       required: [url]
           required: [asset, transformation]
@@ -5642,15 +5842,15 @@ components:
           type: string
           format: date-time
         request:
-          $ref: '#/components/schemas/VideoWebhookRequestInfo'
+          $ref: "#/components/schemas/VideoWebhookRequestInfo"
         data:
           type: object
           properties:
             asset:
-              $ref: '#/components/schemas/VideoAsset'
+              $ref: "#/components/schemas/VideoAsset"
             transformation:
               allOf:
-                - $ref: '#/components/schemas/VideoTransformationBase'
+                - $ref: "#/components/schemas/VideoTransformationBase"
                 - type: object
                   properties:
                     error:
@@ -5658,7 +5858,12 @@ components:
                       properties:
                         reason:
                           type: string
-                          enum: [encoding_failed, download_failed, internal_server_error]
+                          enum:
+                            [
+                              encoding_failed,
+                              download_failed,
+                              internal_server_error,
+                            ]
                       required: [reason]
           required: [asset, transformation]
       required: [type, id, created_at, request, data]
