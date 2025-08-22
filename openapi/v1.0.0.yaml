@@ -3645,6 +3645,8 @@ components:
         prefix: images
         accessKey: AKIATEST123
         secretKey: secrettest123
+      discriminator:
+        propertyName: type
       oneOf:
         - title: S3
           type: object
@@ -4135,6 +4137,8 @@ components:
     OriginResponse:
       title: Origin Response
       description: Origin object as returned by the API (sensitive fields removed).
+      discriminator:
+        propertyName: type
       oneOf:
         - title: S3
           type: object
@@ -4557,6 +4561,8 @@ components:
             type: string
         urlRewriter:
           description: Configuration for third-party URL rewriting.
+          discriminator:
+            propertyName: type
           oneOf:
             - title: Cloudinary URL Rewriter
               type: object

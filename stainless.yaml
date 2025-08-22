@@ -66,7 +66,9 @@ resources:
     methods:
       upload: post /api/v1/files/upload
       get: get /v1/files/{fileId}/details
-      update: patch /v1/files/{fileId}/details
+      update:
+        endpoint: patch /v1/files/{fileId}/details
+        body_param_name: update
       delete: delete /v1/files/{fileId}
       copy: post /v1/files/copy
       move: post /v1/files/move
@@ -120,9 +122,13 @@ resources:
       origins:
         methods:
           list: get /v1/accounts/origins
-          create: post /v1/accounts/origins
+          create:
+            endpoint: post /v1/accounts/origins
+            body_param_name: origin
           get: get /v1/accounts/origins/{id}
-          update: put /v1/accounts/origins/{id}
+          update:
+            endpoint: put /v1/accounts/origins/{id}
+            body_param_name: origin
           delete: delete /v1/accounts/origins/{id}
       urlEndpoints:
         methods:
@@ -192,23 +198,22 @@ readme:
     default:
       type: request
       endpoint: post /api/v1/files/upload
-      params: {}
+      params:
+        file: https://www.example.com/public-url.jpg
+        fileName: file-name.jpg
     headline:
       type: request
       endpoint: post /api/v1/files/upload
-      params: {}
+      params:
+        file: https://www.example.com/public-url.jpg
+        fileName: file-name.jpg
 diagnostics:
   ignored:
     Pagination/NotConfigured:
       - "#/pagination"
     ReadmeExample/MissingParam:
       - (resource) files > (method) upload
-    Model/Recommended:
-      - "#/components/schemas/ExifDetails"
-      - "#/components/schemas/Gps"
-      - "#/components/schemas/Thumbnail"
-      - "#/components/schemas/VideoAsset"
-      - "#/components/schemas/VideoTransformationOptions"
-      - "#/components/schemas/VideoWebhookRequestInfo"
-      - "#/components/schemas/ExifImage"
-      - "#/components/schemas/Interoperability"
+    Model/Recommended: true
+    Model/IsConstant: true
+    Java/SchemaUnionDiscriminatorMissing:
+      - (resource) files > (method) update > (params) default > (param) update > (schema)
