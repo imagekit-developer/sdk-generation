@@ -157,6 +157,10 @@ resources:
           discriminator: type
           webhook_key_opt: private_api_key
 
+        unsafe_unwrap:
+          type: webhook_unwrap
+          discriminator: type
+
 settings:
   # All generated integration tests that hit the prism mock http server are marked
   # as skipped. Removing this setting or setting it to false enables tests, but
