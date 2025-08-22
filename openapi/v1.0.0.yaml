@@ -247,6 +247,7 @@ paths:
                         - type: number
                         - type: boolean
                         - type: array
+                          x-stainless-variantName: Mixed
                           items:
                             oneOf:
                               - type: string
@@ -734,6 +735,7 @@ paths:
                         - type: number
                         - type: boolean
                         - type: array
+                          x-stainless-variantName: Mixed
                           items:
                             oneOf:
                               - type: string
@@ -5664,6 +5666,7 @@ components:
                 - type: number
                 - type: boolean
                 - type: array
+                  x-stainless-variantName: Mixed
                   items:
                     oneOf:
                       - type: string
