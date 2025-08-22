@@ -22,8 +22,8 @@ targets:
     publish:
       pypi: false
   php:
-    package_name: 'image-kit'
-    composer_package_name: 'imagekit/imagekit'
+    package_name: "image-kit"
+    composer_package_name: "imagekit/imagekit"
   csharp:
     package_name: imagekit
     publish:
@@ -139,27 +139,17 @@ resources:
           files:
             methods:
               upload: post /api/v2/files/upload
-  $shared:
-    models:
-      exif_details: "#/components/schemas/ExifDetails"
-      gps: "#/components/schemas/Gps"
-      exif_image: "#/components/schemas/ExifImage"
-      interoperability: "#/components/schemas/Interoperability"
-      thumbnail: "#/components/schemas/Thumbnail"
-      removedot_bg_extension: "#/components/schemas/RemovedotBGExtension"
-      auto_tagging_extension: "#/components/schemas/AutoTaggingExtension"
-      auto_description_extension: "#/components/schemas/AutoDescriptionExtension"
 
   webhooks:
-      methods:
-        unwrap:
-          type: webhook_unwrap
-          discriminator: type
-          webhook_key_opt: private_api_key
+    methods:
+      unwrap:
+        type: webhook_unwrap
+        discriminator: type
+        webhook_key_opt: private_api_key
 
-        unsafe_unwrap:
-          type: webhook_unwrap
-          discriminator: type
+      unsafe_unwrap:
+        type: webhook_unwrap
+        discriminator: type
 
 settings:
   # All generated integration tests that hit the prism mock http server are marked
@@ -180,7 +170,7 @@ client_settings:
       description: Your ImageKit private key starts with `private_`.
       read_env: IMAGEKIT_PRIVATE_API_KEY # or let users pass it in code
       nullable: false # required to create a client
-      auth: { security_scheme: basicAuth, role: 'username' }
+      auth: { security_scheme: basicAuth, role: "username" }
 
     password:
       type: string
@@ -188,7 +178,7 @@ client_settings:
       default: "does_not_matter"
       nullable: true
       read_env: ORG_MY_PASSWORD_TOKEN
-      auth: { security_scheme: basicAuth, role: 'password' }
+      auth: { security_scheme: basicAuth, role: "password" }
 
 # `readme` is used to configure the code snippets that will be rendered in the
 # README.md of various SDKs. In particular, you can change the `headline`
@@ -211,3 +201,14 @@ diagnostics:
   ignored:
     Pagination/NotConfigured:
       - "#/pagination"
+    ReadmeExample/MissingParam:
+      - (resource) files > (method) upload
+    Model/Recommended:
+      - "#/components/schemas/ExifDetails"
+      - "#/components/schemas/Gps"
+      - "#/components/schemas/Thumbnail"
+      - "#/components/schemas/VideoAsset"
+      - "#/components/schemas/VideoTransformationOptions"
+      - "#/components/schemas/VideoWebhookRequestInfo"
+      - "#/components/schemas/ExifImage"
+      - "#/components/schemas/Interoperability"
