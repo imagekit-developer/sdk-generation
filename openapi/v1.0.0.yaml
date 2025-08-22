@@ -492,7 +492,7 @@ paths:
                           items:
                             type: string
                         - type: string
-                          enum: ["all"]
+                          const: "all"
                       description: |
                         An array of AITags associated with the file that you want to remove, e.g. `["car", "vehicle", "motorsports"]`. 
 
@@ -3656,8 +3656,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - S3
+              const: "S3"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -3711,8 +3710,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - S3_COMPATIBLE
+              const: "S3_COMPATIBLE"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -3777,8 +3775,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - CLOUDINARY_BACKUP
+              const: "CLOUDINARY_BACKUP"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -3832,8 +3829,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - WEB_FOLDER
+              const: "WEB_FOLDER"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -3871,8 +3867,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - WEB_PROXY
+              const: "WEB_PROXY"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -3899,8 +3894,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - GCS
+              const: "GCS"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -3949,8 +3943,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - AZURE_BLOB
+              const: "AZURE_BLOB"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -3999,8 +3992,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - AKENEO_PIM
+              const: "AKENEO_PIM"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -4101,8 +4093,7 @@ components:
               properties:
                 type:
                   type: string
-                  enum:
-                    - CLOUDINARY
+                  const: "CLOUDINARY"
                 preserveAssetDeliveryTypes:
                   description:
                     Whether to preserve `<asset_type>/<delivery_type>` in the rewritten
@@ -4118,8 +4109,7 @@ components:
               properties:
                 type:
                   type: string
-                  enum:
-                    - IMGIX
+                  const: "IMGIX"
               required:
                 - type
               additionalProperties: false
@@ -4128,8 +4118,7 @@ components:
               properties:
                 type:
                   type: string
-                  enum:
-                    - AKAMAI
+                  const: "AKAMAI"
               required:
                 - type
               additionalProperties: false
@@ -4265,8 +4254,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - CLOUDINARY_BACKUP
+              const: "CLOUDINARY_BACKUP"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -4313,8 +4301,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - WEB_FOLDER
+              const: "WEB_FOLDER"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -4361,8 +4348,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - WEB_PROXY
+              const: "WEB_PROXY"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -4397,8 +4383,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - GCS
+              const: "GCS"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -4449,8 +4434,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - AZURE_BLOB
+              const: "AZURE_BLOB"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -4501,8 +4485,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - AKENEO_PIM
+              const: "AKENEO_PIM"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -4580,8 +4563,7 @@ components:
               properties:
                 type:
                   type: string
-                  enum:
-                    - CLOUDINARY
+                  const: "CLOUDINARY"
                 preserveAssetDeliveryTypes:
                   description:
                     Whether to preserve `<asset_type>/<delivery_type>` in the rewritten
@@ -4598,8 +4580,7 @@ components:
               properties:
                 type:
                   type: string
-                  enum:
-                    - IMGIX
+                  const: "IMGIX"
               required:
                 - type
               additionalProperties: false
@@ -4608,8 +4589,7 @@ components:
               properties:
                 type:
                   type: string
-                  enum:
-                    - AKAMAI
+                  const: "AKAMAI"
               required:
                 - type
               additionalProperties: false
@@ -5049,7 +5029,7 @@ components:
                 properties:
                   type:
                     type: string
-                    enum: ["transformation"]
+                    const: "transformation"
                     description: Transformation type.
                   value:
                     type: string
@@ -5068,7 +5048,7 @@ components:
                 properties:
                   type:
                     type: string
-                    enum: ["gif-to-video"]
+                    const: "gif-to-video"
                     description: Converts an animated GIF into an MP4.
                   value:
                     type: string
@@ -5087,7 +5067,7 @@ components:
                 properties:
                   type:
                     type: string
-                    enum: ["thumbnail"]
+                    const: "thumbnail"
                     description: Generates a thumbnail image.
                   value:
                     type: string
@@ -5106,7 +5086,7 @@ components:
                 properties:
                   type:
                     type: string
-                    enum: ["abs"]
+                    const: "abs"
                     description: Adaptive Bitrate Streaming (ABS) setup.
                   value:
                     type: string
@@ -5136,7 +5116,7 @@ components:
       properties:
         name:
           type: string
-          enum: ["remove-bg"]
+          const: "remove-bg"
           description: Specifies the background removal extension.
         options:
           type: object
@@ -5188,7 +5168,7 @@ components:
       properties:
         name:
           type: string
-          enum: ["ai-auto-description"]
+          const: "ai-auto-description"
           description: Specifies the auto description extension.
     FileDetails:
       title: File & File Version
@@ -5305,8 +5285,7 @@ components:
         type:
           type: string
           description: Type of the asset.
-          enum: 
-            - folder
+          const: "folder"
         folderId:
           type: string
           description: Unique identifier of the asset.
