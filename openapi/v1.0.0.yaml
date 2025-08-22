@@ -4146,8 +4146,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - S3
+              const: "S3"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -4194,8 +4193,7 @@ components:
               pattern: ^[a-zA-Z0-9 ]+$
             type:
               type: string
-              enum:
-                - S3_COMPATIBLE
+              const: "S3_COMPATIBLE"
             includeCanonicalHeader:
               description: Whether to send a Canonical header.
               example: false
@@ -5766,7 +5764,7 @@ components:
       properties:
         type:
           type: string
-          enum: [video.transformation.accepted]
+          const: "video.transformation.accepted"
         id:
           type: string
           description: Unique identifier for the event.
@@ -5791,7 +5789,7 @@ components:
       properties:
         type:
           type: string
-          enum: [video.transformation.ready]
+          const: "video.transformation.ready"
         id:
           type: string
           description: Unique identifier for the event.
@@ -5843,7 +5841,7 @@ components:
       properties:
         type:
           type: string
-          enum: [video.transformation.error]
+          const: "video.transformation.error"
         id:
           type: string
           description: Unique identifier for the event.
