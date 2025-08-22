@@ -534,6 +534,7 @@ paths:
                       type: object
                       description: |
                         A key-value data to be associated with the asset. To unset a key, send `null` value for that key. Before setting any custom metadata on an asset you have to create the field using custom metadata fields API.
+                      additionalProperties: true
                     description:
                       type: string
                       description: |
@@ -883,6 +884,7 @@ paths:
             application/json:
               schema:
                 type: object
+                x-stainless-empty-object: true
   /v1/files:
     get:
       tags:
@@ -1317,6 +1319,7 @@ paths:
             application/json:
               schema:
                 type: object
+                x-stainless-empty-object: true
         "404":
           description: File not found.
           content:
@@ -1396,6 +1399,7 @@ paths:
             application/json:
               schema:
                 type: object
+                x-stainless-empty-object: true
         "404":
           description: File not found.
           content:
@@ -1825,6 +1829,7 @@ paths:
             application/json:
               schema:
                 type: object
+                x-stainless-empty-object: true
         "400":
           description: Trying to delete the current version of the file.
           content:
@@ -2365,6 +2370,7 @@ paths:
             application/json:
               schema:
                 type: object
+                x-stainless-empty-object: true
         "400":
           description: Bad Request.
           content:
@@ -2416,6 +2422,7 @@ paths:
             application/json:
               schema:
                 type: object
+                x-stainless-empty-object: true
         "404":
           description: Folder not found
           content:
@@ -5263,6 +5270,7 @@ components:
           type: object
           description: |
             An object with custom metadata for the file.
+          additionalProperties: true
         createdAt:
           type: string
           description: |
@@ -5396,6 +5404,7 @@ components:
           type: object
           description: |
             A key-value data associated with the asset. Use `responseField` in API request to get `customMetadata` in the upload API response. Before setting any custom metadata on an asset, you have to create the field using custom metadata fields API. Send `customMetadata` in `responseFields` in API request to get the value of this field.
+          additionalProperties: true 
         extensionStatus:
           type: object
           description: |

@@ -1,0 +1,209 @@
+# yaml-language-server: $schema=https://app.stainless.com/config.schema.json
+
+organization:
+  # Name of your organization or company, used to determine the name of the client
+  # and headings.
+  name: ImageKit
+  # Link to your API documentation.
+  docs: https://imagekit.io
+  # Contact email for bug reports, questions, and support requests.
+  contact: developer@imagekit.io
+
+# `targets` define the output targets and their customization options, such as
+# whether to emit the Node SDK and what it's package name should be.
+targets:
+  typescript:
+    package_name: "@imagekit/nodejs"
+    production_repo: null
+    publish:
+      npm: false
+  python:
+    package_name: imagekit
+    publish:
+      pypi: false
+  php:
+    package_name: 'image-kit'
+    composer_package_name: 'imagekit/imagekit'
+  csharp:
+    package_name: imagekit
+    publish:
+      nuget: false
+  go:
+    package_name: imagekit
+    production_repo: null
+    options:
+      enable_v2: true
+  java:
+    reverse_domain: com.imagekit.api
+    production_repo: null
+    publish:
+      maven: false
+  ruby:
+    gem_name: imagekit
+    production_repo: null
+    publish:
+      rubygems: false
+
+# `environments` are a map of the name of the environment (e.g. "sandbox",
+# "production") to the corresponding url to use.
+environments:
+  production: https://api.imagekit.io
+
+# `resources` define the structure and organization for your API, such as how
+# methods and models are grouped together and accessed. See the [configuration
+# guide] for more information.
+#
+# [configuration guide]: https://www.stainless.com/docs/guides/configure#resources
+resources:
+  customMetadataFields:
+    methods:
+      create: post /v1/customMetadataFields
+      list: get /v1/customMetadataFields
+      update: patch /v1/customMetadataFields/{id}
+      delete: delete /v1/customMetadataFields/{id}
+
+  files:
+    methods:
+      upload: post /api/v1/files/upload
+      get: get /v1/files/{fileId}/details
+      update: patch /v1/files/{fileId}/details
+      delete: delete /v1/files/{fileId}
+      copy: post /v1/files/copy
+      move: post /v1/files/move
+      rename: put /v1/files/rename
+    subresources:
+      bulk:
+        methods:
+          delete: post /v1/files/batch/deleteByFileIds
+          addTags: post /v1/files/addTags
+          removeTags: post /v1/files/removeTags
+          removeAiTags: post /v1/files/removeAITags
+      versions:
+        methods:
+          list: get /v1/files/{fileId}/versions
+          get: get /v1/files/{fileId}/versions/{versionId}
+          delete: delete /v1/files/{fileId}/versions/{versionId}
+          restore: put /v1/files/{fileId}/versions/{versionId}/restore
+      metadata:
+        methods:
+          get: get /v1/files/{fileId}/metadata
+          getFromURL: get /v1/files/metadata
+
+  assets:
+    methods:
+      list: get /v1/files
+
+  cache:
+    subresources:
+      invalidation:
+        methods:
+          create: post /v1/files/purge
+          get: get /v1/files/purge/{requestId}
+
+  folders:
+    methods:
+      create: post /v1/folder
+      delete: delete /v1/folder
+      copy: post /v1/bulkJobs/copyFolder
+      move: post /v1/bulkJobs/moveFolder
+      rename: post /v1/bulkJobs/renameFolder
+    subresources:
+      job:
+        methods:
+          get: get /v1/bulkJobs/{jobId}
+
+  accounts:
+    subresources:
+      usage:
+        methods:
+          get: get /v1/accounts/usage
+      origins:
+        methods:
+          list: get /v1/accounts/origins
+          create: post /v1/accounts/origins
+          get: get /v1/accounts/origins/{id}
+          update: put /v1/accounts/origins/{id}
+          delete: delete /v1/accounts/origins/{id}
+      urlEndpoints:
+        methods:
+          list: get /v1/accounts/url-endpoints
+          create: post /v1/accounts/url-endpoints
+          get: get /v1/accounts/url-endpoints/{id}
+          update: put /v1/accounts/url-endpoints/{id}
+          delete: delete /v1/accounts/url-endpoints/{id}
+
+  beta:
+    subresources:
+      v2:
+        subresources:
+          files:
+            methods:
+              upload: post /api/v2/files/upload
+  $shared:
+    models:
+      exif_details: "#/components/schemas/ExifDetails"
+      gps: "#/components/schemas/Gps"
+      exif_image: "#/components/schemas/ExifImage"
+      interoperability: "#/components/schemas/Interoperability"
+      thumbnail: "#/components/schemas/Thumbnail"
+      removedot_bg_extension: "#/components/schemas/RemovedotBGExtension"
+      auto_tagging_extension: "#/components/schemas/AutoTaggingExtension"
+      auto_description_extension: "#/components/schemas/AutoDescriptionExtension"
+
+  webhooks:
+      methods:
+        unwrap:
+          type: webhook_unwrap
+          discriminator: type
+          webhook_key_opt: private_api_key
+
+settings:
+  # All generated integration tests that hit the prism mock http server are marked
+  # as skipped. Removing this setting or setting it to false enables tests, but
+  # doing so may result in test failures due to bugs in the test server.
+  #
+  # [prism mock http server]: https://stoplight.io/open-source/prism
+  disable_mock_tests: true
+  license: Apache-2.0
+
+# `client_settings` define settings for the API client, such as extra constructor
+# arguments (used for authentication), retry behavior, idempotency, etc.
+client_settings:
+  opts:
+    # 1️⃣  The username side of Basic Auth
+    private_api_key:
+      type: string
+      description: Your ImageKit private key starts with `private_`.
+      read_env: IMAGEKIT_PRIVATE_API_KEY # or let users pass it in code
+      nullable: false # required to create a client
+      auth: { security_scheme: basicAuth, role: 'username' }
+
+    password:
+      type: string
+      description: "Do not set this, its value is ignored"
+      default: "does_not_matter"
+      nullable: true
+      read_env: ORG_MY_PASSWORD_TOKEN
+      auth: { security_scheme: basicAuth, role: 'password' }
+
+# `readme` is used to configure the code snippets that will be rendered in the
+# README.md of various SDKs. In particular, you can change the `headline`
+# snippet's endpoint and the arguments to call it with.
+
+openapi:
+  code_samples: "readme"
+
+readme:
+  example_requests:
+    default:
+      type: request
+      endpoint: post /api/v1/files/upload
+      params: {}
+    headline:
+      type: request
+      endpoint: post /api/v1/files/upload
+      params: {}
+diagnostics:
+  ignored:
+    Pagination/NotConfigured:
+      - "#/pagination"
