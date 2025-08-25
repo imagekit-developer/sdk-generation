@@ -518,22 +518,16 @@ paths:
                       description: >
                         Array of extensions to be applied to the asset. Each extension can be configured with specific parameters based on the extension type.
                     tags:
-                      type: array
+                      type: [array, "null"]
                       items:
                         type: string
                       description: >
                         An array of tags associated with the file, such as `["tag1", "tag2"]`. Send `null` to unset all tags associated with the file.
-                      nullable: true
                       example: ["tag1", "tag2"]
-                      x-nullable-description: >
-                        Send `null` to unset all tags associated with the file.
                     customCoordinates:
-                      type: string
-                      nullable: true
+                      type: [string, "null"]
                       description: |
                         Define an important area in the image in the format `x,y,width,height` e.g. `10,10,100,100`. Send `null` to unset this value.
-                      x-nullable-description: >
-                        Send `null` to unset this value.
                     customMetadata:
                       type: object
                       description: |
@@ -651,6 +645,7 @@ paths:
                 extensionStatus:
                   google-auto-tagging: "success"
                   remove-bg: "pending"
+                  ai-auto-description: "success"
         "404":
           description: File not found.
           content:
@@ -2508,16 +2503,10 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
         "200":
-          description: Job submitted successfully. A `jobId` will be returned.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  jobId:
-                    type: string
-                    description: |
-                      Unique identifier of the bulk job. This can be used to check the status of the bulk job.
+                $ref: "#/components/schemas/JobResponse"
         "404":
           description: Folder not found
           content:
@@ -2607,16 +2596,10 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
         "200":
-          description: Job submitted successfully. A `jobId` will be returned.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  jobId:
-                    type: string
-                    description: |
-                      Unique identifier of the bulk job. This can be used to check the status of the bulk job.
+                $ref: "#/components/schemas/JobResponse"
         "404":
           description: Folder not found
           content:
@@ -2714,16 +2697,10 @@ paths:
                   example: true
       responses:
         "202":
-          description: Job submitted successfully. A `jobId` will be returned.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  jobId:
-                    type: string
-                    description: |
-                      Unique identifier of the bulk job. This can be used to check the status of the bulk job.
+                $ref: "#/components/schemas/JobResponse"
         "400":
           description: Bad request.
           content:
@@ -2824,11 +2801,18 @@ paths:
                   type:
                     type: string
                     description: |
-                      Type of the bulk job. Possible values - `COPY_FOLDER`, `MOVE_FOLDER`, `RENAME_FOLDER`.
+                      Type of the bulk job.
+                    enum:
+                      - COPY_FOLDER
+                      - MOVE_FOLDER
+                      - RENAME_FOLDER
                   status:
                     type: string
                     description: |
-                      Status of the bulk job. Possible values - `Pending`, `Completed`.
+                      Status of the bulk job.
+                    enum:
+                      - Pending
+                      - Completed
                   purgeRequestId:
                     type: string
                     description: |
@@ -3232,7 +3216,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OriginSchema"
+              $ref: "#/components/schemas/OriginRequest"
       responses:
         "201":
           description: Origin created successfully.
@@ -3327,7 +3311,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OriginSchema"
+              $ref: "#/components/schemas/OriginRequest"
       responses:
         "200":
           description: Origin updated successfully.
@@ -3421,7 +3405,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UrlEndpointResponseArray"
+                type: array
+                items:
+                  $ref: "#/components/schemas/UrlEndpointResponse"
         "401": *a1
         "403": *a2
         "404":
@@ -3454,7 +3440,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/urlEndpointSchema"
+              $ref: "#/components/schemas/UrlEndpointRequest"
       responses:
         "201":
           description: URL‑endpoint created successfully.
@@ -3552,7 +3538,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/urlEndpointSchema"
+              $ref: "#/components/schemas/UrlEndpointRequest"
       responses:
         "200":
           description: URL‑endpoint updated successfully.
@@ -3645,9 +3631,9 @@ paths:
         "429": *a3
 components:
   schemas:
-    OriginSchema:
-      title: Origin Schema
-      description: Schema for origin resources.
+    OriginRequest:
+      title: Origin request
+      description: Schema for origin request resources.
       example:
         name: My S3 Origin
         type: S3
@@ -4056,90 +4042,6 @@ components:
             - password
           additionalProperties: false
       type: object
-    urlEndpointSchema:
-      title: URL Endpoint Schema
-      description: Schema for URL endpoint resource.
-      example:
-        description: My custom URL endpoint
-        urlPrefix: product-images
-        origins:
-          - origin-id-1
-      type: object
-      properties:
-        description:
-          description: Description of the URL endpoint.
-          example: My custom URL endpoint
-          type: string
-          minLength: 1
-          maxLength: 1000
-        urlPrefix:
-          description:
-            Path segment appended to your base URL to form the endpoint
-            (letters, digits, and hyphens only — or empty for the default
-            endpoint).
-          example: product-images
-          default: ""
-          type: string
-          maxLength: 100
-        origins:
-          description:
-            Ordered list of origin IDs to try when the file isn’t in the Media
-            Library; ImageKit checks them in the sequence provided. Origin must
-            be created before it can be used in a URL endpoint.
-          example:
-            - origin-id-1
-            - origin-id-2
-          default: []
-          maxItems: 10
-          type: array
-          items:
-            description:
-              Unique identifier for the origin. This is generated by ImageKit
-              when you create a new origin.
-            type: string
-        urlRewriter:
-          description: Configuration for third-party URL rewriting.
-          discriminator:
-              propertyName: type
-          oneOf:
-            - title: Cloudinary URL Rewriter
-              type: object
-              properties:
-                type:
-                  type: string
-                  const: "CLOUDINARY"
-                preserveAssetDeliveryTypes:
-                  description:
-                    Whether to preserve `<asset_type>/<delivery_type>` in the rewritten
-                    URL.
-                  example: true
-                  default: false
-                  type: boolean
-              required:
-                - type
-              additionalProperties: false
-            - title: Imgix URL Rewriter
-              type: object
-              properties:
-                type:
-                  type: string
-                  const: "IMGIX"
-              required:
-                - type
-              additionalProperties: false
-            - title: Akamai URL Rewriter
-              type: object
-              properties:
-                type:
-                  type: string
-                  const: "AKAMAI"
-              required:
-                - type
-              additionalProperties: false
-          type: object
-      required:
-        - description
-      additionalProperties: false
     OriginResponse:
       title: Origin Response
       description: Origin object as returned by the API (sensitive fields removed).
@@ -4525,10 +4427,90 @@ components:
             - id
           additionalProperties: false
       type: object
-    UrlEndpointResponseArray:
-      type: array
-      items:
-        $ref: "#/components/schemas/UrlEndpointResponse"
+    UrlEndpointRequest:
+      title: URL Endpoint Schema
+      description: Schema for URL endpoint resource.
+      example:
+        description: My custom URL endpoint
+        urlPrefix: product-images
+        origins:
+          - origin-id-1
+      type: object
+      properties:
+        description:
+          description: Description of the URL endpoint.
+          example: My custom URL endpoint
+          type: string
+          minLength: 1
+          maxLength: 1000
+        urlPrefix:
+          description:
+            Path segment appended to your base URL to form the endpoint
+            (letters, digits, and hyphens only — or empty for the default
+            endpoint).
+          example: product-images
+          default: ""
+          type: string
+          maxLength: 100
+        origins:
+          description:
+            Ordered list of origin IDs to try when the file isn’t in the Media
+            Library; ImageKit checks them in the sequence provided. Origin must
+            be created before it can be used in a URL endpoint.
+          example:
+            - origin-id-1
+            - origin-id-2
+          default: []
+          maxItems: 10
+          type: array
+          items:
+            description:
+              Unique identifier for the origin. This is generated by ImageKit
+              when you create a new origin.
+            type: string
+        urlRewriter:
+          description: Configuration for third-party URL rewriting.
+          discriminator:
+              propertyName: type
+          oneOf:
+            - title: Cloudinary URL Rewriter
+              type: object
+              properties:
+                type:
+                  type: string
+                  const: "CLOUDINARY"
+                preserveAssetDeliveryTypes:
+                  description:
+                    Whether to preserve `<asset_type>/<delivery_type>` in the rewritten
+                    URL.
+                  example: true
+                  default: false
+                  type: boolean
+              required:
+                - type
+              additionalProperties: false
+            - title: Imgix URL Rewriter
+              type: object
+              properties:
+                type:
+                  type: string
+                  const: "IMGIX"
+              required:
+                - type
+              additionalProperties: false
+            - title: Akamai URL Rewriter
+              type: object
+              properties:
+                type:
+                  type: string
+                  const: "AKAMAI"
+              required:
+                - type
+              additionalProperties: false
+          type: object
+      required:
+        - description
+      additionalProperties: false
     UrlEndpointResponse:
       title: URL‑endpoint Response
       description: URL‑endpoint object as returned by the API.
@@ -4776,6 +4758,7 @@ components:
             - name: "google-auto-tagging"
               maxTags: 5
               minConfidence: 95
+            - name: "ai-auto-description"
         webhookUrl:
           type: string
           format: uri
@@ -4955,6 +4938,7 @@ components:
             - name: "google-auto-tagging"
               maxTags: 5
               minConfidence: 95
+            - name: "ai-auto-description"
         webhookUrl:
           type: string
           format: uri
@@ -5287,6 +5271,10 @@ components:
           description: |
             An object with custom metadata for the file.
           additionalProperties: true
+        description:
+          type: string
+          description: |
+            Optional text to describe the contents of the file. Can be set by the user or the ai-auto-description extension.
         createdAt:
           type: string
           format: date-time
@@ -5366,28 +5354,24 @@ components:
           type: string
           description: The video codec used in the video (only for video).
         tags:
-          oneOf:
-            - type: array
-              items:
-                type: string
-          nullable: true
+          type: ["array", "null"]
+          items:
+            type: string
           description: The array of tags associated with the asset. If no tags are set, it will be `null`. Send `tags` in `responseFields` in API request to get the value of this field.
         AITags:
-          oneOf:
-            - type: array
-              items:
-                type: object
-                properties:
-                  name:
-                    type: string
-                    description: Name of the tag.
-                  confidence:
-                    type: number
-                    description: Confidence score of the tag.
-                  source:
-                    type: string
-                    description: Array of `AITags` associated with the image. If no `AITags` are set, it will be null. These tags can be added using the `google-auto-tagging` or `aws-auto-tagging` extensions.
-          nullable: true
+          type: ["array", "null"]
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Name of the tag.
+              confidence:
+                type: number
+                description: Confidence score of the tag.
+              source:
+                type: string
+                description: Array of `AITags` associated with the image. If no `AITags` are set, it will be null. These tags can be added using the `google-auto-tagging` or `aws-auto-tagging` extensions.
           description: |
             An array of tags assigned to the uploaded file by auto tagging.
         versionInfo:
@@ -5410,9 +5394,7 @@ components:
           description: |
             Is the file published or in draft state. It can be either `true` or `false`. Send `isPublished` in `responseFields` in API request to get the value of this field.
         customCoordinates:
-          oneOf:
-            - type: string
-          nullable: true
+          type: ["string", "null"]
           description: |
             Value of custom coordinates associated with the image in the format `x,y,width,height`. If `customCoordinates` are not defined, then it is `null`. Send `customCoordinates` in `responseFields` in API request to get the value of this field.
         fileType:
@@ -5453,6 +5435,10 @@ components:
           type: object
           additionalProperties: true
           description: Consolidated embedded metadata associated with the file. It includes exif, iptc, and xmp data. Send `embeddedMetadata` in `responseFields` in API request to get embeddedMetadata in the upload API response.
+        description:
+          type: string
+          description: |
+            Optional text to describe the contents of the file. Can be set by the user or the ai-auto-description extension.
     ExifImage:
       description: Object containing EXIF image information.
       type: object
@@ -5739,6 +5725,17 @@ components:
           description: User-Agent header of the originating request.
       required: [x_request_id, url]
 
+    JobResponse:
+      type: object
+      title: Async Bulk Job Response
+      description: Job submitted successfully. A `jobId` will be returned.
+      required: [jobId]
+      properties:
+        jobId:
+          type: string
+          description: |
+            Unique identifier of the bulk job. This can be used to check the status of the bulk job.
+    
     VideoAsset:
       type: object
       properties:

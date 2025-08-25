@@ -66,8 +66,9 @@ resources:
 
   files:
     models:
-      file: "#/components/schemas/FileDetails"
-      folder: "#/components/schemas/FolderDetails"
+      File: "#/components/schemas/FileDetails"
+      Folder: "#/components/schemas/FolderDetails"
+      Metadata: "#/components/schemas/Metadata"
     methods:
       upload: post /api/v1/files/upload
       get: get /v1/files/{fileId}/details
@@ -126,8 +127,8 @@ resources:
           get: get /v1/accounts/usage
       origins:
         models:
-          origin: '#/components/schemas/OriginSchema'
-          originResponse: '#/components/schemas/OriginResponse'
+          OriginRequest: '#/components/schemas/OriginRequest'
+          OriginResponse: '#/components/schemas/OriginResponse'
         methods:
           list: get /v1/accounts/origins
           create:
@@ -140,7 +141,8 @@ resources:
           delete: delete /v1/accounts/origins/{id}
       urlEndpoints:
         models:
-          urlEndpoint: '#/components/schemas/urlEndpointSchema'
+          UrlEndpointRequest: '#/components/schemas/UrlEndpointRequest'
+          UrlEndpointResponse: '#/components/schemas/UrlEndpointResponse'
         methods:
           list: get /v1/accounts/url-endpoints
           create: post /v1/accounts/url-endpoints
