@@ -56,6 +56,8 @@ environments:
 # [configuration guide]: https://www.stainless.com/docs/guides/configure#resources
 resources:
   customMetadataFields:
+    models:
+      CustomMetadataField: '#/components/schemas/CustomMetadataField'
     methods:
       create: post /v1/customMetadataFields
       list: get /v1/customMetadataFields
@@ -63,6 +65,9 @@ resources:
       delete: delete /v1/customMetadataFields/{id}
 
   files:
+    models:
+      file: "#/components/schemas/FileDetails"
+      folder: "#/components/schemas/FolderDetails"
     methods:
       upload: post /api/v1/files/upload
       get: get /v1/files/{fileId}/details
@@ -120,6 +125,9 @@ resources:
         methods:
           get: get /v1/accounts/usage
       origins:
+        models:
+          origin: '#/components/schemas/OriginSchema'
+          originResponse: '#/components/schemas/OriginResponse'
         methods:
           list: get /v1/accounts/origins
           create:
@@ -131,6 +139,8 @@ resources:
             body_param_name: origin
           delete: delete /v1/accounts/origins/{id}
       urlEndpoints:
+        models:
+          urlEndpoint: '#/components/schemas/urlEndpointSchema'
         methods:
           list: get /v1/accounts/url-endpoints
           create: post /v1/accounts/url-endpoints

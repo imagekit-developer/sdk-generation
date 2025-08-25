@@ -3208,7 +3208,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OriginResponseArray"
+                type: array
+                items:
+                  $ref: "#/components/schemas/OriginResponse"
         "401": &a1
           $ref: "#/components/responses/Unauthorized"
         "403": &a2
@@ -4138,10 +4140,6 @@ components:
       required:
         - description
       additionalProperties: false
-    OriginResponseArray:
-      type: array
-      items:
-        $ref: "#/components/schemas/OriginResponse"
     OriginResponse:
       title: Origin Response
       description: Origin object as returned by the API (sensitive fields removed).
