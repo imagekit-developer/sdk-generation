@@ -248,6 +248,7 @@ paths:
                         - type: boolean
                         - type: array
                           x-stainless-variantName: Mixed
+                          title: Mixed
                           items:
                             oneOf:
                               - type: string
@@ -736,6 +737,7 @@ paths:
                         - type: boolean
                         - type: array
                           x-stainless-variantName: Mixed
+                          title: Mixed
                           items:
                             oneOf:
                               - type: string
@@ -1013,6 +1015,12 @@ paths:
               schema:
                 type: array
                 items:
+                  discriminator:
+                    propertyName: type
+                    mapping:
+                      file: "#/components/schemas/FileDetails"
+                      "file-version": "#/components/schemas/FileDetails"
+                      folder: "#/components/schemas/FolderDetails"
                   oneOf:
                     - $ref: "#/components/schemas/FileDetails"
                     - $ref: "#/components/schemas/FolderDetails"
@@ -5187,6 +5195,9 @@ components:
         type:
           type: string
           description: Type of the asset.
+          enum: 
+            - file
+            - file-version
         name:
           type: string
           description: Name of the asset.
@@ -5241,10 +5252,12 @@ components:
             An string with custom coordinates of the file.
         url:
           type: string
+          format: uri
           description: |
             URL of the file.
         thumbnail:
           type: string
+          format: uri
           description: |
             URL of the thumbnail image. This URL is used to access the thumbnail image of the file in the media library.
         fileType:
@@ -5278,10 +5291,12 @@ components:
           additionalProperties: true
         createdAt:
           type: string
+          format: date-time
           description: |
             Date and time when the file was uploaded. The date and time is in ISO8601 format.
         updatedAt:
           type: string
+          format: date-time
           description: |
             Date and time when the file was last updated. The date and time is in ISO8601 format.
     FolderDetails:
@@ -5304,10 +5319,12 @@ components:
             Path of the folder. This is the path you would use in the URL to access the folder. For example, if the folder is at the root of the media library, the path will be /folder. If the folder is inside another folder named images, the path will be /images/folder.
         createdAt:
           type: string
+          format: date-time
           description: |
             Date and time when the folder was created. The date and time is in ISO8601 format.
         updatedAt:
           type: string
+          format: date-time
           description: |
             Date and time when the folder was last updated. The date and time is in ISO8601 format.
     Upload:
@@ -5673,6 +5690,7 @@ components:
                 - type: boolean
                 - type: array
                   x-stainless-variantName: Mixed
+                  title: Mixed
                   items:
                     oneOf:
                       - type: string
