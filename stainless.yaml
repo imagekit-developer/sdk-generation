@@ -17,6 +17,10 @@ targets:
     production_repo: null
     publish:
       npm: false
+    options:
+      mcp_server:
+        package_name: "@imagekit/nodejs-mcp"
+        enable_all_resources: true
   python:
     package_name: imagekit
     publish:
@@ -229,3 +233,4 @@ diagnostics:
     Model/IsConstant: true
     Java/SchemaUnionDiscriminatorMissing:
       - (resource) files > (method) update > (params) default > (param) update > (schema)
+    Ruby/NameShadowedBuiltin: true
