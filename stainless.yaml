@@ -163,6 +163,10 @@ resources:
               upload: post /api/v2/files/upload
 
   webhooks:
+    models: 
+      video_transformation_accepted_event: VideoTransformationAcceptedEvent
+      video_transformation_ready_event: VideoTransformationReadyEvent
+      video_transformation_error_event: VideoTransformationErrorEvent
     methods:
       unwrap:
         type: webhook_unwrap
