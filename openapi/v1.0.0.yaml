@@ -5896,6 +5896,745 @@ components:
                       required: [reason]
           required: [asset, transformation]
       required: [type, id, created_at, request, data]
+    
+    SrcOptions:
+      title: Source Options
+      description: Options for generating ImageKit URLs with transformations
+      type: object
+      required:
+        - src
+        - urlEndpoint
+      properties:
+        src:
+          type: string
+          description: |
+            Accepts a relative or absolute path of the resource. If a relative path is provided, it is appended to the `urlEndpoint`. 
+            If an absolute path is provided, `urlEndpoint` is ignored.
+          example: "/my-image.jpg"
+        urlEndpoint:
+          type: string
+          format: uri
+          description: |
+            Get your urlEndpoint from the [ImageKit dashboard](https://imagekit.io/dashboard/url-endpoints).
+          example: "https://ik.imagekit.io/demo"
+        transformation:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transformation"
+          description: |
+            An array of objects specifying the transformations to be applied in the URL. If more than one transformation is specified, they are applied in the order they are specified as chained transformations.
+        queryParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: |
+            These are additional query parameters that you want to add to the final URL.
+            They can be any query parameters and not necessarily related to ImageKit.
+            This is especially useful if you want to add a versioning parameter to your URLs.
+        transformationPosition:
+          $ref: "#/components/schemas/TransformationPosition"
+      additionalProperties: false
+
+    TransformationPosition:
+      type: string
+      enum: ["path", "query"]
+      description: |
+        By default, the transformation string is added as a query parameter in the URL, e.g., `?tr=w-100,h-100`. 
+        If you want to add the transformation string in the path of the URL, set this to `path`.
+
+    StreamingResolution:
+      type: string
+      enum: ["240", "360", "480", "720", "1080", "1440", "2160"]
+      description: Available streaming resolutions for adaptive bitrate streaming
+
+    Transformation:
+      title: Transformation
+      description: |
+        The SDK provides easy-to-use names for transformations. These names are converted to the corresponding transformation string before being added to the URL.
+        SDKs are updated regularly to support new transformations. If you want to use a transformation that is not supported by the SDK, 
+        You can use the `raw` parameter to pass the transformation string directly.
+      type: object
+      properties:
+        width:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the width of the output. If a value between 0 and 1 is provided, it is treated as a percentage (e.g., `0.4` represents 40% of the original width). 
+            You can also supply arithmetic expressions (e.g., `iw_div_2`).
+          example: 300
+        height:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the height of the output. If a value between 0 and 1 is provided, it is treated as a percentage (e.g., `0.5` represents 50% of the original height). 
+            You can also supply arithmetic expressions (e.g., `ih_mul_0.5`).
+          example: 200
+        aspectRatio:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the aspect ratio for the output, e.g., "ar-4-3". Typically used with either width or height (but not both). 
+            For example: aspectRatio = `4:3`, `4_3`, or an expression like `iar_div_2`.
+          example: "4:3"
+        background:
+          type: string
+          description: |
+            Specifies the background to be used in conjunction with certain cropping strategies when resizing an image. 
+            - A solid color: e.g., `red`, `F3F3F3`, `AAFF0010`.
+            - A blurred background: e.g., `blurred`, `blurred_25_N15`, etc.
+            - Expand the image boundaries using generative fill: `genfill`. Not supported inside overlay. Optionally, control the background scene by passing a text prompt:
+              `genfill[:-prompt-${text}]` or `genfill[:-prompte-${urlencoded_base64_encoded_text}]`.
+          example: "red"
+        border:
+          type: string
+          description: |
+            Adds a border to the output media. Accepts a string in the format `<border-width>_<hex-code>` 
+            (e.g., `5_FFF000` for a 5px yellow border), or an expression like `ih_div_20_FF00FF`.
+          example: "5_FF0000"
+        crop:
+          type: string
+          enum: ["force", "at_max", "at_max_enlarge", "at_least", "maintain_ratio"]
+          description: Crop modes for image resizing
+        cropMode:
+          type: string
+          enum: ["pad_resize", "extract", "pad_extract"]
+          description: Additional crop modes for image resizing
+        dpr:
+          type: number
+          minimum: 0.1
+          maximum: 5
+          description: |
+            Accepts values between 0.1 and 5, or `auto` for automatic device pixel ratio (DPR) calculation.
+          example: 2
+        focus:
+          type: string
+          description: |
+            This parameter can be used with pad resize, maintain ratio, or extract crop to modify the padding or cropping behavior.
+          example: "center"
+        quality:
+          type: number
+          minimum: 1
+          maximum: 100
+          description: |
+            Specifies the quality of the output image for lossy formats such as JPEG, WebP, and AVIF. 
+            A higher quality value results in a larger file size with better quality, while a lower value produces a smaller file size with reduced quality.
+          example: 80
+        x:
+          oneOf:
+            - type: number
+            - type: string
+          description: Focus using cropped image coordinates - X coordinate
+        xCenter:
+          oneOf:
+            - type: number
+            - type: string
+          description: Focus using cropped image coordinates - X center coordinate
+        y:
+          oneOf:
+            - type: number
+            - type: string
+          description: Focus using cropped image coordinates - Y coordinate
+        yCenter:
+          oneOf:
+            - type: number
+            - type: string
+          description: Focus using cropped image coordinates - Y center coordinate
+        format:
+          type: string
+          enum: ["auto", "webp", "jpg", "jpeg", "png", "gif", "svg", "mp4", "webm", "avif", "orig"]
+          description: |
+            Specifies the output format for images or videos, e.g., `jpg`, `png`, `webp`, `mp4`, or `auto`. 
+            You can also pass `orig` for images to return the original format.
+            ImageKit automatically delivers images and videos in the optimal format based on device support unless overridden by the dashboard settings or the format parameter.
+        videoCodec:
+          type: string
+          enum: ["h264", "vp9", "av1", "none"]
+          description: Specifies the video codec, e.g., `h264`, `vp9`, `av1`, or `none`.
+        audioCodec:
+          type: string
+          enum: ["aac", "opus", "none"]
+          description: Specifies the audio codec, e.g., `aac`, `opus`, or `none`.
+        radius:
+          oneOf:
+            - type: number
+            - type: string
+              enum: ["max"]
+          description: |
+            Specifies the corner radius for rounded corners (e.g., 20) or `max` for circular/oval shapes.
+          example: 20
+        rotation:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the rotation angle in degrees. Positive values rotate the image clockwise; you can also use, for example, `N40` for counterclockwise rotation 
+            or `auto` to use the orientation specified in the image's EXIF data.
+            For videos, only the following values are supported: 0, 90, 180, 270, or 360.
+          example: 90
+        blur:
+          type: number
+          minimum: 1
+          maximum: 100
+          description: |
+            Specifies the Gaussian blur level. Accepts an integer value between 1 and 100, or an expression like `bl-10`.
+          example: 10
+        named:
+          type: string
+          description: Named transformation reference
+        defaultImage:
+          type: string
+          description: |
+            Specifies a fallback image if the resource is not found, e.g., a URL or file path.
+        flip:
+          type: string
+          enum: ["h", "v", "h_v", "v_h"]
+          description: |
+            Flips or mirrors an image either horizontally, vertically, or both. 
+            Acceptable values: `h` (horizontal), `v` (vertical), `h_v` (horizontal and vertical), or `v_h`.
+        original:
+          type: boolean
+          description: |
+            If set to true, serves the original file without applying any transformations.
+        startOffset:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the start offset (in seconds) for trimming videos, e.g., `5` or `10.5`. 
+            Arithmetic expressions are also supported.
+        endOffset:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the end offset (in seconds) for trimming videos, e.g., `5` or `10.5`. 
+            Typically used with startOffset to define a time window. Arithmetic expressions are supported.
+        duration:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the duration (in seconds) for trimming videos, e.g., `5` or `10.5`. 
+            Typically used with startOffset to indicate the length from the start offset. Arithmetic expressions are supported.
+        streamingResolutions:
+          type: array
+          items:
+            $ref: "#/components/schemas/StreamingResolution"
+          description: |
+            An array of resolutions for adaptive bitrate streaming, e.g., [`240`, `360`, `480`, `720`, `1080`].
+        grayscale:
+          type: boolean
+          enum: [true]
+          description: Enables a grayscale effect for images.
+        aiUpscale:
+          type: boolean
+          enum: [true]
+          description: |
+            Upscales images beyond their original dimensions using AI. Not supported inside overlay.
+        aiRetouch:
+          type: boolean
+          enum: [true]
+          description: |
+            Performs AI-based retouching to improve faces or product shots. Not supported inside overlay.
+        aiVariation:
+          type: boolean
+          enum: [true]
+          description: |
+            Generates a variation of an image using AI. This produces a new image with slight variations from the original, 
+            such as changes in color, texture, and other visual elements, while preserving the structure and essence of the original image. Not supported inside overlay.
+        aiDropShadow:
+          oneOf:
+            - type: boolean
+              enum: [true]
+            - type: string
+          description: |
+            Adds an AI-based drop shadow around a foreground object on a transparent or removed background. 
+            Optionally, control the direction, elevation, and saturation of the light source (e.g., `az-45` to change light direction).
+            Pass `true` for the default drop shadow, or provide a string for a custom drop shadow.
+            Supported inside overlay.
+        aiChangeBackground:
+          type: string
+          description: |
+            Uses AI to change the background. Provide a text prompt or a base64-encoded prompt, 
+            e.g., `prompt-snow road` or `prompte-[urlencoded_base64_encoded_text]`.
+            Not supported inside overlay.
+        aiRemoveBackground:
+          type: boolean
+          enum: [true]
+          description: |
+            Applies ImageKit's in-house background removal. 
+            Supported inside overlay.
+        aiRemoveBackgroundExternal:
+          type: boolean
+          enum: [true]
+          description: |
+            Uses third-party background removal. 
+            Note: It is recommended to use aiRemoveBackground, ImageKit's in-house solution, which is more cost-effective.
+            Supported inside overlay.
+        contrastStretch:
+          type: boolean
+          enum: [true]
+          description: |
+            Automatically enhances the contrast of an image (contrast stretch).
+        shadow:
+          oneOf:
+            - type: boolean
+              enum: [true]
+            - type: string
+          description: |
+            Adds a shadow beneath solid objects in an image with a transparent background. 
+            For AI-based drop shadows, refer to aiDropShadow.
+            Pass `true` for a default shadow, or provide a string for a custom shadow.
+        sharpen:
+          oneOf:
+            - type: boolean
+              enum: [true]
+            - type: number
+          description: |
+            Sharpens the input image, highlighting edges and finer details. 
+            Pass `true` for default sharpening, or provide a numeric value for custom sharpening.
+        unsharpMask:
+          oneOf:
+            - type: boolean
+              enum: [true]
+            - type: string
+          description: |
+            Applies Unsharp Masking (USM), an image sharpening technique. 
+            Pass `true` for a default unsharp mask, or provide a string for a custom unsharp mask.
+        gradient:
+          oneOf:
+            - type: boolean
+              enum: [true]
+            - type: string
+          description: |
+            Creates a linear gradient with two colors. Pass `true` for a default gradient, or provide a string for a custom gradient.
+        progressive:
+          type: boolean
+          description: |
+            Specifies whether the output JPEG image should be rendered progressively. Progressive loading begins with a low-quality, 
+            pixelated version of the full image, which gradually improves to provide a faster perceived load time.
+        lossless:
+          type: boolean
+          description: |
+            Specifies whether the output image (in JPEG or PNG) should be compressed losslessly.
+        colorProfile:
+          type: boolean
+          description: |
+            Indicates whether the output image should retain the original color profile.
+        metadata:
+          type: boolean
+          description: |
+            By default, ImageKit removes all metadata during automatic image compression. 
+            Set this to true to preserve metadata.
+        opacity:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Specifies the opacity level of the output image.
+        trim:
+          oneOf:
+            - type: boolean
+              enum: [true]
+            - type: number
+          description: |
+            Useful for images with a solid or nearly solid background and a central object. This parameter trims the background, 
+            leaving only the central object in the output image.
+        zoom:
+          type: number
+          description: |
+            Accepts a numeric value that determines how much to zoom in or out of the cropped area. 
+            It should be used in conjunction with fo-face or fo-<object_name>.
+        page:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Extracts a specific page or frame from multi-page or layered files (PDF, PSD, AI). 
+            For example, specify by number (e.g., `2`), a range (e.g., `3-4` for the 2nd and 3rd layers),
+            or by name (e.g., `name-layer-4` for a PSD layer).
+        raw:
+          type: string
+          description: |
+            Pass any transformation not directly supported by the SDK. 
+            This transformation string is appended to the URL as provided.
+        overlay:
+          $ref: "#/components/schemas/Overlay"
+      additionalProperties: false
+
+    Overlay:
+      title: Overlay
+      description: |
+        Specifies an overlay to be applied on the parent image or video. 
+        ImageKit supports overlays including images, text, videos, subtitles, and solid colors.
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/TextOverlay"
+        - $ref: "#/components/schemas/ImageOverlay"
+        - $ref: "#/components/schemas/VideoOverlay"
+        - $ref: "#/components/schemas/SubtitleOverlay"
+        - $ref: "#/components/schemas/SolidColorOverlay"
+
+    BaseOverlay:
+      type: object
+      properties:
+        position:
+          $ref: "#/components/schemas/OverlayPosition"
+        timing:
+          $ref: "#/components/schemas/OverlayTiming"
+      additionalProperties: false
+
+    OverlayPosition:
+      type: object
+      properties:
+        x:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the x-coordinate of the top-left corner of the base asset where the overlay's top-left corner will be positioned.
+            It also accepts arithmetic expressions such as `bw_mul_0.4` or `bw_sub_cw`.
+            Maps to `lx` in the URL.
+        y:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the y-coordinate of the top-left corner of the base asset where the overlay's top-left corner will be positioned.
+            It also accepts arithmetic expressions such as `bh_mul_0.4` or `bh_sub_ch`.
+            Maps to `ly` in the URL.
+        focus:
+          type: string
+          enum: ["center", "top", "left", "bottom", "right", "top_left", "top_right", "bottom_left", "bottom_right"]
+          description: |
+            Specifies the position of the overlay relative to the parent image or video.
+            Maps to `lfo` in the URL.
+      additionalProperties: false
+
+    OverlayTiming:
+      type: object
+      properties:
+        start:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the start time (in seconds) for when the overlay should appear on the base video.
+            Accepts a positive number up to two decimal places (e.g., `20` or `20.50`) and arithmetic expressions such as `bdu_mul_0.4` or `bdu_sub_idu`.
+            Applies only if the base asset is a video.
+            Maps to `lso` in the URL.
+        duration:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the duration (in seconds) during which the overlay should appear on the base video.
+            Accepts a positive number up to two decimal places (e.g., `20` or `20.50`) and arithmetic expressions such as `bdu_mul_0.4` or `bdu_sub_idu`.
+            Applies only if the base asset is a video.
+            Maps to `ldu` in the URL.
+        end:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the end time (in seconds) for when the overlay should disappear from the base video.
+            If both end and duration are provided, duration is ignored.
+            Accepts a positive number up to two decimal places (e.g., `20` or `20.50`) and arithmetic expressions such as `bdu_mul_0.4` or `bdu_sub_idu`.
+            Applies only if the base asset is a video.
+            Maps to `leo` in the URL.
+      additionalProperties: false
+
+    TextOverlay:
+      allOf:
+        - $ref: "#/components/schemas/BaseOverlay"
+        - type: object
+          required:
+            - type
+            - text
+          properties:
+            type:
+              type: string
+              enum: ["text"]
+            text:
+              type: string
+              description: Specifies the text to be displayed in the overlay. The SDK automatically handles special characters and encoding.
+            encoding:
+              type: string
+              enum: ["auto", "plain", "base64"]
+              default: "auto"
+              description: |
+                Text can be included in the layer as either `i-{input}` (plain text) or `ie-{base64_encoded_input}` (base64). 
+                By default, the SDK selects the appropriate format based on the input text. 
+                To always use base64 (`ie-{base64}`), set this parameter to `base64`. 
+                To always use plain text (`i-{input}`), set it to `plain`.
+            transformation:
+              type: array
+              items:
+                $ref: "#/components/schemas/TextOverlayTransformation"
+              description: Control styling of the text overlay.
+          additionalProperties: false
+
+    ImageOverlay:
+      allOf:
+        - $ref: "#/components/schemas/BaseOverlay"
+        - type: object
+          required:
+            - type
+            - input
+          properties:
+            type:
+              type: string
+              enum: ["image"]
+            input:
+              type: string
+              description: Specifies the relative path to the image used as an overlay.
+            encoding:
+              type: string
+              enum: ["auto", "plain", "base64"]
+              default: "auto"
+              description: |
+                The input path can be included in the layer as either `i-{input}` or `ie-{base64_encoded_input}`. 
+                By default, the SDK determines the appropriate format automatically. 
+                To always use base64 encoding (`ie-{base64}`), set this parameter to `base64`. 
+                To always use plain text (`i-{input}`), set it to `plain`.
+            transformation:
+              type: array
+              items:
+                $ref: "#/components/schemas/Transformation"
+              description: |
+                Array of transformations to be applied to the overlay image. Supported transformations depends on the base/parent asset.
+          additionalProperties: false
+
+    VideoOverlay:
+      allOf:
+        - $ref: "#/components/schemas/BaseOverlay"
+        - type: object
+          required:
+            - type
+            - input
+          properties:
+            type:
+              type: string
+              enum: ["video"]
+            input:
+              type: string
+              description: Specifies the relative path to the video used as an overlay.
+            encoding:
+              type: string
+              enum: ["auto", "plain", "base64"]
+              default: "auto"
+              description: |
+                The input path can be included in the layer as either `i-{input}` or `ie-{base64_encoded_input}`. 
+                By default, the SDK determines the appropriate format automatically. 
+                To always use base64 encoding (`ie-{base64}`), set this parameter to `base64`. 
+                To always use plain text (`i-{input}`), set it to `plain`.
+            transformation:
+              type: array
+              items:
+                $ref: "#/components/schemas/Transformation"
+              description: |
+                Array of transformation to be applied to the overlay video. Except `streamingResolutions`, all other video transformations are supported.
+          additionalProperties: false
+
+    SubtitleOverlay:
+      allOf:
+        - $ref: "#/components/schemas/BaseOverlay"
+        - type: object
+          required:
+            - type
+            - input
+          properties:
+            type:
+              type: string
+              enum: ["subtitle"]
+            input:
+              type: string
+              description: Specifies the relative path to the subtitle file used as an overlay.
+            encoding:
+              type: string
+              enum: ["auto", "plain", "base64"]
+              default: "auto"
+              description: |
+                The input path can be included in the layer as either `i-{input}` or `ie-{base64_encoded_input}`. 
+                By default, the SDK determines the appropriate format automatically. 
+                To always use base64 encoding (`ie-{base64}`), set this parameter to `base64`. 
+                To always use plain text (`i-{input}`), set it to `plain`.
+            transformation:
+              type: array
+              items:
+                $ref: "#/components/schemas/SubtitleOverlayTransformation"
+              description: Control styling of the subtitle.
+          additionalProperties: false
+
+    SolidColorOverlay:
+      allOf:
+        - $ref: "#/components/schemas/BaseOverlay"
+        - type: object
+          required:
+            - type
+            - color
+          properties:
+            type:
+              type: string
+              enum: ["solidColor"]
+            color:
+              type: string
+              description: |
+                Specifies the color of the block using an RGB hex code (e.g., `FF0000`), an RGBA code (e.g., `FFAABB50`), or a color name (e.g., `red`).
+                If an 8-character value is provided, the last two characters represent the opacity level (from `00` for 0.00 to `99` for 0.99).
+            transformation:
+              type: array
+              items:
+                $ref: "#/components/schemas/SolidColorOverlayTransformation"
+              description: |
+                Control width and height of the solid color overlay. Supported transformations depend on the base/parent asset.
+          additionalProperties: false
+
+    TextOverlayTransformation:
+      type: object
+      properties:
+        width:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the maximum width (in pixels) of the overlaid text. The text wraps automatically, and arithmetic expressions (e.g., `bw_mul_0.2` or `bh_div_2`) are supported. Useful when used in conjunction with the `background`.
+        fontSize:
+          oneOf:
+            - type: number
+            - type: string
+          description: Specifies the font size of the overlaid text. Accepts a numeric value or an arithmetic expression.
+        fontFamily:
+          type: string
+          description: |
+            Specifies the font family of the overlaid text. Choose from the supported fonts list or use a custom font.
+        fontColor:
+          type: string
+          description: |
+            Specifies the font color of the overlaid text. Accepts an RGB hex code (e.g., `FF0000`), an RGBA code (e.g., `FFAABB50`), or a color name.
+        innerAlignment:
+          type: string
+          enum: ["left", "right", "center"]
+          default: "center"
+          description: |
+            Specifies the inner alignment of the text when width is more than the text length.
+        padding:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the padding around the overlaid text.
+            Can be provided as a single positive integer or multiple values separated by underscores (following CSS shorthand order).
+            Arithmetic expressions are also accepted.
+        alpha:
+          type: number
+          minimum: 1
+          maximum: 9
+          description: Specifies the transparency level of the text overlay. Accepts integers from `1` to `9`.
+        typography:
+          type: string
+          enum: ["b", "i", "b_i"]
+          description: |
+            Specifies the typography style of the text.
+            Supported values: `b` for bold, `i` for italics, and `b_i` for bold with italics.
+        background:
+          type: string
+          description: |
+            Specifies the background color of the text overlay.
+            Accepts an RGB hex code, an RGBA code, or a color name.
+        radius:
+          oneOf:
+            - type: number
+            - type: string
+              enum: ["max"]
+          description: |
+            Specifies the corner radius of the text overlay.
+            Set to `max` to achieve a circular or oval shape.
+        rotation:
+          oneOf:
+            - type: number
+            - type: string
+          description: |
+            Specifies the rotation angle of the text overlay.
+            Accepts a numeric value for clockwise rotation or a string prefixed with "N" for counter-clockwise rotation.
+        flip:
+          type: string
+          enum: ["h", "v", "h_v", "v_h"]
+          description: Flip the text overlay horizontally, vertically, or both.
+        lineHeight:
+          oneOf:
+            - type: number
+            - type: string
+          description: Specifies the line height of the text overlay.
+      additionalProperties: false
+
+    SubtitleOverlayTransformation:
+      type: object
+      properties:
+        background:
+          type: string
+          description: Background color for subtitles
+        fontSize:
+          oneOf:
+            - type: number
+            - type: string
+          description: Font size for subtitles
+        fontFamily:
+          type: string
+          description: Font family for subtitles
+        color:
+          type: string
+          description: Text color for subtitles
+        typography:
+          type: string
+          enum: ["b", "i", "b_i"]
+          description: Typography style for subtitles
+        fontOutline:
+          type: string
+          description: Font outline for subtitles
+        fontShadow:
+          type: string
+          description: Font shadow for subtitles
+      additionalProperties: false
+
+    SolidColorOverlayTransformation:
+      type: object
+      properties:
+        width:
+          oneOf:
+            - type: number
+            - type: string
+          description: Width of the solid color overlay
+        height:
+          oneOf:
+            - type: number
+            - type: string
+          description: Height of the solid color overlay
+        radius:
+          oneOf:
+            - type: number
+            - type: string
+              enum: ["max"]
+          description: Corner radius of the solid color overlay
+        alpha:
+          type: number
+          minimum: 1
+          maximum: 9
+          description: Alpha transparency level
+        background:
+          type: string
+          description: Background color
+        gradient:
+          oneOf:
+            - type: boolean
+              enum: [true]
+            - type: string
+          description: Gradient effect for the overlay
+      additionalProperties: false
+  
   examples:
     UploadResponseWithEmbeddedMetadata:
       fileId: 6673f88237b244ef54d60180
@@ -6394,6 +7133,7 @@ components:
       audioCodec: aac
       videoCodec: h264
       size: 23490
+
   securitySchemes:
     basicAuth:
       description: >-

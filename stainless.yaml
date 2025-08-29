@@ -59,6 +59,26 @@ environments:
 #
 # [configuration guide]: https://www.stainless.com/docs/guides/configure#resources
 resources:
+  $shared:
+    models:
+      SrcOptions: '#/components/schemas/SrcOptions'
+      Transformation: '#/components/schemas/Transformation'
+      TransformationPosition: '#/components/schemas/TransformationPosition'
+      StreamingResolution: '#/components/schemas/StreamingResolution'
+      Overlay: '#/components/schemas/Overlay'
+      BaseOverlay: '#/components/schemas/BaseOverlay'
+      OverlayPosition: '#/components/schemas/OverlayPosition'
+      OverlayTiming: '#/components/schemas/OverlayTiming'
+      TextOverlay: '#/components/schemas/TextOverlay'
+      ImageOverlay: '#/components/schemas/ImageOverlay'
+      VideoOverlay: '#/components/schemas/VideoOverlay'
+      SubtitleOverlay: '#/components/schemas/SubtitleOverlay'
+      SolidColorOverlay: '#/components/schemas/SolidColorOverlay'
+      TextOverlayTransformation: '#/components/schemas/TextOverlayTransformation'
+      SubtitleOverlayTransformation: '#/components/schemas/SubtitleOverlayTransformation'
+      SolidColorOverlayTransformation: '#/components/schemas/SolidColorOverlayTransformation'
+
+
   customMetadataFields:
     models:
       CustomMetadataField: '#/components/schemas/CustomMetadataField'
