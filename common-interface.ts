@@ -554,7 +554,8 @@ export interface ImageOverlay extends BaseOverlay {
     type: "image";
 
     /**
-     * Specifies the relative path to the image used as an overlay.
+     * Specifies the relative path to the image used as an overlay. You can also use an HTTP(S) URL of an image. 
+     * ImageKit will fetch the image from the URL, and use it as the layer.
      */
     input: string;
 
