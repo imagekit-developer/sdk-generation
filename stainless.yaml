@@ -14,13 +14,9 @@ organization:
 targets:
   typescript:
     package_name: "@imagekit/nodejs"
-    production_repo: null
+    production_repo: imagekit-developer/imagekit-nodejs#master
     publish:
       npm: false
-    options:
-      mcp_server:
-        package_name: "@imagekit/nodejs-mcp"
-        enable_all_resources: true
   python:
     package_name: imagekit
     publish:
@@ -77,7 +73,6 @@ resources:
       TextOverlayTransformation: '#/components/schemas/TextOverlayTransformation'
       SubtitleOverlayTransformation: '#/components/schemas/SubtitleOverlayTransformation'
       SolidColorOverlayTransformation: '#/components/schemas/SolidColorOverlayTransformation'
-
 
   customMetadataFields:
     models:
@@ -183,7 +178,7 @@ resources:
               upload: post /api/v2/files/upload
 
   webhooks:
-    models: 
+    models:
       video_transformation_accepted_event: VideoTransformationAcceptedEvent
       video_transformation_ready_event: VideoTransformationReadyEvent
       video_transformation_error_event: VideoTransformationErrorEvent
