@@ -5,7 +5,7 @@ organization:
   # and headings.
   name: ImageKit
   # Link to your API documentation.
-  docs: https://imagekit.io
+  docs: https://imagekit.io/docs
   # Contact email for bug reports, questions, and support requests.
   contact: developer@imagekit.io
 
