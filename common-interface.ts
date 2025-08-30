@@ -314,6 +314,18 @@ export interface Transformation {
      */
     aiRemoveBackgroundExternal?: true
 
+
+    /**
+     * Uses AI to edit and modify the contents of an image using a descriptive text prompt.
+     * Provide a text description of the desired edit (e.g., "add some flair to this plain cake" or "make the seawater blue").
+     * The output image dimensions will be 1024x1024 for square images, or 1536x1024/1024x1536 for non-square images.
+     * e.g., `prompt-add some flair to this plain cake` or `prompte-[urlencoded_base64_encoded_text]`.
+     * 
+     * Not supported inside overlay.
+     * [AI Transformations - Edit Image](https://imagekit.io/docs/ai-transformations#edit-image-e-edit)
+     */
+    aiEdit?: string;
+
     /**
      * Automatically enhances the contrast of an image (contrast stretch). 
      * 
@@ -677,9 +689,11 @@ export type TextOverlayTransformation = {
 
     /**
      * Specifies the typography style of the text.
-     * Supported values: `b` for bold, `i` for italics, and `b_i` for bold with italics.
+     * Supported values: 
+     * - Single styles: `b` (bold), `i` (italic), `strikethrough`.
+     * - Combinations: Any combination separated by underscores, e.g., `b_i`, `b_i_strikethrough`.
      */
-    typography?: "b" | "i" | "b_i";
+    typography?: string;
 
     /**
      * Specifies the background color of the text overlay.
@@ -730,11 +744,15 @@ export type SubtitleOverlayTransformation = {
      * Sets the font color of the subtitle text using a standard color name, an RGB color code (e.g., `FF0000`), or an RGBA color code (e.g., `FFAABB50`).
      */
     color?: string;
+
     /**
-     * Sets the typography style of the subtitle text.
-     * Supported values: `b` for bold, `i` for italics, and `b_i` for bold with italics.
+     * Specifies the typography style of the text.
+     * Supported values: 
+     * - Single styles: `b` (bold), `i` (italic), `strikethrough`.
+     * - Combinations: Any combination separated by underscores, e.g., `b_i`, `b_i_strikethrough`.
      */
-    typography?: "b" | "i" | "b_i";
+    typography?: string;
+
     /**
      * Sets the font outline of the subtitle text.
      * Requires the outline width (an integer) and the outline color (as an RGB color code, RGBA color code, or standard web color name) separated by an underscore.
