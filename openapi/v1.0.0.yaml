@@ -5753,11 +5753,11 @@ components:
       properties:
         video_codec:
           type: string
-          enum: [h264, vp9]
-          description: Video codec used for encoding (h264 or vp9).
+          enum: ["h264", "vp9", "av1"]
+          description: Video codec used for encoding (h264, vp9, or av1).
         audio_codec:
           type: string
-          enum: [aac, opus]
+          enum: ["aac", "opus"]
           description: Audio codec used for encoding (aac or opus).
         auto_rotate:
           type: boolean
@@ -5767,11 +5767,11 @@ components:
           description: Quality setting for the output video.
         format:
           type: string
-          enum: [mp4, webm, jpg, png, webp]
+          enum: ["mp4", "webm", "jpg", "png", "webp"]
           description: Output format for the transformed video or thumbnail.
         stream_protocol:
           type: string
-          enum: [HLS, DASH]
+          enum: ["HLS", "DASH"]
           description: Streaming protocol for adaptive bitrate streaming.
         variants:
           type: array
