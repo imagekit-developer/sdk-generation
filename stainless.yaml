@@ -179,9 +179,14 @@ resources:
 
   webhooks:
     models:
-      video_transformation_accepted_event: VideoTransformationAcceptedEvent
-      video_transformation_ready_event: VideoTransformationReadyEvent
-      video_transformation_error_event: VideoTransformationErrorEvent
+      VideoTransformationAcceptedEvent: '#/components/schemas/VideoTransformationAcceptedEvent'
+      VideoTransformationReadyEvent: '#/components/schemas/VideoTransformationReadyEvent'
+      VideoTransformationErrorEvent: '#/components/schemas/VideoTransformationErrorEvent'
+      UploadPreTransformSuccessEvent: '#/components/schemas/UploadPreTransformSuccessEvent'
+      UploadPreTransformErrorEvent: '#/components/schemas/UploadPreTransformErrorEvent'
+      UploadPostTransformSuccessEvent: '#/components/schemas/UploadPostTransformSuccessEvent'
+      UploadPostTransformErrorEvent: '#/components/schemas/UploadPostTransformErrorEvent'
+
     methods:
       unwrap:
         type: webhook_unwrap
