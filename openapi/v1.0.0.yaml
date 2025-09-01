@@ -5426,6 +5426,9 @@ components:
             remove-bg:
               type: string
               enum: ["success", "pending", "failed"]
+            ai-auto-description:
+              type: string
+              enum: ["success", "pending", "failed"]
         metadata:
           type: object
           $ref: "#/components/schemas/Metadata"
