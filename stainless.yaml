@@ -191,7 +191,7 @@ resources:
       unwrap:
         type: webhook_unwrap
         discriminator: type
-        webhook_key_opt: private_api_key
+        webhook_key_opt: webhook_secret
 
       unsafe_unwrap:
         type: webhook_unwrap
@@ -229,6 +229,16 @@ client_settings:
       nullable: true
       read_env: OPTIONAL_IMAGEKIT_IGNORES_THIS
       auth: { security_scheme: basicAuth, role: 'password' }
+
+    webhook_secret:
+      type: string
+      description: |
+        Your ImageKit webhook secret. This is used by the SDK to verify webhook signatures. It starts with a `whsec_` prefix.
+        You can view and manage your webhook secret in the [dashboard](https://imagekit.io/dashboard/developer/webhooks).
+        Treat the secret like a password, keep it private and do not expose it publicly.
+        Learn more about [webhook verification](https://imagekit.io/docs/webhooks#verify-webhook-signature).
+      read_env: IMAGEKIT_WEBHOOK_SECRET
+      nullable: true
 
 # `readme` is used to configure the code snippets that will be rendered in the
 # README.md of various SDKs. In particular, you can change the `headline`
