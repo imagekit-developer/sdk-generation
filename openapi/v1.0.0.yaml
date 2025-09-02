@@ -3631,6 +3631,17 @@ paths:
         "429": *a3
 components:
   schemas:
+    BaseWebhookEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the event.
+        type:
+          type: string
+          description: The type of webhook event.
+      required: [id, type]
+    
     OriginRequest:
       title: Origin request
       description: Schema for origin request resources.
@@ -5801,147 +5812,144 @@ components:
 
     # ---- Event: accepted ----
     VideoTransformationAcceptedEvent:
-      type: object
-      description: |
-        Triggered when a new video transformation request is accepted for processing. This event confirms that ImageKit has received and queued your transformation request. Use this for debugging and tracking transformation lifecycle.
-      properties:
-        type:
-          type: string
-          const: "video.transformation.accepted"
-        id:
-          type: string
-          description: Unique identifier for the event.
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the event was created in ISO8601 format.
-        request:
-          $ref: "#/components/schemas/VideoWebhookRequestInfo"
-        data:
-          type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a new video transformation request is accepted for processing. This event confirms that ImageKit has received and queued your transformation request. Use this for debugging and tracking transformation lifecycle.
           properties:
-            asset:
-              $ref: "#/components/schemas/VideoAsset"
-            transformation:
-              $ref: "#/components/schemas/VideoTransformationBase"
-          required: [asset, transformation]
-      required: [type, id, created_at, request, data]
+            type:
+              type: string
+              const: "video.transformation.accepted"
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp when the event was created in ISO8601 format.
+            request:
+              $ref: "#/components/schemas/VideoWebhookRequestInfo"
+            data:
+              type: object
+              properties:
+                asset:
+                  $ref: "#/components/schemas/VideoAsset"
+                transformation:
+                  $ref: "#/components/schemas/VideoTransformationBase"
+              required: [asset, transformation]
+          required: [type, created_at, request, data]
 
     # ---- Event: ready ----
     VideoTransformationReadyEvent:
-      type: object
-      description: |
-        Triggered when video encoding is finished and the transformed resource is ready to be served. This is the key event to listen for - update your database or CMS flags when you receive this so your application can start showing the transformed video to users.
-      properties:
-        type:
-          type: string
-          const: "video.transformation.ready"
-        id:
-          type: string
-          description: Unique identifier for the event.
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the event was created in ISO8601 format.
-        request:
-          $ref: "#/components/schemas/VideoWebhookRequestInfo"
-        timings:
-          type: object
-          description: Performance metrics for the transformation process.
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when video encoding is finished and the transformed resource is ready to be served. This is the key event to listen for - update your database or CMS flags when you receive this so your application can start showing the transformed video to users.
           properties:
-            download_duration:
-              type: integer
-              description: Time spent downloading the source video from your origin or media library, in milliseconds.
-            encoding_duration:
-              type: integer
-              description: Time spent encoding the video, in milliseconds.
-        data:
-          type: object
-          properties:
-            asset:
-              $ref: "#/components/schemas/VideoAsset"
-            transformation:
-              allOf:
-                - $ref: "#/components/schemas/VideoTransformationBase"
-                - type: object
-                  properties:
-                    output:
-                      type: object
-                      description: Information about the transformed output video.
+            type:
+              type: string
+              const: "video.transformation.ready"
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp when the event was created in ISO8601 format.
+            request:
+              $ref: "#/components/schemas/VideoWebhookRequestInfo"
+            timings:
+              type: object
+              description: Performance metrics for the transformation process.
+              properties:
+                download_duration:
+                  type: integer
+                  description: Time spent downloading the source video from your origin or media library, in milliseconds.
+                encoding_duration:
+                  type: integer
+                  description: Time spent encoding the video, in milliseconds.
+            data:
+              type: object
+              properties:
+                asset:
+                  $ref: "#/components/schemas/VideoAsset"
+                transformation:
+                  allOf:
+                    - $ref: "#/components/schemas/VideoTransformationBase"
+                    - type: object
                       properties:
-                        url:
-                          type: string
-                          format: uri
-                          description: URL to access the transformed video.
-                        video_metadata:
+                        output:
                           type: object
-                          description: Metadata of the output video file.
+                          description: Information about the transformed output video.
                           properties:
-                            duration: 
-                              type: number
-                              description: Duration of the output video in seconds.
-                            width: 
-                              type: integer
-                              description: Width of the output video in pixels.
-                            height: 
-                              type: integer
-                              description: Height of the output video in pixels.
-                            bitrate: 
-                              type: integer
-                              description: Bitrate of the output video in bits per second.
-                          required: [duration, width, height, bitrate]
-                      required: [url]
-          required: [asset, transformation]
-      required: [type, id, created_at, request, data]
+                            url:
+                              type: string
+                              format: uri
+                              description: URL to access the transformed video.
+                            video_metadata:
+                              type: object
+                              description: Metadata of the output video file.
+                              properties:
+                                duration: 
+                                  type: number
+                                  description: Duration of the output video in seconds.
+                                width: 
+                                  type: integer
+                                  description: Width of the output video in pixels.
+                                height: 
+                                  type: integer
+                                  description: Height of the output video in pixels.
+                                bitrate: 
+                                  type: integer
+                                  description: Bitrate of the output video in bits per second.
+                              required: [duration, width, height, bitrate]
+                          required: [url]
+              required: [asset, transformation]
+          required: [type, created_at, request, data]
 
     # ---- Event: error ----
     VideoTransformationErrorEvent:
-      type: object
-      description: |
-        Triggered when an error occurs during video encoding. Listen to this webhook to log error reasons and debug issues. Check your origin and URL endpoint settings if the reason is related to download failure. For other errors, contact ImageKit support.
-      properties:
-        type:
-          type: string
-          const: "video.transformation.error"
-        id:
-          type: string
-          description: Unique identifier for the event.
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the event was created in ISO8601 format.
-        request:
-          $ref: "#/components/schemas/VideoWebhookRequestInfo"
-        data:
-          type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when an error occurs during video encoding. Listen to this webhook to log error reasons and debug issues. Check your origin and URL endpoint settings if the reason is related to download failure. For other errors, contact ImageKit support.
           properties:
-            asset:
-              $ref: "#/components/schemas/VideoAsset"
-            transformation:
-              allOf:
-                - $ref: "#/components/schemas/VideoTransformationBase"
-                - type: object
-                  properties:
-                    error:
-                      type: object
-                      description: Details about the transformation error.
+            type:
+              type: string
+              const: "video.transformation.error"
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp when the event was created in ISO8601 format.
+            request:
+              $ref: "#/components/schemas/VideoWebhookRequestInfo"
+            data:
+              type: object
+              properties:
+                asset:
+                  $ref: "#/components/schemas/VideoAsset"
+                transformation:
+                  allOf:
+                    - $ref: "#/components/schemas/VideoTransformationBase"
+                    - type: object
                       properties:
-                        reason:
-                          type: string
-                          description: |
-                            Specific reason for the transformation failure:
-                            - `encoding_failed`: Error during video encoding process
-                            - `download_failed`: Could not download source video
-                            - `internal_server_error`: Unexpected server error
-                          enum:
-                            [
-                              encoding_failed,
-                              download_failed,
-                              internal_server_error,
-                            ]
-                      required: [reason]
-          required: [asset, transformation]
-      required: [type, id, created_at, request, data]
+                        error:
+                          type: object
+                          description: Details about the transformation error.
+                          properties:
+                            reason:
+                              type: string
+                              description: |
+                                Specific reason for the transformation failure:
+                                - `encoding_failed`: Error during video encoding process
+                                - `download_failed`: Could not download source video
+                                - `internal_server_error`: Unexpected server error
+                              enum:
+                                [
+                                  encoding_failed,
+                                  download_failed,
+                                  internal_server_error,
+                                ]
+                          required: [reason]
+              required: [asset, transformation]
+          required: [type, created_at, request, data]
 
     # ──── Pre-transformation Event Schemas ────
 
@@ -5957,66 +5965,64 @@ components:
       required: [x_request_id, transformation]
 
     UploadPreTransformSuccessEvent:
-      type: object
-      properties:
-        type:
-          type: string
-          const: "upload.pre-transform.success"
-        id:
-          type: string
-          description: Unique identifier for the event.
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp of when the event occurred in ISO8601 format.
-        request:
-          $ref: "#/components/schemas/PreTransformWebhookRequestInfo"
-        data:
-          $ref: "#/components/schemas/Upload"
-      required: [type, id, created_at, request, data]
-      description: |
-        Triggered when a pre-transformation completes successfully. The file has been processed with the requested transformation and is now available in the Media Library.
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a pre-transformation completes successfully. The file has been processed with the requested transformation and is now available in the Media Library.
+          properties:
+            type:
+              type: string
+              const: "upload.pre-transform.success"
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            request:
+              $ref: "#/components/schemas/PreTransformWebhookRequestInfo"
+            data:
+              $ref: "#/components/schemas/Upload"
+          required: [type, created_at, request, data]
 
     UploadPreTransformErrorEvent:
-      type: object
-      properties:
-        type:
-          type: string
-          const: "upload.pre-transform.error"
-        id:
-          type: string
-          description: Unique identifier for the event.
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp of when the event occurred in ISO8601 format.
-        request:
-          $ref: "#/components/schemas/PreTransformWebhookRequestInfo"
-        data:
-          type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a pre-transformation fails. The file upload may have been accepted, but the requested transformation could not be applied.
           properties:
-            name:
+            type:
               type: string
-              description: Name of the file.
-            path:
+              const: "upload.pre-transform.error"
+            created_at:
               type: string
-              description: Path of the file.
-            transformation:
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            request:
+              $ref: "#/components/schemas/PreTransformWebhookRequestInfo"
+            data:
               type: object
               properties:
-                error:
+                name:
+                  type: string
+                  description: Name of the file.
+                path:
+                  type: string
+                  description: Path of the file.
+                transformation:
                   type: object
                   properties:
-                    reason:
-                      type: string
-                      description: Reason for the pre-transformation failure.
-                      example: "encoding_failed"
-                  required: [reason]
-              required: [error]
-          required: [name, path, transformation]
-      required: [type, id, created_at, request, data]
-      description: |
-        Triggered when a pre-transformation fails. The file upload may have been accepted, but the requested transformation could not be applied.
+                    error:
+                      type: object
+                      properties:
+                        reason:
+                          type: string
+                          description: Reason for the pre-transformation failure.
+                          example: "encoding_failed"
+                      required: [reason]
+                  required: [error]
+              required: [name, path, transformation]
+          required: [type, created_at, request, data]
 
     # ──── Post-transformation Event Schemas ────
 
@@ -6044,85 +6050,83 @@ components:
       required: [x_request_id, transformation]
 
     UploadPostTransformSuccessEvent:
-      type: object
-      properties:
-        type:
-          type: string
-          const: "upload.post-transform.success"
-        id:
-          type: string
-          description: Unique identifier for the event.
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp of when the event occurred in ISO8601 format.
-        request:
-          $ref: "#/components/schemas/PostTransformWebhookRequestInfo"
-        data:
-          type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a post-transformation completes successfully. The transformed version of the file is now ready and can be accessed via the provided URL. Note that each post-transformation generates a separate webhook event.
           properties:
-            fileId:
+            type:
               type: string
-              description: Unique identifier of the originally uploaded file.
-            url:
+              const: "upload.post-transform.success"
+            created_at:
               type: string
-              format: uri
-              description: URL of the generated post-transformation.
-            name:
-              type: string
-              description: Name of the file.
-          required: [fileId, url, name]
-      required: [type, id, created_at, request, data]
-      description: |
-        Triggered when a post-transformation completes successfully. The transformed version of the file is now ready and can be accessed via the provided URL. Note that each post-transformation generates a separate webhook event.
-
-    UploadPostTransformErrorEvent:
-      type: object
-      properties:
-        type:
-          type: string
-          const: "upload.post-transform.error"
-        id:
-          type: string
-          description: Unique identifier for the event.
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp of when the event occurred in ISO8601 format.
-        request:
-          $ref: "#/components/schemas/PostTransformWebhookRequestInfo"
-        data:
-          type: object
-          properties:
-            fileId:
-              type: string
-              description: Unique identifier of the originally uploaded file.
-            url:
-              type: string
-              format: uri
-              description: URL of the attempted post-transformation.
-            name:
-              type: string
-              description: Name of the file.
-            path:
-              type: string
-              description: Path of the file.
-            transformation:
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            request:
+              $ref: "#/components/schemas/PostTransformWebhookRequestInfo"
+            data:
               type: object
               properties:
-                error:
+                fileId:
+                  type: string
+                  description: Unique identifier of the originally uploaded file.
+                url:
+                  type: string
+                  format: uri
+                  description: URL of the generated post-transformation.
+                name:
+                  type: string
+                  description: Name of the file.
+              required: [fileId, url, name]
+          required: [type, created_at, request, data]
+
+    UploadPostTransformErrorEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a post-transformation fails. The original file remains available, but the requested transformation could not be generated.
+          properties:
+            type:
+              type: string
+              const: "upload.post-transform.error"
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            request:
+              $ref: "#/components/schemas/PostTransformWebhookRequestInfo"
+            data:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: Unique identifier of the originally uploaded file.
+                url:
+                  type: string
+                  format: uri
+                  description: URL of the attempted post-transformation.
+                name:
+                  type: string
+                  description: Name of the file.
+                path:
+                  type: string
+                  description: Path of the file.
+                transformation:
                   type: object
                   properties:
-                    reason:
-                      type: string
-                      description: Reason for the post-transformation failure.
-                      example: "encoding_failed"
-                  required: [reason]
-              required: [error]
-          required: [fileId, url, name, path, transformation]
-      required: [type, id, created_at, request, data]
-      description: |
-        Triggered when a post-transformation fails. The original file remains available, but the requested transformation could not be generated.
+                    error:
+                      type: object
+                      properties:
+                        reason:
+                          type: string
+                          description: Reason for the post-transformation failure.
+                          example: "encoding_failed"
+                      required: [reason]
+                  required: [error]
+              required: [fileId, url, name, path, transformation]
+          required: [type, created_at, request, data]
     
     SrcOptions:
       title: Source Options
