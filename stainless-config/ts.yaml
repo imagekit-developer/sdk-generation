@@ -1,0 +1,276 @@
+# yaml-language-server: $schema=https://app.stainless.com/config.schema.json
+
+organization:
+  # Name of your organization or company, used to determine the name of the client
+  # and headings.
+  name: ImageKit
+  # Link to your API documentation.
+  docs: https://imagekit.io/docs
+  # Contact email for bug reports, questions, and support requests.
+  contact: developer@imagekit.io
+
+# `targets` define the output targets and their customization options, such as
+# whether to emit the Node SDK and what it's package name should be.
+targets:
+  typescript:
+    package_name: "@imagekit/nodejs"
+    production_repo: imagekit-developer/imagekit-nodejs#master
+    publish:
+      npm: false
+  python:
+    package_name: imagekit
+    publish:
+      pypi: false
+    production_repo: imagekit-developer/imagekit-python#master
+  php:
+    package_name: 'image-kit'
+    composer_package_name: 'imagekit/imagekit'
+    production_repo: imagekit-developer/imagekit-php#master
+  csharp:
+    package_name: imagekit
+    publish:
+      nuget: false
+    production_repo: imagekit-developer/imagekit-dotnet#master
+  go:
+    package_name: imagekit
+    production_repo: imagekit-developer/imagekit-go#master
+    options:
+      enable_v2: true
+  java:
+    reverse_domain: com.imagekit.api
+    production_repo: imagekit-developer/imagekit-java#master
+    publish:
+      maven: false
+  ruby:
+    gem_name: imagekit
+    production_repo: imagekit-developer/imagekit-ruby#master
+    publish:
+      rubygems: false
+
+# `environments` are a map of the name of the environment (e.g. "sandbox",
+# "production") to the corresponding url to use.
+environments:
+  production: https://api.imagekit.io
+
+# `resources` define the structure and organization for your API, such as how
+# methods and models are grouped together and accessed. See the [configuration
+# guide] for more information.
+#
+# [configuration guide]: https://www.stainless.com/docs/guides/configure#resources
+resources:
+  $shared:
+    models:
+      Extensions: "#/components/schemas/Extensions"
+      SrcOptions: '#/components/schemas/SrcOptions'
+      Transformation: '#/components/schemas/Transformation'
+      TransformationPosition: '#/components/schemas/TransformationPosition'
+      StreamingResolution: '#/components/schemas/StreamingResolution'
+      Overlay: '#/components/schemas/Overlay'
+      BaseOverlay: '#/components/schemas/BaseOverlay'
+      OverlayPosition: '#/components/schemas/OverlayPosition'
+      OverlayTiming: '#/components/schemas/OverlayTiming'
+      TextOverlay: '#/components/schemas/TextOverlay'
+      ImageOverlay: '#/components/schemas/ImageOverlay'
+      VideoOverlay: '#/components/schemas/VideoOverlay'
+      SubtitleOverlay: '#/components/schemas/SubtitleOverlay'
+      SolidColorOverlay: '#/components/schemas/SolidColorOverlay'
+      TextOverlayTransformation: '#/components/schemas/TextOverlayTransformation'
+      SubtitleOverlayTransformation: '#/components/schemas/SubtitleOverlayTransformation'
+      SolidColorOverlayTransformation: '#/components/schemas/SolidColorOverlayTransformation'
+
+  customMetadataFields:
+    models:
+      CustomMetadataField: '#/components/schemas/CustomMetadataField'
+    methods:
+      create: post /v1/customMetadataFields
+      list: get /v1/customMetadataFields
+      update: patch /v1/customMetadataFields/{id}
+      delete: delete /v1/customMetadataFields/{id}
+
+  files:
+    models:
+      File: "#/components/schemas/FileDetails"
+      Folder: "#/components/schemas/FolderDetails"
+      Metadata: "#/components/schemas/Metadata"
+    methods:
+      upload: post /api/v1/files/upload
+      get: get /v1/files/{fileId}/details
+      update:
+        endpoint: patch /v1/files/{fileId}/details
+      delete: delete /v1/files/{fileId}
+      copy: post /v1/files/copy
+      move: post /v1/files/move
+      rename: put /v1/files/rename
+    subresources:
+      bulk:
+        methods:
+          delete: post /v1/files/batch/deleteByFileIds
+          addTags: post /v1/files/addTags
+          removeTags: post /v1/files/removeTags
+          removeAiTags: post /v1/files/removeAITags
+      versions:
+        methods:
+          list: get /v1/files/{fileId}/versions
+          get: get /v1/files/{fileId}/versions/{versionId}
+          delete: delete /v1/files/{fileId}/versions/{versionId}
+          restore: put /v1/files/{fileId}/versions/{versionId}/restore
+      metadata:
+        methods:
+          get: get /v1/files/{fileId}/metadata
+          getFromURL: get /v1/files/metadata
+
+  assets:
+    methods:
+      list: get /v1/files
+
+  cache:
+    subresources:
+      invalidation:
+        methods:
+          create: post /v1/files/purge
+          get: get /v1/files/purge/{requestId}
+
+  folders:
+    methods:
+      create: post /v1/folder
+      delete: delete /v1/folder
+      copy: post /v1/bulkJobs/copyFolder
+      move: post /v1/bulkJobs/moveFolder
+      rename: post /v1/bulkJobs/renameFolder
+    subresources:
+      job:
+        methods:
+          get: get /v1/bulkJobs/{jobId}
+
+  accounts:
+    subresources:
+      usage:
+        methods:
+          get: get /v1/accounts/usage
+      origins:
+        models:
+          OriginRequest: '#/components/schemas/OriginRequest'
+          OriginResponse: '#/components/schemas/OriginResponse'
+        methods:
+          list: get /v1/accounts/origins
+          create:
+            endpoint: post /v1/accounts/origins
+          get: get /v1/accounts/origins/{id}
+          update:
+            endpoint: put /v1/accounts/origins/{id}
+          delete: delete /v1/accounts/origins/{id}
+      urlEndpoints:
+        models:
+          UrlEndpointRequest: '#/components/schemas/UrlEndpointRequest'
+          UrlEndpointResponse: '#/components/schemas/UrlEndpointResponse'
+        methods:
+          list: get /v1/accounts/url-endpoints
+          create: post /v1/accounts/url-endpoints
+          get: get /v1/accounts/url-endpoints/{id}
+          update: put /v1/accounts/url-endpoints/{id}
+          delete: delete /v1/accounts/url-endpoints/{id}
+
+  beta:
+    subresources:
+      v2:
+        subresources:
+          files:
+            methods:
+              upload: post /api/v2/files/upload
+
+  webhooks:
+    models:
+      BaseWebhookEvent: '#/components/schemas/BaseWebhookEvent'
+      VideoTransformationAcceptedEvent: '#/components/schemas/VideoTransformationAcceptedEvent'
+      VideoTransformationReadyEvent: '#/components/schemas/VideoTransformationReadyEvent'
+      VideoTransformationErrorEvent: '#/components/schemas/VideoTransformationErrorEvent'
+      UploadPreTransformSuccessEvent: '#/components/schemas/UploadPreTransformSuccessEvent'
+      UploadPreTransformErrorEvent: '#/components/schemas/UploadPreTransformErrorEvent'
+      UploadPostTransformSuccessEvent: '#/components/schemas/UploadPostTransformSuccessEvent'
+      UploadPostTransformErrorEvent: '#/components/schemas/UploadPostTransformErrorEvent'
+
+    methods:
+      unwrap:
+        type: webhook_unwrap
+        discriminator: type
+        webhook_key_opt: webhook_secret
+
+      unsafe_unwrap:
+        type: webhook_unwrap
+        discriminator: type
+
+settings:
+  # All generated integration tests that hit the prism mock http server are marked
+  # as skipped. Removing this setting or setting it to false enables tests, but
+  # doing so may result in test failures due to bugs in the test server.
+  #
+  # [prism mock http server]: https://stoplight.io/open-source/prism
+  disable_mock_tests: true
+  license: Apache-2.0
+
+# `client_settings` define settings for the API client, such as extra constructor
+# arguments (used for authentication), retry behavior, idempotency, etc.
+client_settings:
+  opts:
+    # 1️⃣  The username side of Basic Auth
+    private_api_key:
+      type: string
+      description: |
+        Your ImageKit private API key (it starts with `private_`).
+        You can view and manage API keys in the [dashboard](https://imagekit.io/dashboard/developer/api-keys).
+      read_env: IMAGEKIT_PRIVATE_API_KEY # or let users pass it in code
+      nullable: false # required to create a client
+      auth: { security_scheme: basicAuth, role: 'username' }
+
+    password:
+      type: string
+      description: |
+        ImageKit Basic Auth only uses the username field and ignores the password.
+        This field is unused.
+      default: "do_not_set"
+      nullable: true
+      read_env: OPTIONAL_IMAGEKIT_IGNORES_THIS
+      auth: { security_scheme: basicAuth, role: 'password' }
+
+    webhook_secret:
+      type: string
+      description: |
+        Your ImageKit webhook secret. This is used by the SDK to verify webhook signatures. It starts with a `whsec_` prefix.
+        You can view and manage your webhook secret in the [dashboard](https://imagekit.io/dashboard/developer/webhooks).
+        Treat the secret like a password, keep it private and do not expose it publicly.
+        Learn more about [webhook verification](https://imagekit.io/docs/webhooks#verify-webhook-signature).
+      read_env: IMAGEKIT_WEBHOOK_SECRET
+      nullable: true
+
+# `readme` is used to configure the code snippets that will be rendered in the
+# README.md of various SDKs. In particular, you can change the `headline`
+# snippet's endpoint and the arguments to call it with.
+
+openapi:
+  code_samples: "readme"
+
+readme:
+  example_requests:
+    default:
+      type: request
+      endpoint: post /api/v1/files/upload
+      params:
+        file: https://www.example.com/public-url.jpg
+        fileName: file-name.jpg
+    headline:
+      type: request
+      endpoint: post /api/v1/files/upload
+      params:
+        file: https://www.example.com/public-url.jpg
+        fileName: file-name.jpg
+diagnostics:
+  ignored:
+    Pagination/NotConfigured:
+      - "#/pagination"
+    ReadmeExample/MissingParam:
+      - (resource) files > (method) upload
+    Model/Recommended: true
+    Model/IsConstant: true
+    Java/SchemaUnionDiscriminatorMissing:
+      - (resource) files > (method) update > (params) default > (param) update > (schema)
+    Ruby/NameShadowedBuiltin: true
