@@ -97,7 +97,6 @@ resources:
       get: get /v1/files/{fileId}/details
       update:
         endpoint: patch /v1/files/{fileId}/details
-        body_param_name: update
       delete: delete /v1/files/{fileId}
       copy: post /v1/files/copy
       move: post /v1/files/move
@@ -156,11 +155,9 @@ resources:
           list: get /v1/accounts/origins
           create:
             endpoint: post /v1/accounts/origins
-            body_param_name: origin
           get: get /v1/accounts/origins/{id}
           update:
             endpoint: put /v1/accounts/origins/{id}
-            body_param_name: origin
           delete: delete /v1/accounts/origins/{id}
       urlEndpoints:
         models:
@@ -266,6 +263,7 @@ readme:
       params:
         file: https://www.example.com/public-url.jpg
         fileName: file-name.jpg
+
 diagnostics:
   ignored:
     Pagination/NotConfigured:
