@@ -60,6 +60,7 @@ environments:
 resources:
   $shared:
     models:
+      Extensions: "#/components/schemas/Extensions"
       SrcOptions: '#/components/schemas/SrcOptions'
       Transformation: '#/components/schemas/Transformation'
       TransformationPosition: '#/components/schemas/TransformationPosition'

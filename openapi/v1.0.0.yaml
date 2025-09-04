@@ -507,16 +507,7 @@ paths:
                       description: |
                         The final status of extensions after they have completed execution will be delivered to this endpoint as a POST request. [Learn more](/docs/api-reference/digital-asset-management-dam/managing-assets/update-file-details#webhook-payload-structure) about the webhook payload structure.
                     extensions:
-                      type: array
-                      items:
-                        anyOf:
-                          - $ref: "#/components/schemas/RemovedotBGExtension"
-                          - $ref: "#/components/schemas/AutoTaggingExtension"
-                          - $ref: "#/components/schemas/AutoDescriptionExtension"
-                        discriminator:
-                          propertyName: name
-                      description: >
-                        Array of extensions to be applied to the asset. Each extension can be configured with specific parameters based on the extension type.
+                      $ref: "#/components/schemas/Extensions"
                     tags:
                       type: [array, "null"]
                       items:
@@ -4751,25 +4742,7 @@ components:
             - customCoordinates
             - isPrivateFile
         extensions:
-          type: array
-          items:
-            discriminator:
-              propertyName: name
-            anyOf:
-              - $ref: "#/components/schemas/RemovedotBGExtension"
-              - $ref: "#/components/schemas/AutoTaggingExtension"
-              - $ref: "#/components/schemas/AutoDescriptionExtension"
-          description: >
-            Array of extensions to be applied to the image. Each extension can be configured with specific parameters based on the extension type.
-          example:
-            - name: "remove-bg"
-              options:
-                add_shadow: true
-                bg_colour: "green"
-            - name: "google-auto-tagging"
-              maxTags: 5
-              minConfidence: 95
-            - name: "ai-auto-description"
+          $ref: "#/components/schemas/Extensions"
         webhookUrl:
           type: string
           format: uri
@@ -4931,25 +4904,7 @@ components:
             - customCoordinates
             - isPrivateFile
         extensions:
-          type: array
-          items:
-            discriminator:
-              propertyName: name
-            anyOf:
-              - $ref: "#/components/schemas/RemovedotBGExtension"
-              - $ref: "#/components/schemas/AutoTaggingExtension"
-              - $ref: "#/components/schemas/AutoDescriptionExtension"
-          description: >
-            Array of extensions to be applied to the image. Each extension can be configured with specific parameters based on the extension type.
-          example:
-            - name: "remove-bg"
-              options:
-                add_shadow: true
-                bg_colour: "green"
-            - name: "google-auto-tagging"
-              maxTags: 5
-              minConfidence: 95
-            - name: "ai-auto-description"
+          $ref: "#/components/schemas/Extensions"
         webhookUrl:
           type: string
           format: uri
@@ -5177,6 +5132,27 @@ components:
           type: string
           const: "ai-auto-description"
           description: Specifies the auto description extension.
+    Extensions:
+      title: Extensions Array
+      type: array
+      items:
+        discriminator:
+          propertyName: name
+        anyOf:
+          - $ref: "#/components/schemas/RemovedotBGExtension"
+          - $ref: "#/components/schemas/AutoTaggingExtension"
+          - $ref: "#/components/schemas/AutoDescriptionExtension"
+      description: >
+        Array of extensions to be applied to the asset. Each extension can be configured with specific parameters based on the extension type.
+      example:
+        - name: "remove-bg"
+          options:
+            add_shadow: true
+            bg_colour: "green"
+        - name: "google-auto-tagging"
+          maxTags: 5
+          minConfidence: 95
+        - name: "ai-auto-description"
     FileDetails:
       title: File & File Version
       description: Object containing details of a file or file version.
