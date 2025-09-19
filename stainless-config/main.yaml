@@ -17,6 +17,11 @@ targets:
     production_repo: imagekit-developer/imagekit-nodejs#master
     publish:
       npm: false
+    options:
+      mcp_server:
+        package_name: imagekit-api-mcp # this is the default
+        enable_all_resources: true
+        generate_cloudflare_worker: true
   python:
     package_name: imagekit
     publish:
@@ -144,6 +149,7 @@ resources:
           get: get /v1/bulkJobs/{jobId}
 
   accounts:
+    mcp: false
     subresources:
       usage:
         methods:
@@ -213,12 +219,11 @@ settings:
 # arguments (used for authentication), retry behavior, idempotency, etc.
 client_settings:
   opts:
-    # 1️⃣  The username side of Basic Auth
     private_key:
       type: string
       description: |
-        Your ImageKit private API key (it starts with `private_`).
-        You can view and manage API keys in the [dashboard](https://imagekit.io/dashboard/developer/api-keys).
+        Your ImageKit private API key (starts with `private_`).
+        You can find this in the [ImageKit dashboard](https://imagekit.io/dashboard/developer/api-keys).
       read_env: IMAGEKIT_PRIVATE_API_KEY # or let users pass it in code
       nullable: false # required to create a client
       auth: { security_scheme: basicAuth, role: 'username' }
@@ -226,7 +231,8 @@ client_settings:
     password:
       type: string
       description: |
-        ImageKit Basic Auth only uses the `private_key` as username and ignores the password.
+        Leave this field unset. ImageKit uses Basic Authentication scheme that requires the `private_key` as the username and empty string as the password.
+        The password field is automatically managed by the SDK and should not be set.
       default: "do_not_set"
       nullable: true
       read_env: OPTIONAL_IMAGEKIT_IGNORES_THIS
@@ -235,9 +241,12 @@ client_settings:
     webhook_secret:
       type: string
       description: |
-        Your ImageKit webhook secret. This is used by the SDK to verify webhook signatures. It starts with a `whsec_` prefix.
-        You can view and manage your webhook secret in the [dashboard](https://imagekit.io/dashboard/developer/webhooks).
-        Treat the secret like a password, keep it private and do not expose it publicly.
+        Your ImageKit webhook secret used by the SDK to verify webhook signatures for security.
+        This secret starts with a `whsec_` prefix and is essential for webhook verification.
+        You can view and manage your webhook secret in the [ImageKit dashboard](https://imagekit.io/dashboard/developer/webhooks).
+        
+        **Security Note**: Treat this secret like a password - keep it private and never expose it publicly.
+        This field is optional and only required if you plan to use webhook signature verification.
         Learn more about [webhook verification](https://imagekit.io/docs/webhooks#verify-webhook-signature).
       read_env: IMAGEKIT_WEBHOOK_SECRET
       nullable: true
