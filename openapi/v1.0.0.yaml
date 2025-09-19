@@ -481,92 +481,11 @@ paths:
           schema:
             type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              oneOf:
-                - title: Update file details
-                  type: object
-                  properties:
-                    removeAITags:
-                      oneOf:
-                        - type: array
-                          items:
-                            type: string
-                        - type: string
-                          const: "all"
-                      description: |
-                        An array of AITags associated with the file that you want to remove, e.g. `["car", "vehicle", "motorsports"]`. 
-
-                        If you want to remove all AITags associated with the file, send a string - "all".
-
-                        Note: The remove operation for `AITags` executes before any of the `extensions` are processed.
-                    webhookUrl:
-                      type: string
-                      format: uri
-                      description: |
-                        The final status of extensions after they have completed execution will be delivered to this endpoint as a POST request. [Learn more](/docs/api-reference/digital-asset-management-dam/managing-assets/update-file-details#webhook-payload-structure) about the webhook payload structure.
-                    extensions:
-                      $ref: "#/components/schemas/Extensions"
-                    tags:
-                      type: [array, null]
-                      items:
-                        type: string
-                      description: >
-                        An array of tags associated with the file, such as `["tag1", "tag2"]`. Send `null` to unset all tags associated with the file.
-                      example: ["tag1", "tag2"]
-                    customCoordinates:
-                      type: [string, null]
-                      description: |
-                        Define an important area in the image in the format `x,y,width,height` e.g. `10,10,100,100`. Send `null` to unset this value.
-                    customMetadata:
-                      type: object
-                      description: |
-                        A key-value data to be associated with the asset. To unset a key, send `null` value for that key. Before setting any custom metadata on an asset you have to create the field using custom metadata fields API.
-                      additionalProperties: true
-                    description:
-                      type: string
-                      description: |
-                        Optional text to describe the contents of the file.
-                - title: Change publication status
-                  type: object
-                  properties:
-                    publish:
-                      type: object
-                      required: ["isPublished"]
-                      description: |
-                        Configure the publication status of a file and its versions.
-                      properties:
-                        isPublished:
-                          type: boolean
-                          description: |
-                            Set to `true` to publish the file. Set to `false` to unpublish the file.
-                        includeFileVersions:
-                          type: boolean
-                          description: |
-                            Set to `true` to publish/unpublish all versions of the file. Set to `false` to publish/unpublish only the current version of the file.
-
-            example:
-              removeAITags: ["car", "vehicle", "motorsports"]
-              webhookUrl: https://webhook.site/0d6b6c7a-8e5a-4b3a-8b7c-0d6b6c7a8e5a
-              extensions:
-                [
-                  { "name": "remove-bg", "options": { "add_shadow": true } },
-                  {
-                    "name": "google-auto-tagging",
-                    "minConfidence": 80,
-                    "maxTags": 10,
-                  },
-                  {
-                    "name": "aws-auto-tagging",
-                    "minConfidence": 80,
-                    "maxTags": 10,
-                  },
-                  { "name": "ai-auto-description" },
-                ]
-              tags: ["tag1", "tag2"]
-              customCoordinates: "10,10,100,100"
-              customMetadata: { "brand": "Nike", "color": "red" }
+              $ref: "#/components/schemas/UpdateFileRequest"
       responses:
         "429":
           $ref: "#/components/responses/RateLimitExceeded"
@@ -3633,6 +3552,93 @@ components:
           description: The type of webhook event.
       required: [id, type]
     
+    UpdateFileRequest:
+      title: Update file request
+      description: Schema for update file update request.
+      type: object
+      example:
+        removeAITags: ["car", "vehicle", "motorsports"]
+        webhookUrl: https://webhook.site/0d6b6c7a-8e5a-4b3a-8b7c-0d6b6c7a8e5a
+        extensions:
+          [
+            { "name": "remove-bg", "options": { "add_shadow": true } },
+            {
+              "name": "google-auto-tagging",
+              "minConfidence": 80,
+              "maxTags": 10,
+            },
+            {
+              "name": "aws-auto-tagging",
+              "minConfidence": 80,
+              "maxTags": 10,
+            },
+            { "name": "ai-auto-description" },
+          ]
+        tags: ["tag1", "tag2"]
+        customCoordinates: "10,10,100,100"
+        customMetadata: { "brand": "Nike", "color": "red" }
+      oneOf:
+        - title: Update file details
+          type: object
+          properties:
+            removeAITags:
+              oneOf:
+                - type: array
+                  items:
+                    type: string
+                - type: string
+                  const: "all"
+              description: |
+                An array of AITags associated with the file that you want to remove, e.g. `["car", "vehicle", "motorsports"]`. 
+
+                If you want to remove all AITags associated with the file, send a string - "all".
+
+                Note: The remove operation for `AITags` executes before any of the `extensions` are processed.
+            webhookUrl:
+              type: string
+              format: uri
+              description: |
+                The final status of extensions after they have completed execution will be delivered to this endpoint as a POST request. [Learn more](/docs/api-reference/digital-asset-management-dam/managing-assets/update-file-details#webhook-payload-structure) about the webhook payload structure.
+            extensions:
+              $ref: "#/components/schemas/Extensions"
+            tags:
+              type: [array, null]
+              items:
+                type: string
+              description: >
+                An array of tags associated with the file, such as `["tag1", "tag2"]`. Send `null` to unset all tags associated with the file.
+              example: ["tag1", "tag2"]
+            customCoordinates:
+              type: [string, null]
+              description: |
+                Define an important area in the image in the format `x,y,width,height` e.g. `10,10,100,100`. Send `null` to unset this value.
+            customMetadata:
+              type: object
+              description: |
+                A key-value data to be associated with the asset. To unset a key, send `null` value for that key. Before setting any custom metadata on an asset you have to create the field using custom metadata fields API.
+              additionalProperties: true
+            description:
+              type: string
+              description: |
+                Optional text to describe the contents of the file.
+        - title: Change publication status
+          type: object
+          properties:
+            publish:
+              type: object
+              required: ["isPublished"]
+              description: |
+                Configure the publication status of a file and its versions.
+              properties:
+                isPublished:
+                  type: boolean
+                  description: |
+                    Set to `true` to publish the file. Set to `false` to unpublish the file.
+                includeFileVersions:
+                  type: boolean
+                  description: |
+                    Set to `true` to publish/unpublish all versions of the file. Set to `false` to publish/unpublish only the current version of the file.
+
     OriginRequest:
       title: Origin request
       description: Schema for origin request resources.

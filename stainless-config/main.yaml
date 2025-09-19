@@ -92,6 +92,7 @@ resources:
       File: "#/components/schemas/FileDetails"
       Folder: "#/components/schemas/FolderDetails"
       Metadata: "#/components/schemas/Metadata"
+      UpdateFileRequest: "#/components/schemas/UpdateFileRequest"
     methods:
       upload: post /api/v1/files/upload
       get: get /v1/files/{fileId}/details
