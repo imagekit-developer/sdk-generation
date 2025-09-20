@@ -224,7 +224,7 @@ client_settings:
       description: |
         Your ImageKit private API key (starts with `private_`).
         You can find this in the [ImageKit dashboard](https://imagekit.io/dashboard/developer/api-keys).
-      read_env: IMAGEKIT_PRIVATE_API_KEY # or let users pass it in code
+      read_env: IMAGEKIT_PRIVATE_KEY # or let users pass it in code
       nullable: false # required to create a client
       auth: { security_scheme: basicAuth, role: 'username' }
 
