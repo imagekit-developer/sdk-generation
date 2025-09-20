@@ -268,6 +268,7 @@ readme:
       params:
         file: https://www.example.com/public-url.jpg
         fileName: file-name.jpg
+  include_stainless_attribution: false
 
 diagnostics:
   ignored:
