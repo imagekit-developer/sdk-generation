@@ -5774,7 +5774,7 @@ components:
                 - true
             defaultValue:
               description: |
-                The default value for this custom metadata field. Date type of default value depends on the field type.
+                The default value for this custom metadata field. Data type of default value depends on the field type.
               oneOf:
                 - type: string
                 - type: number
