@@ -334,7 +334,10 @@ paths:
         - Custom metadata fields
       operationId: list-all-fields
       summary: List all fields
-      description: This API returns the array of created custom metadata field objects. By default the API returns only non deleted field objects, but you can include deleted fields in the API response.
+      description: |
+        This API returns the array of created custom metadata field objects. By default the API returns only non deleted field objects, but you can include deleted fields in the API response.
+        
+        You can also filter results by a specific folder path to retrieve custom metadata fields applicable at that location. This path-specific filtering is useful when using the **Path policy** feature to determine which custom metadata fields are selected for a given path.
       parameters:
         - in: query
           description: |
@@ -344,6 +347,13 @@ paths:
           schema:
             type: boolean
             default: false
+        - in: query
+          description: |
+            The folder path (e.g., `/path/to/folder`) for which to retrieve applicable custom metadata fields. Useful for determining path-specific field selections when the [Path policy](https://imagekit.io/docs/dam/path-policy) feature is in use.
+          name: folderPath
+          required: false
+          schema:
+            type: string
       responses:
         "429":
           $ref: "#/components/responses/RateLimitExceeded"
@@ -4741,6 +4751,7 @@ components:
               - isPublished
               - customMetadata
               - metadata
+              - selectedFieldsSchema
           description: |
             Array of response field keys to include in the API response body.
           example:
@@ -4903,6 +4914,7 @@ components:
               - isPublished
               - customMetadata
               - metadata
+              - selectedFieldsSchema
           description: |
             Array of response field keys to include in the API response body.
           example:
@@ -5306,6 +5318,99 @@ components:
           format: date-time
           description: |
             Date and time when the folder was last updated. The date and time is in ISO8601 format.
+    SelectedFieldsSchema:
+      type: object
+      description: |
+        This field is included in the response only if the Path policy feature is available in the plan.
+        It contains schema definitions for the custom metadata fields selected for the specified file path.
+        Field selection can only be done when the Path policy feature is enabled.
+
+        Keys are the names of the custom metadata fields; the value object has details about the custom metadata schema.
+      additionalProperties:
+        type: object
+        required:
+          - type
+        properties:
+          type:
+            description: Type of the custom metadata field.
+            type: string
+            enum:
+              - Text
+              - Textarea
+              - Number
+              - Date
+              - Boolean
+              - SingleSelect
+              - MultiSelect
+          selectOptions:
+            type: array
+            items:
+              oneOf:
+                - type: string
+                - type: number
+                - type: boolean
+            description: |
+              An array of allowed values when field type is `SingleSelect` or `MultiSelect`.
+            example:
+              - small
+              - medium
+              - large
+              - 30
+              - 40
+              - true
+          selectOptionsTruncated:
+            type: boolean
+            description: |
+              Specifies if the selectOptions array is truncated. It is truncated when number of options are > 100.
+          defaultValue:
+            description: |
+              The default value for this custom metadata field. The value should match the `type` of custom metadata field.
+            oneOf:
+              - type: string
+              - type: number
+              - type: boolean
+              - type: array
+                x-stainless-variantName: Mixed
+                title: Mixed
+                items:
+                  oneOf:
+                    - type: string
+                    - type: number
+                    - type: boolean
+                description: |
+                  Default value should be of type array when custom metadata field type is set to `MultiSelect`.
+                example:
+                  - true
+                  - 10
+                  - Hello
+          isValueRequired:
+            type: boolean
+            description: |
+              Specifies if the custom metadata field is required or not.
+          readOnly:
+            type: boolean
+            description: |
+              Indicates whether the custom metadata field is read only. A read only field cannot be modified after being set. This field is configurable only via the **Path policy** feature.
+          minValue:
+            description: |
+              Minimum value of the field. Only set if field type is `Date` or `Number`. For `Date` type field, the value will be in ISO8601 string format. For `Number` type field, it will be a numeric value.
+            oneOf:
+              - type: string
+              - type: number
+          maxValue:
+            description: |
+              Maximum value of the field. Only set if field type is `Date` or `Number`. For `Date` type field, the value will be in ISO8601 string format. For `Number` type field, it will be a numeric value.
+            oneOf:
+              - type: string
+              - type: number
+          minLength:
+            description: |
+              Minimum length of string. Only set if `type` is set to `Text` or `Textarea`.
+            type: number
+          maxLength:
+            description: |
+              Maximum length of string. Only set if `type` is set to `Text` or `Textarea`.
+            type: number
     Upload:
       description: Object containing details of a successful upload.
       type: object
