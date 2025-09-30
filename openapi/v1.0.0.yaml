@@ -4739,6 +4739,8 @@ components:
               - To be passed as a string with the x and y coordinates of the top-left corner, and width and height of the area of interest in the format `x,y,width,height`. For example - `10,10,100,100`
               - Can be used with fo-customtransformation.
               - If this field is not specified and the file is overwritten, then customCoordinates will be removed.
+        selectedFieldsSchema:
+          $ref: "#/components/schemas/SelectedFieldsSchema"
         responseFields:
           type: array
           items:
@@ -4902,6 +4904,8 @@ components:
               - To be passed as a string with the x and y coordinates of the top-left corner, and width and height of the area of interest in the format `x,y,width,height`. For example - `10,10,100,100`
               - Can be used with fo-customtransformation.
               - If this field is not specified and the file is overwritten, then customCoordinates will be removed.
+        selectedFieldsSchema:
+          $ref: "#/components/schemas/SelectedFieldsSchema"
         responseFields:
           type: array
           items:
@@ -5276,6 +5280,8 @@ components:
           description: |
             An object with custom metadata for the file.
           additionalProperties: true
+        selectedFieldsSchema:
+          $ref: "#/components/schemas/SelectedFieldsSchema"
         description:
           type: string
           description: |
