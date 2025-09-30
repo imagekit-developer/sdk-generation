@@ -16,7 +16,7 @@ targets:
     package_name: "@imagekit/nodejs"
     production_repo: imagekit-developer/imagekit-nodejs#master
     publish:
-      npm: false
+      npm: true
     options:
       mcp_server:
         package_name: imagekit-api-mcp # this is the default
@@ -26,29 +26,29 @@ targets:
     package_name: imagekit
     publish:
       pypi: false
-    production_repo: imagekit-developer/imagekit-python#master
+    # production_repo: imagekit-developer/imagekit-python#master
   php:
     package_name: 'image-kit'
     composer_package_name: 'imagekit/imagekit'
-    production_repo: imagekit-developer/imagekit-php#master
+    # production_repo: imagekit-developer/imagekit-php#master
   csharp:
     package_name: imagekit
     publish:
       nuget: false
-    production_repo: imagekit-developer/imagekit-dotnet#master
+    # production_repo: imagekit-developer/imagekit-dotnet#master
   go:
     package_name: imagekit
-    production_repo: imagekit-developer/imagekit-go#master
+    # production_repo: imagekit-developer/imagekit-go#master
     options:
       enable_v2: true
   java:
     reverse_domain: com.imagekit.api
-    production_repo: imagekit-developer/imagekit-java#master
+    # production_repo: imagekit-developer/imagekit-java#master
     publish:
       maven: false
   ruby:
     gem_name: imagekit
-    production_repo: imagekit-developer/imagekit-ruby#master
+    # production_repo: imagekit-developer/imagekit-ruby#master
     publish:
       rubygems: false
 
