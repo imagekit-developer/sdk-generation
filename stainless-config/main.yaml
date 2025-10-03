@@ -160,12 +160,12 @@ resources:
 
   accounts:
     mcp: false
-    terraform: true
     subresources:
       usage:
         methods:
           get: get /v1/accounts/usage
       origins:
+        terraform: true
         models:
           OriginRequest: '#/components/schemas/OriginRequest'
           OriginResponse: '#/components/schemas/OriginResponse'
@@ -178,6 +178,7 @@ resources:
             endpoint: put /v1/accounts/origins/{id}
           delete: delete /v1/accounts/origins/{id}
       urlEndpoints:
+        terraform: true
         models:
           UrlEndpointRequest: '#/components/schemas/UrlEndpointRequest'
           UrlEndpointResponse: '#/components/schemas/UrlEndpointResponse'
