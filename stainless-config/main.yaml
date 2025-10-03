@@ -93,6 +93,12 @@ resources:
       SubtitleOverlayTransformation: '#/components/schemas/SubtitleOverlayTransformation'
       SolidColorOverlayTransformation: '#/components/schemas/SolidColorOverlayTransformation'
 
+  dummy:
+    only:
+      - go
+    methods:
+      create: post /v1/dummy/test
+
   customMetadataFields:
     models:
       CustomMetadataField: '#/components/schemas/CustomMetadataField'
