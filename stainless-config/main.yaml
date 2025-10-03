@@ -19,7 +19,7 @@ targets:
       npm: true
     options:
       mcp_server:
-        package_name: imagekit-api-mcp # this is the default
+        package_name: "@imagekit/nodejs-mcp"
         enable_all_resources: true
         generate_cloudflare_worker: true
   python:
@@ -51,6 +51,16 @@ targets:
     # production_repo: imagekit-developer/imagekit-ruby#master
     publish:
       rubygems: false
+  cli:
+    binary_name: imagekit
+    production_repo: null
+  terraform:
+    provider_name: imagekit
+    production_repo: null
+    publish:
+      hashicorp_registry: false
+    options:
+      infer_all_services: false
 
 # `environments` are a map of the name of the environment (e.g. "sandbox",
 # "production") to the corresponding url to use.
@@ -150,6 +160,7 @@ resources:
 
   accounts:
     mcp: false
+    terraform: true
     subresources:
       usage:
         methods:
