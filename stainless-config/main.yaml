@@ -19,7 +19,7 @@ targets:
       npm: true
     options:
       mcp_server:
-        package_name: "@imagekit/nodejs-mcp"
+        package_name: "@imagekit/api-mcp"
         enable_all_resources: true
         generate_cloudflare_worker: true
   python:
