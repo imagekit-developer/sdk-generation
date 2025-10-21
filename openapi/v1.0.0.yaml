@@ -12,6 +12,76 @@ info:
 servers:
   - url: https://api.imagekit.io
 paths:
+  /v1/dummy/test:
+    post:
+      summary: Dummy test endpoint using all shared models
+      operationId: create-dummy-test
+      description: |
+        Internal test endpoint for SDK generation purposes only. This endpoint demonstrates usage of all shared models defined in the Stainless configuration and is not intended for public consumption.
+      tags:
+        - Dummy Test
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                extensions:
+                  $ref: '#/components/schemas/Extensions'
+                srcOptions:
+                  $ref: '#/components/schemas/SrcOptions'
+                getImageAttributesOptions:
+                  $ref: '#/components/schemas/GetImageAttributesOptions'
+                responsiveImageAttributes:
+                  $ref: '#/components/schemas/ResponsiveImageAttributes'
+                transformation:
+                  $ref: '#/components/schemas/Transformation'
+                transformationPosition:
+                  $ref: '#/components/schemas/TransformationPosition'
+                streamingResolution:
+                  $ref: '#/components/schemas/StreamingResolution'
+                overlay:
+                  $ref: '#/components/schemas/Overlay'
+                baseOverlay:
+                  $ref: '#/components/schemas/BaseOverlay'
+                overlayPosition:
+                  $ref: '#/components/schemas/OverlayPosition'
+                overlayTiming:
+                  $ref: '#/components/schemas/OverlayTiming'
+                textOverlay:
+                  $ref: '#/components/schemas/TextOverlay'
+                imageOverlay:
+                  $ref: '#/components/schemas/ImageOverlay'
+                videoOverlay:
+                  $ref: '#/components/schemas/VideoOverlay'
+                subtitleOverlay:
+                  $ref: '#/components/schemas/SubtitleOverlay'
+                solidColorOverlay:
+                  $ref: '#/components/schemas/SolidColorOverlay'
+                textOverlayTransformation:
+                  $ref: '#/components/schemas/TextOverlayTransformation'
+                subtitleOverlayTransformation:
+                  $ref: '#/components/schemas/SubtitleOverlayTransformation'
+                solidColorOverlayTransformation:
+                  $ref: '#/components/schemas/SolidColorOverlayTransformation'
+      responses:
+        "204":
+          description: No content - Request processed successfully with empty response
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input data"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
   /api/v1/files/upload:
     servers:
       - url: https://upload.imagekit.io
