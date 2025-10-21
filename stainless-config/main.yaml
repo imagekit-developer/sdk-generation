@@ -41,6 +41,7 @@ targets:
     # production_repo: imagekit-developer/imagekit-go#master
     options:
       enable_v2: true
+    production_repo: imagekit-developer/imagekit-go#master
   java:
     reverse_domain: com.imagekit.api
     # production_repo: imagekit-developer/imagekit-java#master
