@@ -76,29 +76,63 @@ environments:
 resources:
   $shared:
     models:
-      Extensions: "#/components/schemas/Extensions"
-      SrcOptions: '#/components/schemas/SrcOptions'
-      Transformation: '#/components/schemas/Transformation'
-      TransformationPosition: '#/components/schemas/TransformationPosition'
-      StreamingResolution: '#/components/schemas/StreamingResolution'
-      Overlay: '#/components/schemas/Overlay'
-      BaseOverlay: '#/components/schemas/BaseOverlay'
-      OverlayPosition: '#/components/schemas/OverlayPosition'
-      OverlayTiming: '#/components/schemas/OverlayTiming'
-      TextOverlay: '#/components/schemas/TextOverlay'
-      ImageOverlay: '#/components/schemas/ImageOverlay'
-      VideoOverlay: '#/components/schemas/VideoOverlay'
-      SubtitleOverlay: '#/components/schemas/SubtitleOverlay'
-      SolidColorOverlay: '#/components/schemas/SolidColorOverlay'
-      TextOverlayTransformation: '#/components/schemas/TextOverlayTransformation'
-      SubtitleOverlayTransformation: '#/components/schemas/SubtitleOverlayTransformation'
-      SolidColorOverlayTransformation: '#/components/schemas/SolidColorOverlayTransformation'
-
-  dummy:
-    only:
-      - go
-    methods:
-      create: post /v1/dummy/test
+      Extensions:
+        openapi_uri: '#/components/schemas/Extensions'
+        force_generation: true
+      SrcOptions:
+        openapi_uri: '#/components/schemas/SrcOptions'
+        force_generation: true
+      GetImageAttributesOptions:
+        openapi_uri: '#/components/schemas/GetImageAttributesOptions'
+        force_generation: true
+      ResponsiveImageAttributes:
+        openapi_uri: '#/components/schemas/ResponsiveImageAttributes'
+        force_generation: true
+      Transformation:
+        openapi_uri: '#/components/schemas/Transformation'
+        force_generation: true
+      TransformationPosition:
+        openapi_uri: '#/components/schemas/TransformationPosition'
+        force_generation: true
+      StreamingResolution:
+        openapi_uri: '#/components/schemas/StreamingResolution'
+        force_generation: true
+      Overlay:
+        openapi_uri: '#/components/schemas/Overlay'
+        force_generation: true
+      BaseOverlay:
+        openapi_uri: '#/components/schemas/BaseOverlay'
+        force_generation: true
+      OverlayPosition:
+        openapi_uri: '#/components/schemas/OverlayPosition'
+        force_generation: true
+      OverlayTiming:
+        openapi_uri: '#/components/schemas/OverlayTiming'
+        force_generation: true
+      TextOverlay:
+        openapi_uri: '#/components/schemas/TextOverlay'
+        force_generation: true
+      ImageOverlay:
+        openapi_uri: '#/components/schemas/ImageOverlay'
+        force_generation: true
+      VideoOverlay:
+        openapi_uri: '#/components/schemas/VideoOverlay'
+        force_generation: true
+      SubtitleOverlay:
+        openapi_uri: '#/components/schemas/SubtitleOverlay'
+        force_generation: true
+      SolidColorOverlay:
+        openapi_uri: '#/components/schemas/SolidColorOverlay'
+        force_generation: true
+      TextOverlayTransformation:
+        openapi_uri: '#/components/schemas/TextOverlayTransformation'
+        force_generation: true
+      SubtitleOverlayTransformation:
+        openapi_uri: '#/components/schemas/SubtitleOverlayTransformation'
+        force_generation: true
+      SolidColorOverlayTransformation:
+        openapi_uri: '#/components/schemas/SolidColorOverlayTransformation'
+        force_generation: true
 
   customMetadataFields:
     models:

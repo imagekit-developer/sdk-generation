@@ -185,72 +185,6 @@ paths:
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
-  /v1/dummy/test:
-    post:
-      summary: Dummy test endpoint using all shared models
-      operationId: create-dummy-test
-      description: |
-        Internal test endpoint for SDK generation purposes only. This endpoint demonstrates usage of all shared models defined in the Stainless configuration and is not intended for public consumption.
-      tags:
-        - Dummy Test
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                extensions:
-                  $ref: '#/components/schemas/Extensions'
-                srcOptions:
-                  $ref: '#/components/schemas/SrcOptions'
-                transformation:
-                  $ref: '#/components/schemas/Transformation'
-                transformationPosition:
-                  $ref: '#/components/schemas/TransformationPosition'
-                streamingResolution:
-                  $ref: '#/components/schemas/StreamingResolution'
-                overlay:
-                  $ref: '#/components/schemas/Overlay'
-                baseOverlay:
-                  $ref: '#/components/schemas/BaseOverlay'
-                overlayPosition:
-                  $ref: '#/components/schemas/OverlayPosition'
-                overlayTiming:
-                  $ref: '#/components/schemas/OverlayTiming'
-                textOverlay:
-                  $ref: '#/components/schemas/TextOverlay'
-                imageOverlay:
-                  $ref: '#/components/schemas/ImageOverlay'
-                videoOverlay:
-                  $ref: '#/components/schemas/VideoOverlay'
-                subtitleOverlay:
-                  $ref: '#/components/schemas/SubtitleOverlay'
-                solidColorOverlay:
-                  $ref: '#/components/schemas/SolidColorOverlay'
-                textOverlayTransformation:
-                  $ref: '#/components/schemas/TextOverlayTransformation'
-                subtitleOverlayTransformation:
-                  $ref: '#/components/schemas/SubtitleOverlayTransformation'
-                solidColorOverlayTransformation:
-                  $ref: '#/components/schemas/SolidColorOverlayTransformation'
-      responses:
-        "204":
-          description: No content - Request processed successfully with empty response
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Invalid input data"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
   /v1/customMetadataFields:
     post:
       summary: Create new field
@@ -6342,6 +6276,92 @@ components:
 
             [Learn more](https://imagekit.io/docs/media-delivery-basic-security#how-to-generate-signed-urls).
       additionalProperties: false
+
+    GetImageAttributesOptions:
+      title: Get Image Attributes Options
+      description: |
+        Options for generating responsive image attributes including `src`, `srcSet`, and `sizes` for HTML `<img>` elements. 
+        This schema extends `SrcOptions` to add support for responsive image generation with breakpoints.
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SrcOptions"
+        - type: object
+          properties:
+            width:
+              type: number
+              description: |
+                The intended display width of the image in pixels, 
+                used **only when the `sizes` attribute is not provided**.
+
+                Triggers a DPR-based strategy (1x and 2x variants) and generates `x` descriptors in `srcSet`.
+                
+                Ignored if `sizes` is present.
+              example: 400
+            sizes:
+              type: string
+              description: |
+                The value for the HTML `sizes` attribute 
+                (e.g., `"100vw"` or `"(min-width:768px) 50vw, 100vw"`).
+
+                - If it includes one or more `vw` units, breakpoints smaller than the corresponding percentage of the smallest device width are excluded.
+                - If it contains no `vw` units, the full breakpoint list is used.
+
+                Enables a width-based strategy and generates `w` descriptors in `srcSet`.
+              example: "(min-width: 768px) 50vw, 100vw"
+            deviceBreakpoints:
+              type: array
+              items:
+                type: number
+              description: |
+                Custom list of **device-width breakpoints** in pixels.
+                These define common screen widths for responsive image generation.
+
+                Defaults to `[640, 750, 828, 1080, 1200, 1920, 2048, 3840]`.
+                Sorted automatically.
+              example: [640, 750, 828, 1080, 1200, 1920, 2048, 3840]
+            imageBreakpoints:
+              type: array
+              items:
+                type: number
+              description: |
+                Custom list of **image-specific breakpoints** in pixels.
+                Useful for generating small variants (e.g., placeholders or thumbnails).
+
+                Merged with `deviceBreakpoints` before calculating `srcSet`.
+                Defaults to `[16, 32, 48, 64, 96, 128, 256, 384]`.
+                Sorted automatically.
+              example: [16, 32, 48, 64, 96, 128, 256, 384]
+
+    ResponsiveImageAttributes:
+      title: Responsive Image Attributes
+      description: |
+        Resulting set of attributes suitable for an HTML `<img>` element.
+        Useful for enabling responsive image loading with `srcSet` and `sizes`.
+      type: object
+      required:
+        - src
+      properties:
+        src:
+          type: string
+          format: uri
+          description: URL for the *largest* candidate (assigned to plain `src`).
+          example: "https://ik.imagekit.io/demo/image.jpg?tr=w-3840"
+        srcSet:
+          type: string
+          description: |
+            Candidate set with `w` or `x` descriptors. 
+            Multiple image URLs separated by commas, each with a descriptor.
+          example: "https://ik.imagekit.io/demo/image.jpg?tr=w-640 640w, https://ik.imagekit.io/demo/image.jpg?tr=w-1080 1080w, https://ik.imagekit.io/demo/image.jpg?tr=w-1920 1920w"
+        sizes:
+          type: string
+          description: |
+            `sizes` returned (or synthesised as `100vw`). 
+            The value for the HTML `sizes` attribute.
+          example: "100vw"
+        width:
+          type: number
+          description: Width as a number (if `width` was provided in the input options).
+          example: 400
 
     TransformationPosition:
       type: string
