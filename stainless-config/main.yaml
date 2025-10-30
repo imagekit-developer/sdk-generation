@@ -48,7 +48,7 @@ targets:
     publish:
       maven: false
   ruby:
-    gem_name: imagekit
+    gem_name: imagekitio
     # production_repo: imagekit-developer/imagekit-ruby#master
     publish:
       rubygems: true
