@@ -51,7 +51,8 @@ targets:
     gem_name: imagekit
     # production_repo: imagekit-developer/imagekit-ruby#master
     publish:
-      rubygems: false
+      rubygems: true
+    production_repo: imagekit-developer/imagekit-ruby#master
   cli:
     binary_name: imagekit
     production_repo: null
