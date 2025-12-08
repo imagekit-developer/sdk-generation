@@ -23,12 +23,12 @@ targets:
         enable_all_resources: true
         generate_cloudflare_worker: true
   python:
-    package_name: imagekit
+    package_name: imagekitio
     publish:
       pypi: false
     # production_repo: imagekit-developer/imagekit-python#master
   php:
-    package_name: 'image-kit'
+    package_name: imagekit
     composer_package_name: 'imagekit/imagekit'
     # production_repo: imagekit-developer/imagekit-php#master
   csharp:
