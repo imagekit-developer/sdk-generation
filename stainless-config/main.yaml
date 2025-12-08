@@ -119,6 +119,7 @@ resources:
   dummy:
     only:
       - go
+      - python
     methods:
       create: post /v1/dummy/test
 
