@@ -27,6 +27,7 @@ targets:
     publish:
       pypi: true
     production_repo: imagekit-developer/imagekit-python#master
+    project_name: imagekitio
     # production_repo: imagekit-developer/imagekit-python#master
   php:
     package_name: imagekit
