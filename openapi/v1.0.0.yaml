@@ -5708,6 +5708,39 @@ components:
             - $ref: "#/components/schemas/AutoTaggingExtension"
             - $ref: "#/components/schemas/AutoDescriptionExtension"
             - $ref: "#/components/schemas/AITasksExtension"
+    SavedExtension:
+      title: Saved Extension
+      description: Saved extension object containing extension configuration.
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the saved extension.
+          example: "ext_abc123"
+        name:
+          type: string
+          description: Name of the saved extension.
+          example: "Car Quality Analysis"
+        description:
+          type: string
+          description: Description of the saved extension.
+          example: "Analyzes vehicle images for type, condition, and quality assessment"
+        config:
+          type: object
+          description: The extension configuration object.
+          oneOf:
+            - $ref: "#/components/schemas/RemovedotBGExtension"
+            - $ref: "#/components/schemas/AutoTaggingExtension"
+            - $ref: "#/components/schemas/AutoDescriptionExtension"
+            - $ref: "#/components/schemas/AITasksExtension"
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the saved extension was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the saved extension was last updated.
     Extensions:
       title: Extensions Array
       type: array
@@ -8337,39 +8370,6 @@ components:
               message:
                 type: string
                 description: A description of the error, providing details about why the rate limit has been exceeded.
-    SavedExtension:
-      title: Saved Extension
-      description: Saved extension object containing extension configuration.
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the saved extension.
-          example: "ext_abc123"
-        name:
-          type: string
-          description: Name of the saved extension.
-          example: "Car Quality Analysis"
-        description:
-          type: string
-          description: Description of the saved extension.
-          example: "Analyzes vehicle images for type, condition, and quality assessment"
-        config:
-          type: object
-          description: The extension configuration object.
-          oneOf:
-            - $ref: "#/components/schemas/RemovedotBGExtension"
-            - $ref: "#/components/schemas/AutoTaggingExtension"
-            - $ref: "#/components/schemas/AutoDescriptionExtension"
-            - $ref: "#/components/schemas/AITasksExtension"
-        createdAt:
-          type: string
-          format: date-time
-          description: Timestamp when the saved extension was created.
-        updatedAt:
-          type: string
-          format: date-time
-          description: Timestamp when the saved extension was last updated.
 
 webhooks:
   video.transformation.accepted:
