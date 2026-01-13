@@ -3025,7 +3025,7 @@ paths:
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
-  /v1/files/metadata:
+  /v1/metadata:
     get:
       tags:
         - File Metadata
@@ -3085,6 +3085,241 @@ paths:
                   message:
                     type: string
                     example: The url should be accessible using your ImageKit.io account.
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+  /v1/extensions:
+    get:
+      tags:
+        - Digital Asset Management (DAM)
+        - Saved Extensions
+      operationId: list-extensions
+      summary: List all saved extensions
+      description: |
+        This API returns an array of all saved extensions for your account. Saved extensions allow you to save complex extension configurations and reuse them by referencing them by ID in upload or update file APIs.
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "200":
+          description: Array of saved extension objects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/responses/SavedExtension"
+    post:
+      tags:
+        - Digital Asset Management (DAM)
+        - Saved Extensions
+      operationId: create-extension
+      summary: Create saved extension
+      description: |
+        This API creates a new saved extension. Saved extensions allow you to save complex extension configurations (like AI tasks) and reuse them by referencing the ID in upload or update file APIs.
+
+        **Saved extension limit** \
+        You can create a maximum of 100 saved extensions per account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSavedExtension"
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "201":
+          description: Saved extension created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/SavedExtension"
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid extension configuration.
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+  /v1/extensions/{id}:
+    get:
+      tags:
+        - Digital Asset Management (DAM)
+        - Saved Extensions
+      operationId: get-extension
+      summary: Get saved extension details
+      description: |
+        This API returns details of a specific saved extension by ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: |
+            The unique ID of the saved extension.
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "200":
+          description: Saved extension details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/SavedExtension"
+        "404":
+          description: Saved extension not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested saved extension does not exist.
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid saved extension ID.
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+    patch:
+      tags:
+        - Digital Asset Management (DAM)
+        - Saved Extensions
+      operationId: update-extension
+      summary: Update saved extension
+      description: |
+        This API updates an existing saved extension. You can update the name, description, or config.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: |
+            The unique ID of the saved extension.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSavedExtension"
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "200":
+          description: Saved extension updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/SavedExtension"
+        "404":
+          description: Saved extension not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested saved extension does not exist.
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid extension configuration.
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+    delete:
+      tags:
+        - Digital Asset Management (DAM)
+        - Saved Extensions
+      operationId: delete-extension
+      summary: Delete saved extension
+      description: |
+        This API deletes a saved extension permanently.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: |
+            The unique ID of the saved extension.
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "204":
+          description: Saved extension deleted successfully.
+        "404":
+          description: Saved extension not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested saved extension does not exist.
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid saved extension ID.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
@@ -3653,6 +3888,17 @@ components:
               "maxTags": 10,
             },
             { "name": "ai-auto-description" },
+            {
+              "name": "ai-tasks",
+              "tasks": [
+                {
+                  "type": "select_tags",
+                  "instruction": "What types of clothing items are visible?",
+                  "vocabulary": ["shirt", "dress", "jacket"]
+                }
+              ]
+            },
+            { "name": "saved-extension", "id": "ext_abc123" }
           ]
         tags: ["tag1", "tag2"]
         customCoordinates: "10,10,100,100"
@@ -5220,6 +5466,232 @@ components:
           type: string
           const: "ai-auto-description"
           description: Specifies the auto description extension.
+    AITasksExtension:
+      title: AI Tasks
+      type: object
+      required:
+        - name
+        - tasks
+      properties:
+        name:
+          type: string
+          const: "ai-tasks"
+          description: Specifies the AI tasks extension for automated image analysis using AI models.
+        tasks:
+          type: array
+          minItems: 1
+          maxItems: 10
+          description: Array of task objects defining AI operations to perform on the asset.
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/AITaskSelectTags"
+              - $ref: "#/components/schemas/AITaskSelectMetadata"
+              - $ref: "#/components/schemas/AITaskYesNo"
+    AITaskSelectTags:
+      title: AI Task - Select Tags
+      type: object
+      required:
+        - type
+        - instruction
+        - vocabulary
+      properties:
+        type:
+          type: string
+          const: "select_tags"
+          description: Task type that analyzes the image and adds matching tags from a vocabulary.
+        instruction:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: The question or instruction for the AI to analyze the image.
+          example: "What types of clothing items are visible in this image?"
+        vocabulary:
+          type: array
+          minItems: 1
+          maxItems: 100
+          description: Array of possible tag values. Combined length of all strings must not exceed 500 characters. Cannot contain the `%` character.
+          items:
+            type: string
+          example: ["shirt", "tshirt", "dress", "trousers", "jacket"]
+        min_selections:
+          type: integer
+          minimum: 0
+          description: Minimum number of tags to select from the vocabulary.
+        max_selections:
+          type: integer
+          minimum: 1
+          description: Maximum number of tags to select from the vocabulary.
+    AITaskSelectMetadata:
+      title: AI Task - Select Metadata
+      type: object
+      required:
+        - type
+        - instruction
+        - field
+      properties:
+        type:
+          type: string
+          const: "select_metadata"
+          description: Task type that analyzes the image and sets a custom metadata field value from a vocabulary.
+        instruction:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: The question or instruction for the AI to analyze the image.
+          example: "What is the primary color of the clothing?"
+        field:
+          type: string
+          description: Name of the custom metadata field to set. The field must exist in your account.
+          example: "primary_color"
+        vocabulary:
+          type: array
+          minItems: 1
+          maxItems: 100
+          description: Array of possible values matching the custom metadata field type.
+          items: {}
+          example: ["red", "blue", "green", "black", "white"]
+        min_selections:
+          type: integer
+          minimum: 0
+          description: Minimum number of values to select from the vocabulary.
+        max_selections:
+          type: integer
+          minimum: 1
+          description: Maximum number of values to select from the vocabulary.
+    AITaskYesNo:
+      title: AI Task - Yes/No
+      type: object
+      required:
+        - type
+        - instruction
+      properties:
+        type:
+          type: string
+          const: "yes_no"
+          description: Task type that asks a yes/no question and executes actions based on the answer.
+        instruction:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: The yes/no question for the AI to answer about the image.
+          example: "Is this a luxury or high-end fashion item?"
+        on_yes:
+          $ref: "#/components/schemas/AITaskAction"
+          description: Actions to execute if the AI answers yes.
+        on_no:
+          $ref: "#/components/schemas/AITaskAction"
+          description: Actions to execute if the AI answers no.
+        on_unknown:
+          $ref: "#/components/schemas/AITaskAction"
+          description: Actions to execute if the AI cannot determine the answer.
+    AITaskAction:
+      title: AI Task Action
+      type: object
+      description: Defines actions to perform based on AI task results.
+      properties:
+        add_tags:
+          type: array
+          description: Array of tag strings to add to the asset.
+          items:
+            type: string
+          example: ["luxury", "premium"]
+        remove_tags:
+          type: array
+          description: Array of tag strings to remove from the asset.
+          items:
+            type: string
+          example: ["budget", "affordable"]
+        set_metadata:
+          type: array
+          description: Array of custom metadata field updates.
+          items:
+            type: object
+            required:
+              - field
+              - value
+            properties:
+              field:
+                type: string
+                description: Name of the custom metadata field to set.
+              value:
+                description: Value to set for the custom metadata field.
+          example:
+            - field: "price_range"
+              value: "premium"
+        unset_metadata:
+          type: array
+          description: Array of custom metadata fields to remove.
+          items:
+            type: object
+            required:
+              - field
+            properties:
+              field:
+                type: string
+                description: Name of the custom metadata field to remove.
+          example:
+            - field: "price_range"
+    SavedExtensionReference:
+      title: Saved Extension Reference
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        name:
+          type: string
+          const: "saved-extension"
+          description: Indicates this is a reference to a saved extension.
+        id:
+          type: string
+          description: The unique ID of the saved extension to apply.
+          example: "ext_abc123"
+    CreateSavedExtension:
+      title: Create Saved Extension
+      type: object
+      required:
+        - name
+        - description
+        - config
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Name of the saved extension.
+          example: "Car Quality Analysis"
+        description:
+          type: string
+          minLength: 1
+          description: Description of what the saved extension does.
+          example: "Analyzes vehicle images for type, condition, and quality assessment"
+        config:
+          type: object
+          description: The extension configuration object. Must be a valid extension configuration (cannot be of type 'saved-extension').
+          oneOf:
+            - $ref: "#/components/schemas/RemovedotBGExtension"
+            - $ref: "#/components/schemas/AutoTaggingExtension"
+            - $ref: "#/components/schemas/AutoDescriptionExtension"
+            - $ref: "#/components/schemas/AITasksExtension"
+    UpdateSavedExtension:
+      title: Update Saved Extension
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Updated name of the saved extension.
+        description:
+          type: string
+          minLength: 1
+          description: Updated description of the saved extension.
+        config:
+          type: object
+          description: Updated extension configuration object. Must be a valid extension configuration (cannot be of type 'saved-extension').
+          oneOf:
+            - $ref: "#/components/schemas/RemovedotBGExtension"
+            - $ref: "#/components/schemas/AutoTaggingExtension"
+            - $ref: "#/components/schemas/AutoDescriptionExtension"
+            - $ref: "#/components/schemas/AITasksExtension"
     Extensions:
       title: Extensions Array
       type: array
@@ -5230,6 +5702,8 @@ components:
           - $ref: "#/components/schemas/RemovedotBGExtension"
           - $ref: "#/components/schemas/AutoTaggingExtension"
           - $ref: "#/components/schemas/AutoDescriptionExtension"
+          - $ref: "#/components/schemas/AITasksExtension"
+          - $ref: "#/components/schemas/SavedExtensionReference"
       description: >
         Array of extensions to be applied to the asset. Each extension can be configured with specific parameters based on the extension type.
       example:
@@ -5241,6 +5715,17 @@ components:
           maxTags: 5
           minConfidence: 95
         - name: "ai-auto-description"
+        - name: "ai-tasks"
+          tasks:
+            - type: "select_tags"
+              instruction: "What types of clothing items are visible in this image?"
+              vocabulary: ["shirt", "tshirt", "dress", "trousers", "jacket"]
+            - type: "yes_no"
+              instruction: "Is this a luxury or high-end fashion item?"
+              on_yes:
+                add_tags: ["luxury", "premium"]
+        - name: "saved-extension"
+          id: "ext_abc123"
     FileDetails:
       title: File & File Version
       description: Object containing details of a file or file version.
@@ -7828,6 +8313,39 @@ components:
               message:
                 type: string
                 description: A description of the error, providing details about why the rate limit has been exceeded.
+    SavedExtension:
+      title: Saved Extension
+      description: Saved extension object containing extension configuration.
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the saved extension.
+          example: "ext_abc123"
+        name:
+          type: string
+          description: Name of the saved extension.
+          example: "Car Quality Analysis"
+        description:
+          type: string
+          description: Description of the saved extension.
+          example: "Analyzes vehicle images for type, condition, and quality assessment"
+        config:
+          type: object
+          description: The extension configuration object.
+          oneOf:
+            - $ref: "#/components/schemas/RemovedotBGExtension"
+            - $ref: "#/components/schemas/AutoTaggingExtension"
+            - $ref: "#/components/schemas/AutoDescriptionExtension"
+            - $ref: "#/components/schemas/AITasksExtension"
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the saved extension was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the saved extension was last updated.
 
 webhooks:
   video.transformation.accepted:

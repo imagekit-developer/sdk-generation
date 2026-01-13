@@ -165,7 +165,15 @@ resources:
       metadata:
         methods:
           get: get /v1/files/{fileId}/metadata
-          getFromURL: get /v1/files/metadata
+          getFromURL: get /v1/metadata
+
+  extensions:
+    methods:
+      list: get /v1/extensions
+      create: post /v1/extensions
+      get: get /v1/extensions/{id}
+      update: patch /v1/extensions/{id}
+      delete: delete /v1/extensions/{id}
 
   assets:
     methods:
