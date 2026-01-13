@@ -7014,7 +7014,7 @@ components:
           minimum: 0.1
           maximum: 5
           description: |
-            Accepts values between 0.1 and 5, or `auto` for automatic device pixel ratio (DPR) calculation.
+            Accepts values between 0.1 and 5, or `auto` for automatic device pixel ratio (DPR) calculation. Also accepts arithmetic expressions.
             - Learn about [Arithmetic expressions](https://imagekit.io/docs/arithmetic-expressions-in-transformations).
             - See [DPR](https://imagekit.io/docs/image-resize-and-crop#dpr---dpr).
           example: 2
