@@ -6956,10 +6956,10 @@ components:
           - type: number
             description: Numeric radius value for this corner.
           - type: string
-            description: Use `"max"` for maximum radius.
+            description: Use `max` for circular or oval shape.
       description: |
         Per-corner radius values as an array of 4 values: [top-left, top-right, bottom-right, bottom-left].
-        Each value can be a number or `max` for maximum radius.
+        Each value can be a number or `max` for circular or oval shape.
       example: [10, 20, 30, 40]
 
     Transformation:
