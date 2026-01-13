@@ -29,6 +29,10 @@ paths:
               properties:
                 extensions:
                   $ref: '#/components/schemas/Extensions'
+                savedExtensions:
+                  $ref: '#/components/schemas/SavedExtension'
+                extensionConfig:
+                  $ref: '#/components/schemas/ExtensionConfig'
                 srcOptions:
                   $ref: '#/components/schemas/SrcOptions'
                 getImageAttributesOptions:
@@ -5647,6 +5651,15 @@ components:
                 description: Name of the custom metadata field to remove.
           example:
             - field: "price_range"
+    ExtensionConfig:
+      title: Extension Configuration
+      description: Configuration object for an extension (base extensions only, not saved extension references).
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/RemovedotBGExtension"
+        - $ref: "#/components/schemas/AutoTaggingExtension"
+        - $ref: "#/components/schemas/AutoDescriptionExtension"
+        - $ref: "#/components/schemas/AITasksExtension"
     SavedExtensionReference:
       title: Saved Extension Reference
       type: object
@@ -5681,13 +5694,7 @@ components:
           description: Description of what the saved extension does.
           example: "Analyzes vehicle images for type, condition, and quality assessment"
         config:
-          type: object
-          description: The extension configuration object.
-          oneOf:
-            - $ref: "#/components/schemas/RemovedotBGExtension"
-            - $ref: "#/components/schemas/AutoTaggingExtension"
-            - $ref: "#/components/schemas/AutoDescriptionExtension"
-            - $ref: "#/components/schemas/AITasksExtension"
+          $ref: "#/components/schemas/ExtensionConfig"
     UpdateSavedExtension:
       title: Update Saved Extension
       type: object
@@ -5701,13 +5708,7 @@ components:
           minLength: 1
           description: Updated description of the saved extension.
         config:
-          type: object
-          description: Updated extension configuration object.
-          oneOf:
-            - $ref: "#/components/schemas/RemovedotBGExtension"
-            - $ref: "#/components/schemas/AutoTaggingExtension"
-            - $ref: "#/components/schemas/AutoDescriptionExtension"
-            - $ref: "#/components/schemas/AITasksExtension"
+          $ref: "#/components/schemas/ExtensionConfig"
     SavedExtension:
       title: Saved Extension
       description: Saved extension object containing extension configuration.
@@ -5726,13 +5727,7 @@ components:
           description: Description of the saved extension.
           example: "Analyzes vehicle images for type, condition, and quality assessment"
         config:
-          type: object
-          description: The extension configuration object.
-          oneOf:
-            - $ref: "#/components/schemas/RemovedotBGExtension"
-            - $ref: "#/components/schemas/AutoTaggingExtension"
-            - $ref: "#/components/schemas/AutoDescriptionExtension"
-            - $ref: "#/components/schemas/AITasksExtension"
+          $ref: "#/components/schemas/ExtensionConfig"
         createdAt:
           type: string
           format: date-time
