@@ -3111,7 +3111,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/responses/SavedExtension"
+                  $ref: "#/components/schemas/SavedExtension"
     post:
       tags:
         - Digital Asset Management (DAM)
@@ -3141,7 +3141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/responses/SavedExtension"
+                $ref: "#/components/schemas/SavedExtension"
         "400":
           description: Bad request.
           content:
@@ -3184,7 +3184,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/responses/SavedExtension"
+                $ref: "#/components/schemas/SavedExtension"
         "404":
           description: Saved extension not found.
           content:
@@ -3245,7 +3245,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/responses/SavedExtension"
+                $ref: "#/components/schemas/SavedExtension"
         "404":
           description: Saved extension not found.
           content:
