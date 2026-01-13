@@ -7342,13 +7342,11 @@ components:
           $ref: "#/components/schemas/OverlayPosition"
           description: |
             Specifies the overlay's position relative to the parent asset.
-            Accepts a JSON object with `x` and `y` (or `focus`) properties.
             See [Position of Layer](https://imagekit.io/docs/transformations#position-of-layer).
         timing:
           $ref: "#/components/schemas/OverlayTiming"
           description: |
             Specifies timing information for the overlay (only applicable if the base asset is a video).
-            Accepts a JSON object with `start` (`lso`), `end` (`leo`), and `duration` (`ldu`) properties.
             See [Position of Layer](https://imagekit.io/docs/transformations#position-of-layer).
         layerMode:
           type: string
