@@ -5682,7 +5682,7 @@ components:
           example: "Analyzes vehicle images for type, condition, and quality assessment"
         config:
           type: object
-          description: The extension configuration object. Must be a valid extension configuration (cannot be of type 'saved-extension').
+          description: The extension configuration object.
           oneOf:
             - $ref: "#/components/schemas/RemovedotBGExtension"
             - $ref: "#/components/schemas/AutoTaggingExtension"
@@ -5702,7 +5702,7 @@ components:
           description: Updated description of the saved extension.
         config:
           type: object
-          description: Updated extension configuration object. Must be a valid extension configuration (cannot be of type 'saved-extension').
+          description: Updated extension configuration object.
           oneOf:
             - $ref: "#/components/schemas/RemovedotBGExtension"
             - $ref: "#/components/schemas/AutoTaggingExtension"
