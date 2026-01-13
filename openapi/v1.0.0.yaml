@@ -6954,12 +6954,12 @@ components:
       items:
         oneOf:
           - type: number
-            description: Numeric radius value for this corner.
+            description: Positive integer radius value for this corner.
           - type: string
             description: Use `max` for circular or oval shape.
       description: |
         Per-corner radius values as an array of 4 values: [top-left, top-right, bottom-right, bottom-left].
-        Each value can be a number or `max` for circular or oval shape.
+        Each value can be a positive integer or `max` for circular or oval shape.
       example: [10, 20, 30, 40]
 
     Transformation:
@@ -7097,7 +7097,7 @@ components:
             - $ref: "#/components/schemas/PerCornerRadius"
           description: |
             Specifies the corner radius for rounded corners.
-            - Single value (number): Applied to all corners (e.g., `20`)
+            - Single value (positive integer): Applied to all corners (e.g., `20`)
             - `max`: Creates circular or oval shape
             - Per-corner array: Four values for [top-left, top-right, bottom-right, bottom-left]
             See [Radius](https://imagekit.io/docs/effects-and-enhancements#radius---r).
@@ -7669,7 +7669,7 @@ components:
             - $ref: "#/components/schemas/PerCornerRadius"
           description: |
             Specifies the corner radius of the text overlay.
-            - Single value (number): Applied to all corners (e.g., `20`)
+            - Single value (positive integer): Applied to all corners (e.g., `20`)
             - `max`: Creates circular or oval shape
             - Per-corner array: Four values for [top-left, top-right, bottom-right, bottom-left]
         rotation:
@@ -7772,7 +7772,7 @@ components:
             - $ref: "#/components/schemas/PerCornerRadius"
           description: |
             Specifies the corner radius of the solid color overlay.
-            - Single value (number): Applied to all corners (e.g., `20`)
+            - Single value (positive integer): Applied to all corners (e.g., `20`)
             - `max`: Creates circular or oval shape
             - Per-corner array: Four values for [top-left, top-right, bottom-right, bottom-left]
             See [Radius](https://imagekit.io/docs/effects-and-enhancements#radius---r).
