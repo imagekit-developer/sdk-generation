@@ -6947,21 +6947,6 @@ components:
       enum: ["240", "360", "480", "720", "1080", "1440", "2160"]
       description: Available streaming resolutions for [adaptive bitrate streaming](https://imagekit.io/docs/adaptive-bitrate-streaming)
 
-    PerCornerRadius:
-      type: array
-      minItems: 4
-      maxItems: 4
-      items:
-        oneOf:
-          - type: number
-            description: Positive integer radius value for this corner.
-          - type: string
-            description: Use `max` for circular or oval shape.
-      description: |
-        Per-corner radius values as an array of 4 values: [top-left, top-right, bottom-right, bottom-left].
-        Each value can be a positive integer or `max` for circular or oval shape.
-      example: [10, 20, 30, 40]
-
     Transformation:
       title: Transformation
       description: |
@@ -7089,17 +7074,15 @@ components:
           enum: ["aac", "opus", "none"]
           description: Specifies the audio codec, e.g., `aac`, `opus`, or `none`. See [Audio codec](https://imagekit.io/docs/video-optimization#audio-codec---ac).
         radius:
-          oneOf:
+          anyOf:
             - type: number
-              description: Single numeric radius value for all corners (e.g., `20`).
             - const: "max"
-              description: Use `max` for circular or oval shape.
-            - $ref: "#/components/schemas/PerCornerRadius"
+            - type: string
           description: |
             Specifies the corner radius for rounded corners.
-            - Single value (positive integer): Applied to all corners (e.g., `20`)
-            - `max`: Creates circular or oval shape
-            - Per-corner array: Four values for [top-left, top-right, bottom-right, bottom-left]
+            - Single value (positive integer): Applied to all corners (e.g., `20`).
+            - `max`: Creates circular or oval shape.
+            - Per-corner array: Provide four underscore-separated values representing top-left, top-right, bottom-right, and bottom-left corners respectively (e.g., `10_20_30_40`).
             See [Radius](https://imagekit.io/docs/effects-and-enhancements#radius---r).
           example: 20
         rotation:
@@ -7661,17 +7644,16 @@ components:
             Specifies the background color of the text overlay.
             Accepts an RGB hex code, an RGBA code, or a color name.
         radius:
-          oneOf:
+          anyOf:
             - type: number
-              description: Single numeric radius value for all corners (e.g., `20`).
             - const: "max"
-              description: Use `max` for circular or oval shape.
-            - $ref: "#/components/schemas/PerCornerRadius"
+            - type: string
           description: |
-            Specifies the corner radius of the text overlay.
-            - Single value (positive integer): Applied to all corners (e.g., `20`)
-            - `max`: Creates circular or oval shape
-            - Per-corner array: Four values for [top-left, top-right, bottom-right, bottom-left]
+            Specifies the corner radius:
+            - Single value (positive integer): Applied to all corners (e.g., `20`).
+            - `max`: Creates circular or oval shape.
+            - Per-corner array: Provide four underscore-separated values representing top-left, top-right, bottom-right, and bottom-left corners respectively (e.g., `10_20_30_40`).
+            See [Radius](https://imagekit.io/docs/effects-and-enhancements#radius---r).
         rotation:
           oneOf:
             - type: number
@@ -7764,17 +7746,15 @@ components:
             Controls the height of the solid color overlay. Accepts a numeric value or an arithmetic expression.
             Learn about [arithmetic expressions](https://imagekit.io/docs/arithmetic-expressions-in-transformations).
         radius:
-          oneOf:
+          anyOf:
             - type: number
-              description: Single numeric radius value for all corners (e.g., `20`).
             - const: "max"
-              description: Use `max` for circular or oval shape.
-            - $ref: "#/components/schemas/PerCornerRadius"
+            - type: string
           description: |
             Specifies the corner radius of the solid color overlay.
-            - Single value (positive integer): Applied to all corners (e.g., `20`)
-            - `max`: Creates circular or oval shape
-            - Per-corner array: Four values for [top-left, top-right, bottom-right, bottom-left]
+            - Single value (positive integer): Applied to all corners (e.g., `20`).
+            - `max`: Creates circular or oval shape.
+            - Per-corner array: Provide four underscore-separated values representing top-left, top-right, bottom-right, and bottom-left corners respectively (e.g., `10_20_30_40`).
             See [Radius](https://imagekit.io/docs/effects-and-enhancements#radius---r).
         alpha:
           type: number
