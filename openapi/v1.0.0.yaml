@@ -5506,7 +5506,7 @@ components:
         instruction:
           type: string
           minLength: 1
-          maxLength: 1000
+          maxLength: 2000
           description: The question or instruction for the AI to analyze the image.
           example: "What types of clothing items are visible in this image?"
         vocabulary:
@@ -5540,7 +5540,7 @@ components:
         instruction:
           type: string
           minLength: 1
-          maxLength: 1000
+          maxLength: 2000
           description: The question or instruction for the AI to analyze the image.
           example: "What is the primary color of the clothing?"
         field:
@@ -5580,7 +5580,7 @@ components:
         instruction:
           type: string
           minLength: 1
-          maxLength: 1000
+          maxLength: 2000
           description: The yes/no question for the AI to answer about the image.
           example: "Is this a luxury or high-end fashion item?"
         on_yes:
