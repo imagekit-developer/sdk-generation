@@ -3092,7 +3092,7 @@ paths:
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
-  /v1/extensions:
+  /v1/saved-extensions:
     get:
       tags:
         - Digital Asset Management (DAM)
@@ -3159,7 +3159,7 @@ paths:
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
-  /v1/extensions/{id}:
+  /v1/saved-extensions/{id}:
     get:
       tags:
         - Digital Asset Management (DAM)

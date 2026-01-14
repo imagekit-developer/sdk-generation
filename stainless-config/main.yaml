@@ -173,11 +173,11 @@ resources:
 
   savedExtensions:
     methods:
-      list: get /v1/extensions
-      create: post /v1/extensions
-      get: get /v1/extensions/{id}
-      update: patch /v1/extensions/{id}
-      delete: delete /v1/extensions/{id}
+      list: get /v1/saved-extensions
+      create: post /v1/saved-extensions
+      get: get /v1/saved-extensions/{id}
+      update: patch /v1/saved-extensions/{id}
+      delete: delete /v1/saved-extensions/{id}
 
   assets:
     methods:
