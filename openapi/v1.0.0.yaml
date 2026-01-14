@@ -5487,6 +5487,8 @@ components:
           maxItems: 10
           description: Array of task objects defining AI operations to perform on the asset.
           items:
+            discriminator:
+              propertyName: type
             oneOf:
               - $ref: "#/components/schemas/AITaskSelectTags"
               - $ref: "#/components/schemas/AITaskSelectMetadata"
@@ -5655,6 +5657,8 @@ components:
       title: Extension Configuration
       description: Configuration object for an extension (base extensions only, not saved extension references).
       type: object
+      discriminator:
+        propertyName: name
       oneOf:
         - $ref: "#/components/schemas/RemovedotBGExtension"
         - $ref: "#/components/schemas/AutoTaggingExtension"
