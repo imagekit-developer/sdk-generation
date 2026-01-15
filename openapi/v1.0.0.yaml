@@ -5514,7 +5514,7 @@ components:
         vocabulary:
           type: array
           minItems: 1
-          maxItems: 100
+          maxItems: 30
           description: Array of possible tag values. Combined length of all strings must not exceed 500 characters. Cannot contain the `%` character.
           items:
             type: string
@@ -5552,7 +5552,7 @@ components:
         vocabulary:
           type: array
           minItems: 1
-          maxItems: 100
+          maxItems: 30
           description: Array of possible values matching the custom metadata field type.
           items:
             oneOf:
