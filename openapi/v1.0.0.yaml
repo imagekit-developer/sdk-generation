@@ -601,6 +601,9 @@ paths:
                           ai-auto-description:
                             type: string
                             enum: ["success", "pending", "failed"]
+                          ai-tasks:
+                            type: string
+                            enum: ["success", "pending", "failed"]
               example:
                 fileId: 598821f949c0a938d57563bd
                 type: file
@@ -640,6 +643,7 @@ paths:
                   google-auto-tagging: "success"
                   remove-bg: "pending"
                   ai-auto-description: "success"
+                  ai-tasks: "success"
         "404":
           description: File not found.
           content:
@@ -6132,6 +6136,9 @@ components:
               type: string
               enum: ["success", "pending", "failed"]
             ai-auto-description:
+              type: string
+              enum: ["success", "pending", "failed"]
+            ai-tasks:
               type: string
               enum: ["success", "pending", "failed"]
         metadata:
