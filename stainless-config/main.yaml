@@ -81,6 +81,10 @@ resources:
     models:
       Extensions:
         openapi_uri: '#/components/schemas/Extensions'
+      SavedExtension:
+        openapi_uri: '#/components/schemas/SavedExtension'
+      ExtensionConfig:
+        openapi_uri: '#/components/schemas/ExtensionConfig'
       SrcOptions:
         openapi_uri: '#/components/schemas/SrcOptions'
       GetImageAttributesOptions:
@@ -165,7 +169,15 @@ resources:
       metadata:
         methods:
           get: get /v1/files/{fileId}/metadata
-          getFromURL: get /v1/files/metadata
+          getFromURL: get /v1/metadata
+
+  savedExtensions:
+    methods:
+      list: get /v1/saved-extensions
+      create: post /v1/saved-extensions
+      get: get /v1/saved-extensions/{id}
+      update: patch /v1/saved-extensions/{id}
+      delete: delete /v1/saved-extensions/{id}
 
   assets:
     methods:
