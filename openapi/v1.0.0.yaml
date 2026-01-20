@@ -5503,7 +5503,6 @@ components:
       required:
         - type
         - instruction
-        - vocabulary
       properties:
         type:
           type: string
