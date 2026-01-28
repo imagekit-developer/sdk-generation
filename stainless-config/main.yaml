@@ -34,7 +34,7 @@ targets:
     composer_package_name: 'imagekit/imagekit'
     # production_repo: imagekit-developer/imagekit-php#master
   csharp:
-    package_name: imagekit
+    package_name: ImageKit
     publish:
       nuget: false
     # production_repo: imagekit-developer/imagekit-dotnet#master
