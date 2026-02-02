@@ -5928,6 +5928,10 @@ components:
         name:
           type: string
           description: Name of the asset.
+        customMetadata:
+          type: object
+          description: An object with custom metadata for the folder. Returns empty object if no custom metadata is set.
+          additionalProperties: true
         folderPath:
           type: string
           description: |
