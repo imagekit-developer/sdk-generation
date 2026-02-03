@@ -6849,73 +6849,87 @@ components:
               required: [fileId, url, name, path, transformation]
           required: [type, created_at, request, data]
     
-    FileNonDeleteEvent:
-      type: object
-      properties:
-        type:
-          type: string
-          description: The type of the webhook event. Enum: [file.created, file.updated].
-        clientNumber: 
-          type: string
-          description: The client number to identify the client.
-        timestamp:
-          type: number
-          description: The timestamp of the webhook event.
-        fileDetails:
-          $ref: "#/components/schemas/FileDetails"
+    FileCreateUpdateEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file is created or updated.
+          properties:
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            clientNumber: 
+              type: string
+              description: The client number to identify the client.
+            fileDetails:
+              $ref: "#/components/schemas/FileDetails"
+          required: [created_at, clientNumber, fileDetails]
     
     FileDeleteEvent:
-      type: object
-      properties:
-        type:
-          type: string
-          description: The type of the webhook event. Enum: [file.deleted].
-        clientNumber: 
-          type: string
-          description: The client number to identify the client.
-        timestamp:
-          type: number
-          description: The timestamp of the webhook event.
-        fileDetails:
-          type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file is deleted.
           properties:
-            fileId:
+            created_at:
               type: string
-              description: The unique `fileId` of the deleted file.
-
-      FolderNonDeleteEvent:
-        type: object
-        properties:
-          type:
-            type: string
-            description: The type of the webhook event. Enum: [folder.created, folder.updated].
-          clientNumber: 
-            type: string
-            description: The client number to identify the client.
-          timestamp:
-            type: number
-            description: The timestamp of the webhook event.
-          folderDetails:
-            $ref: "#/components/schemas/FolderDetails"
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            clientNumber: 
+              type: string
+              description: The client number to identify the client.
+            fileDetails:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: The unique `fileId` of the deleted file.
+              required: [fileId]
+          required: [created_at, clientNumber, fileDetails]
+    
+    FolderCreateUpdateEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a folder is created or updated.
+          properties:
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            clientNumber: 
+              type: string
+              description: The client number to identify the client.
+            folderDetails:
+              $ref: "#/components/schemas/FolderDetails"
+          required: [created_at, clientNumber, folderDetails]
     
     FolderDeleteEvent:
-      type: object
-      properties:
-        type:
-          type: string
-          description: The type of the webhook event. Enum: [folder.deleted].
-        clientNumber: 
-          type: string
-          description: The client number to identify the client.
-        timestamp:
-          type: number
-          description: The timestamp of the webhook event.
-        folderDetails:
-          type: object
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a folder is deleted.
           properties:
-            folderId:
+            created_at:
               type: string
-              description: The unique `folderId` of the deleted folder.
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            clientNumber: 
+              type: string
+              description: The client number to identify the client.
+            folderDetails:
+              type: object
+              properties:
+                folderId:
+                  type: string
+                  description: The unique `folderId` of the deleted folder.
+              required: [folderId]
+          required: [created_at, clientNumber, folderDetails]
 
     SrcOptions:
       title: Source Options
@@ -8589,7 +8603,7 @@ webhooks:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FileNonDeleteEvent"
+              $ref: "#/components/schemas/FileCreateUpdateEvent"
       responses:
         "200":
           description: Acknowledge
@@ -8605,7 +8619,7 @@ webhooks:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FileNonDeleteEvent"
+              $ref: "#/components/schemas/FileCreateUpdateEvent"
       responses:
         "200":
           description: Acknowledge
@@ -8637,7 +8651,7 @@ webhooks:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FolderNonDeleteEvent"
+              $ref: "#/components/schemas/FolderCreateUpdateEvent"
       responses:
         "200":
           description: Acknowledge
@@ -8653,7 +8667,7 @@ webhooks:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FolderNonDeleteEvent"
+              $ref: "#/components/schemas/FolderCreateUpdateEvent"
       responses:
         "200":
           description: Acknowledge
