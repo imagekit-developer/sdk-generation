@@ -6849,6 +6849,68 @@ components:
               required: [fileId, url, name, path, transformation]
           required: [type, created_at, request, data]
     
+    DamFileCreateEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file is created.
+          properties:
+            type:
+              type: string
+              const: "file.created"
+              description: Type of the webhook event.
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            data:
+              $ref: "#/components/schemas/FileDetails"
+          required: [type, created_at, data]
+    
+    DamFileUpdateEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file is updated.
+          properties:
+            type:
+              type: string
+              const: "file.updated"
+              description: Type of the webhook event.
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            data:
+              $ref: "#/components/schemas/FileDetails"
+          required: [type, created_at, data]
+    
+    DamFileDeleteEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file is deleted.
+          properties:
+            type:
+              type: string
+              const: "file.deleted"
+              description: Type of the webhook event.
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            data:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: The unique `fileId` of the deleted file.
+              required: [fileId]
+          required: [type, created_at, data]
+
     SrcOptions:
       title: Source Options
       description: Options for generating ImageKit URLs with transformations. See the [Transformations guide](https://imagekit.io/docs/transformations).
@@ -8510,5 +8572,53 @@ webhooks:
         "200":
           description: Acknowledge
 
+  dam.file.created:
+    post:
+      operationId: dam-file-created
+      summary: File created
+      description: |
+        Triggered when a file is created.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DamFileCreateEvent"
+      responses:
+        "200":
+          description: Acknowledge
+    
+  dam.file.updated:
+    post:
+      operationId: dam-file-updated
+      summary: File updated
+      description: |
+        Triggered when a file is updated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DamFileUpdateEvent"
+      responses:
+        "200":
+          description: Acknowledge
+
+  dam.file.deleted:
+    post:
+      operationId: dam-file-deleted
+      summary: File deleted
+      description: |
+        Triggered when a file is deleted.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DamFileDeleteEvent"
+      responses:
+        "200":
+          description: Acknowledge
+  
 security:
   - basicAuth: []

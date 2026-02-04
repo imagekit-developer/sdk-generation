@@ -251,6 +251,9 @@ resources:
       UploadPreTransformErrorEvent: '#/components/schemas/UploadPreTransformErrorEvent'
       UploadPostTransformSuccessEvent: '#/components/schemas/UploadPostTransformSuccessEvent'
       UploadPostTransformErrorEvent: '#/components/schemas/UploadPostTransformErrorEvent'
+      DamFileCreateEvent: '#/components/schemas/DamFileCreateEvent'
+      DamFileUpdateEvent: '#/components/schemas/DamFileUpdateEvent'
+      DamFileDeleteEvent: '#/components/schemas/DamFileDeleteEvent'
 
     methods:
       unwrap:
