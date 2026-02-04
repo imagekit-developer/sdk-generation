@@ -6849,87 +6849,67 @@ components:
               required: [fileId, url, name, path, transformation]
           required: [type, created_at, request, data]
     
-    FileCreateUpdateEvent:
+    DamFileCreateEvent:
       allOf:
         - $ref: "#/components/schemas/BaseWebhookEvent"
         - type: object
           description: |
-            Triggered when a file is created or updated.
+            Triggered when a file is created.
           properties:
+            type:
+              type: string
+              const: "file.created"
+              description: Type of the webhook event.
             created_at:
               type: string
               format: date-time
               description: Timestamp of when the event occurred in ISO8601 format.
-            clientNumber: 
-              type: string
-              description: The client number to identify the client.
-            fileDetails:
+            data:
               $ref: "#/components/schemas/FileDetails"
-          required: [created_at, clientNumber, fileDetails]
+          required: [type, created_at, data]
     
-    FileDeleteEvent:
+    DamFileUpdateEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file is created.
+          properties:
+            type:
+              type: string
+              const: "file.updated"
+              description: Type of the webhook event.
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            data:
+              $ref: "#/components/schemas/FileDetails"
+          required: [type, created_at, data]
+    
+    DamFileDeleteEvent:
       allOf:
         - $ref: "#/components/schemas/BaseWebhookEvent"
         - type: object
           description: |
             Triggered when a file is deleted.
           properties:
+            type:
+              type: string
+              const: "file.deleted"
+              description: Type of the webhook event.
             created_at:
               type: string
               format: date-time
               description: Timestamp of when the event occurred in ISO8601 format.
-            clientNumber: 
-              type: string
-              description: The client number to identify the client.
-            fileDetails:
+            data:
               type: object
               properties:
                 fileId:
                   type: string
                   description: The unique `fileId` of the deleted file.
               required: [fileId]
-          required: [created_at, clientNumber, fileDetails]
-    
-    FolderCreateUpdateEvent:
-      allOf:
-        - $ref: "#/components/schemas/BaseWebhookEvent"
-        - type: object
-          description: |
-            Triggered when a folder is created or updated.
-          properties:
-            created_at:
-              type: string
-              format: date-time
-              description: Timestamp of when the event occurred in ISO8601 format.
-            clientNumber: 
-              type: string
-              description: The client number to identify the client.
-            folderDetails:
-              $ref: "#/components/schemas/FolderDetails"
-          required: [created_at, clientNumber, folderDetails]
-    
-    FolderDeleteEvent:
-      allOf:
-        - $ref: "#/components/schemas/BaseWebhookEvent"
-        - type: object
-          description: |
-            Triggered when a folder is deleted.
-          properties:
-            created_at:
-              type: string
-              format: date-time
-              description: Timestamp of when the event occurred in ISO8601 format.
-            clientNumber: 
-              type: string
-              description: The client number to identify the client.
-            folderDetails:
-              type: object
-              properties:
-                folderId:
-                  type: string
-                  description: The unique `folderId` of the deleted folder.
-              required: [folderId]
-          required: [created_at, clientNumber, folderDetails]
+          required: [type, created_at, data]
 
     SrcOptions:
       title: Source Options
@@ -8592,23 +8572,7 @@ webhooks:
         "200":
           description: Acknowledge
 
-  file.updated:
-    post:
-      operationId: file-updated
-      summary: File updated
-      description: |
-        Triggered when a file is updated.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/FileCreateUpdateEvent"
-      responses:
-        "200":
-          description: Acknowledge
-
-  file.created:
+  dam.file.created:
     post:
       operationId: file-created
       summary: File created
@@ -8619,12 +8583,28 @@ webhooks:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FileCreateUpdateEvent"
+              $ref: "#/components/schemas/DamFileCreateEvent"
       responses:
         "200":
           description: Acknowledge
     
-  file.deleted:
+  dam.file.updated:
+    post:
+      operationId: file-updated
+      summary: File updated
+      description: |
+        Triggered when a file is updated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DamFileUpdateEvent"
+      responses:
+        "200":
+          description: Acknowledge
+
+  dam.file.deleted:
     post:
       operationId: file-deleted
       summary: File deleted
@@ -8635,58 +8615,10 @@ webhooks:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FileDeleteEvent"
+              $ref: "#/components/schemas/DamFileDeleteEvent"
       responses:
         "200":
           description: Acknowledge
   
-  folder.created:
-    post:
-      operationId: folder-created
-      summary: Folder created
-      description: |
-        Triggered when a folder is created.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/FolderCreateUpdateEvent"
-      responses:
-        "200":
-          description: Acknowledge
-    
-  folder.updated:
-    post:
-      operationId: folder-updated
-      summary: Folder updated
-      description: |
-        Triggered when a folder is updated.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/FolderCreateUpdateEvent"
-      responses:
-        "200":
-          description: Acknowledge
-    
-  folder.deleted:
-    post:
-      operationId: folder-deleted
-      summary: Folder deleted
-      description: |
-        Triggered when a folder is deleted.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/FolderDeleteEvent"
-      responses:
-        "200":
-          description: Acknowledge
-    
 security:
   - basicAuth: []
