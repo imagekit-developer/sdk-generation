@@ -6873,7 +6873,7 @@ components:
         - $ref: "#/components/schemas/BaseWebhookEvent"
         - type: object
           description: |
-            Triggered when a file is created.
+            Triggered when a file is updated.
           properties:
             type:
               type: string
