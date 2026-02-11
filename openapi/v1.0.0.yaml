@@ -6306,7 +6306,7 @@ components:
           description: The format of the file (e.g., 'jpg', 'mp4').
         mimeType:
           type: string
-          description: (Video only) The MIME type of the video file (e.g., 'video/mp4').
+          description: The MIME type of the file (e.g., 'image/jpeg', 'video/mp4').
         hasColorProfile:
           type: boolean
           description: Indicates if the image has a color profile.
