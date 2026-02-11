@@ -8262,6 +8262,7 @@ components:
       width: 100
       size: 7749
       format: jpg
+      mimeType: image/jpeg
       hasColorProfile: true
       quality: 0
       density: 72
