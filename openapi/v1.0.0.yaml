@@ -8239,6 +8239,8 @@ components:
       width: 1000
       orientation: 1
       thumbnailUrl: https://ik.imagekit.io/demo/tr:n-ik_ml_thumbnail/test-image.jpg
+      format: "jpg"
+      mimeType: image/jpeg
     UploadResonseVideo:
       fileId: 6673f99b37b244ef54d98f11
       name: test-video.mp4
