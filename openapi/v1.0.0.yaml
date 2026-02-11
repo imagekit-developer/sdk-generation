@@ -6080,6 +6080,12 @@ components:
         videoCodec:
           type: string
           description: The video codec used in the video (only for video).
+        format:
+          type: string
+          description: The format of the uploaded file (e.g., jpg, mp4).
+        mimeType:
+          type: string
+          description: The MIME type of the uploaded file (e.g., image/jpeg, video/mp4).
         tags:
           type: [array, null]
           items:
@@ -8249,6 +8255,8 @@ components:
       audioCodec: aac
       videoCodec: h264
       fileType: non-image
+      format: "mp4"
+      mimeType: video/mp4
       metadata:
         height: 720
         width: 720
