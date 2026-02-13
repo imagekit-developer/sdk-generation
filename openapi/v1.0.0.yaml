@@ -6083,9 +6083,6 @@ components:
         format:
           type: string
           description: The format of the uploaded file (e.g., jpg, mp4).
-        mimeType:
-          type: string
-          description: The MIME type of the uploaded file (e.g., image/jpeg, video/mp4).
         tags:
           type: [array, null]
           items:
@@ -8239,8 +8236,6 @@ components:
       width: 1000
       orientation: 1
       thumbnailUrl: https://ik.imagekit.io/demo/tr:n-ik_ml_thumbnail/test-image.jpg
-      format: "jpg"
-      mimeType: image/jpeg
     UploadResonseVideo:
       fileId: 6673f99b37b244ef54d98f11
       name: test-video.mp4
@@ -8257,8 +8252,6 @@ components:
       audioCodec: aac
       videoCodec: h264
       fileType: non-image
-      format: "mp4"
-      mimeType: video/mp4
       metadata:
         height: 720
         width: 720
@@ -8267,6 +8260,8 @@ components:
         audioCodec: aac
         videoCodec: h264
         size: 1378305
+        format: "mp4"
+        mimeType: video/mp4
     ImageMetadata:
       height: 68
       width: 100
