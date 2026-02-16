@@ -6080,6 +6080,9 @@ components:
         videoCodec:
           type: string
           description: The video codec used in the video (only for video).
+        format:
+          type: string
+          description: The format of the uploaded file (e.g., jpg, mp4).
         tags:
           type: [array, null]
           items:
@@ -6304,6 +6307,9 @@ components:
         format:
           type: string
           description: The format of the file (e.g., 'jpg', 'mp4').
+        mimeType:
+          type: string
+          description: The MIME type of the file (e.g., 'image/jpeg', 'video/mp4').
         hasColorProfile:
           type: boolean
           description: Indicates if the image has a color profile.
@@ -8254,11 +8260,14 @@ components:
         audioCodec: aac
         videoCodec: h264
         size: 1378305
+        format: "mp4"
+        mimeType: video/mp4
     ImageMetadata:
       height: 68
       width: 100
       size: 7749
       format: jpg
+      mimeType: image/jpeg
       hasColorProfile: true
       quality: 0
       density: 72
@@ -8331,6 +8340,8 @@ components:
       audioCodec: aac
       videoCodec: h264
       size: 23490
+      format: "mp4"
+      mimeType: video/mp4
 
   securitySchemes:
     basicAuth:
