@@ -26,7 +26,7 @@ paths:
   /api/v1/dummy/test:
     post:
       summary: Dummy test endpoint using all shared models
-      operationId: create-dummy-test
+      operationId: dummy_test
       x-internal: true
       description: |
         Internal test endpoint for SDK generation purposes only. This endpoint demonstrates usage of all shared models defined in the Stainless configuration and is not intended for public consumption.
@@ -104,7 +104,7 @@ paths:
     post:
       tags:
         - Upload File
-      operationId: upload-file-v2
+      operationId: upload_file
       summary: Upload file to ImageKit media library (V2, JWT-secured)
       description: |
         Upload a file (image, video, audio, document) to ImageKit storage. Returns file metadata including URL, fileId, and dimensions.
@@ -178,11 +178,11 @@ paths:
   /api/v1/customMetadataFields:
     post:
       summary: Create custom metadata field
-      operationId: create-custom-metadata-field
+      operationId: create_custom_metadata_field
       description: |
         Create a new custom metadata field schema (e.g., "brand", "price", "SKU"). After creation, this field can be set on assets via upload or update APIs.
         
-        **When to use:** Use this to define new metadata fields before you can assign values to assets. To set field values on assets, use `update-file-details` or `bulk-update-custom-metadata` instead.
+        **When to use:** Use this to define new metadata fields before you can assign values to assets. To set field values on assets, use `update_file_details` or `update_metadata_bulk` instead.
       requestBody:
         content:
           application/json:
@@ -324,7 +324,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Custom metadata fields
-      operationId: list-custom-metadata-fields
+      operationId: list_custom_metadata_fields
       summary: List all custom metadata fields
       description: |
         Retrieve all custom metadata field schemas defined in your account. Returns field names, types, validation rules, and constraints.
@@ -382,12 +382,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: get-file-details
+      operationId: get_file_details
       summary: Get file details by fileId
       description: |
         Retrieve metadata and attributes for a single file by its `fileId`. Returns URL, dimensions, tags, custom metadata, version info, and more.
         
-        **When to use:** Use this to get details of a specific file when you have its `fileId`. To find files or search by attributes, use `list-and-search-assets` instead.
+        **When to use:** Use this to get details of a specific file when you have its `fileId`. To find files or search by attributes, use `search_media_library` instead.
       parameters:
         - description: |
             The unique `fileId` of the uploaded file. `fileId` is returned in the list and search assets API and upload API.
@@ -475,16 +475,16 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: update-file-details
+      operationId: update_file_details
       summary: Update file metadata and apply extensions
       description: |
         Update metadata for a single file: tags, custom metadata, coordinates, publication status, or apply AI extensions.
         
         **When to use:**
         - **Single file:** Use this endpoint for one file at a time
-        - **Multiple files with same metadata:** Use `bulk-update-custom-metadata` instead (up to 1000 files)
-        - **Apply extensions:** Use `bulk-apply-extensions` for multiple files, or include `extensions` in this request for single file
-        - **Get current values:** Call `get-file-details` first to see existing metadata
+        - **Multiple files with same metadata:** Use `update_metadata_bulk` instead (up to 1000 files)
+        - **Apply extensions:** Use `apply_extension_bulk` for multiple files, or include `extensions` in this request for single file
+        - **Get current values:** Call `get_file_details` first to see existing metadata
       parameters:
         - description: |
             The unique `fileId` of the uploaded file. `fileId` is returned in list and search assets API and upload API.
@@ -592,12 +592,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Custom metadata fields
-      operationId: update-custom-metadata-field
+      operationId: update_custom_metadata_field
       summary: Update custom metadata field schema
       description: |
         Modify the label or validation rules of an existing custom metadata field. Does not change field values on assets.
         
-        **When to use:** Use this to change field definitions (e.g., min/max values, labels). To update field values on assets, use `update-file-details` or `bulk-update-custom-metadata` instead.
+        **When to use:** Use this to change field definitions (e.g., min/max values, labels). To update field values on assets, use `update_file_details` or `update_metadata_bulk` instead.
       parameters:
         - description: |
             Should be a valid custom metadata field id.
@@ -745,7 +745,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Custom metadata fields
-      operationId: delete-custom-metadata-field
+      operationId: delete_custom_metadata_field
       summary: Delete custom metadata field
       description: |
         Permanently delete a custom metadata field definition. The field name becomes reserved and cannot be reused.
@@ -807,7 +807,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Custom metadata fields
-      operationId: bulk-update-custom-metadata
+      operationId: update_metadata_bulk
       summary: Bulk update custom metadata
       description: |
         Updates custom metadata fields for multiple files in a single operation. Use this endpoint when you need to apply the same custom metadata changes across multiple files efficiently.
@@ -943,7 +943,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Custom metadata fields
-      operationId: get-bulk-metadata-supported-fields
+      operationId: get_supported_metadata_fields
       summary: Get supported fields for bulk update
       description: |
         Retrieves the list of custom metadata fields that are available for the specified files. This endpoint is useful to discover which metadata fields you can set before performing a bulk update operation.
@@ -958,7 +958,7 @@ paths:
         1. Call this endpoint with the fileIds you plan to update
         2. Examine the returned CustomMetadataField objects to understand available fields and their schemas
         3. Prepare your customMetadata object according to the field definitions
-        4. Call the bulk-update-custom-metadata endpoint with valid field names and values
+        4. Call the update_metadata_bulk endpoint with valid field names and values
       parameters:
         - $ref: "#/components/parameters/ClientNumber"
       requestBody:
@@ -1045,7 +1045,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Saved Extensions
-      operationId: bulk-apply-extensions
+      operationId: apply_extension_bulk
       summary: Apply saved extensions to files
       description: |
         Applies one or more saved extension presets to multiple files in bulk. This endpoint is used for batch processing files with AI/ML extensions like background removal, auto-tagging, image analysis, and other transformations.
@@ -1251,7 +1251,7 @@ paths:
     get:
       tags:
         - Digital Asset Management (DAM)
-      operationId: list-and-search-assets
+      operationId: search_media_library
       summary: List files and folders, or search with filters
       description: |
         List or search for files and folders in your media library. Supports multiple search modes: basic listing, text search, and AI-powered semantic search.
@@ -1260,7 +1260,7 @@ paths:
         - **List all files in a folder:** Set `path=/folder/path`, omit `searchQuery`
         - **Text search with filters:** Use `searchQuery` with Lucene syntax (e.g., `name:"logo" AND tags:"brand"`)
         - **AI semantic search (find similar images):** Set `semantic=true` with natural language query OR use `semanticUrl` with image URL
-        - **Get single file by ID:** Use `get-file-details` instead (faster, returns more metadata)
+        - **Get single file by ID:** Use `get_file_details` instead (faster, returns more metadata)
         
         ---
         
@@ -1492,7 +1492,7 @@ paths:
             Folder path if you want to limit the search within a specific folder. For example, `/sales-banner/` will only search in folder sales-banner.
 
             Note : If your use case involves searching within a folder as well as its subfolders, you can use `path` parameter in `searchQuery` with appropriate operator.
-            Checkout [Supported parameters](/docs/api-reference/digital-asset-management-dam/list-and-search-assets#supported-parameters) for more information.
+            Checkout [Supported parameters](/docs/api-reference/digital-asset-management-dam/search_media_library#supported-parameters) for more information.
           schema:
             type: string
         - in: query
@@ -1507,7 +1507,7 @@ paths:
             2. `type`
             3. `name`
 
-            [Learn more](/docs/api-reference/digital-asset-management-dam/list-and-search-assets#advanced-search-queries) from examples.
+            [Learn more](/docs/api-reference/digital-asset-management-dam/search_media_library#advanced-search-queries) from examples.
           schema:
             type: string
         - in: query
@@ -1689,15 +1689,15 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: delete-file
+      operationId: delete_file
       summary: Delete single file permanently
       description: |
         Permanently delete a file and all its versions. Cannot be undone.
         
         **When to use:**
         - **Single file:** Use this endpoint to delete one file by `fileId`
-        - **Multiple files:** Use `delete-multiple-files` instead (up to 100 files in one request)
-        - **Cache:** Deletion does not purge CDN cache. Use `purge-cache` API separately if needed.
+        - **Multiple files:** Use `delete_files_batch` instead (up to 100 files in one request)
+        - **Cache:** Deletion does not purge CDN cache. Use `purge_cache` API separately if needed.
         
         **Important:** This is a destructive operation. The file and all versions are permanently removed from storage.
       parameters:
@@ -1748,15 +1748,15 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: delete-multiple-files
+      operationId: delete_files_batch
       summary: Delete multiple files in bulk (max 100)
       description: |
         Permanently delete up to 100 files and all their versions in a single request. Returns success/failure status for each file.
         
         **When to use:**
         - **Bulk deletion:** Use this to delete 2-100 files at once
-        - **Single file:** Use `delete-file` instead (simpler, one fileId param)
-        - **Cache:** Deletion does not purge CDN cache. Use `purge-cache` API separately if needed.
+        - **Single file:** Use `delete_file` instead (simpler, one fileId param)
+        - **Cache:** Deletion does not purge CDN cache. Use `purge_cache` API separately if needed.
         
         **Response:** Returns 200 with `successfullyDeletedFileIds` array and `errors` array for any failures. Even if some files fail, successfully deleted files are still removed (partial success).
       requestBody:
@@ -1865,14 +1865,14 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: copy-file
+      operationId: copy_file
       summary: Copy file to another folder
       description: |
         Copy a file from one folder to another. Optionally include all file versions in the copy.
         
         **When to use:**
         - **Duplicate file to new location:** Use this to copy a file while keeping the original
-        - **Move instead:** Use `move-file` if you want to relocate (not duplicate) the file
+        - **Move instead:** Use `move_file` if you want to relocate (not duplicate) the file
         - **Version handling:** If destination has a file with the same name, source versions are appended to destination's version history
         
         **V2 change:** Returns copied file details (200) instead of empty response (204).
@@ -1954,14 +1954,14 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: move-file
+      operationId: move_file
       summary: Move file to another folder
       description: |
         Move a file and all its versions from one folder to another. The original file is removed from the source location.
         
         **When to use:**
         - **Relocate file:** Use this to move a file to a different folder (source is removed)
-        - **Duplicate instead:** Use `copy-file` if you want to keep the original in place
+        - **Duplicate instead:** Use `copy_file` if you want to keep the original in place
         - **Version handling:** If destination has a file with the same name, all source versions are appended to destination's version history
         
         **V2 change:** Returns moved file details (200) instead of empty response (204).
@@ -2038,12 +2038,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: rename-file
+      operationId: rename_file
       summary: Rename file (affects all versions)
       description: |
         Rename a file in the media library. Renames all versions of the file. Old URLs stop working immediately, but CDN cache may persist.
         
-        **When to use:** Use this to change a file's name while keeping it in the same folder. To move a file to a different folder, use `move-file` instead.
+        **When to use:** Use this to change a file's name while keeping it in the same folder. To move a file to a different folder, use `move_file` instead.
         
         **Important:**
         - Old URLs stop working immediately (e.g., `https://ik.imagekit.io/demo/old-name.jpg` returns 404)
@@ -2178,7 +2178,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: publish-file
+      operationId: publish_file
       summary: Publish or unpublish file
       description: |
         Set publication status on a file. Publishing marks files as ready for production use. Unpublishing automatically purges CDN cache.
@@ -2265,7 +2265,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: list-file-versions
+      operationId: list_file_versions
       summary: List file versions
       description: |
         Returns all versions of a file, including the current version and previous versions. Versions are created automatically when a file is overwritten (re-uploaded with the same name and path). Each version has its own `versionId`, URL, metadata (tags, dimensions, size), and timestamps.
@@ -2276,9 +2276,9 @@ paths:
         - Audit who modified a file and when
 
         **Related endpoints:**
-        - Use `get-file-version-details` to inspect a single version
-        - Use `restore-file-version` to make a past version the current one
-        - Use `delete-file-version` to permanently remove specific old versions
+        - Use `get_file_version_details` to inspect a single version
+        - Use `restore_file_version` to make a past version the current one
+        - Use `delete_file_version` to permanently remove specific old versions
       parameters:
         - description: |
             The unique `fileId` of the uploaded file. `fileId` is returned in list and search assets API and upload API.
@@ -2399,12 +2399,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: get-file-version-details
+      operationId: get_file_version_details
       summary: Get file version details
       description: |
         Returns the full details of a specific file version, including its URL, dimensions, size, tags, custom metadata, and timestamps. Use this to inspect a particular historical version of a file.
 
-        **When to use:** Retrieve a specific version's metadata when you already have the `fileId` and `versionId` (from `list-file-versions` or search results). The response includes a direct URL to access that specific version's content.
+        **When to use:** Retrieve a specific version's metadata when you already have the `fileId` and `versionId` (from `list_file_versions` or search results). The response includes a direct URL to access that specific version's content.
       parameters:
         - description: |
             The unique `fileId` of the uploaded file. `fileId` is returned in list and search assets API and upload API.
@@ -2498,12 +2498,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: delete-file-version
+      operationId: delete_file_version
       summary: Delete file version
       description: |
-        Permanently deletes a specific non-current file version. You cannot delete the current (latest) version — use `delete-file` for that, which removes the file and all its versions.
+        Permanently deletes a specific non-current file version. You cannot delete the current (latest) version — use `delete_file` for that, which removes the file and all its versions.
 
-        **When to use:** Free up storage by removing old versions you no longer need. Use `list-file-versions` first to identify which versions exist and their `versionId` values.
+        **When to use:** Free up storage by removing old versions you no longer need. Use `list_file_versions` first to identify which versions exist and their `versionId` values.
       parameters:
         - description: |
             The unique `fileId` of the uploaded file. `fileId` is returned in list and search assets API and upload API.
@@ -2567,14 +2567,14 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: restore-file-version
+      operationId: restore_file_version
       summary: Restore file version
       description: |
         Restores a previous file version, making it the current (active) version. The previously current version becomes a non-current version in the version history — it is not deleted.
 
         **When to use:** Roll back to an earlier version of a file (e.g., revert an accidental overwrite). The restored version's content and metadata become the live version served via the file's URL.
 
-        **Tip:** Use `list-file-versions` first to find the `versionId` you want to restore.
+        **Tip:** Use `list_file_versions` first to find the `versionId` you want to restore.
       parameters:
         - description: |
             The unique `fileId` of the uploaded file. `fileId` is returned in list and search assets API and upload API.
@@ -2670,10 +2670,10 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: add-tags-bulk
+      operationId: add_tags_bulk
       summary: Add tags (bulk)
       description: |
-        Adds one or more tags to up to 50 files in a single request. Tags are additive — existing tags on the files are preserved. Tags are used for organizing and searching files in the media library (e.g., via the `searchQuery` parameter in `list-and-search-assets`).
+        Adds one or more tags to up to 50 files in a single request. Tags are additive — existing tags on the files are preserved. Tags are used for organizing and searching files in the media library (e.g., via the `searchQuery` parameter in `search_media_library`).
 
         **When to use:** Categorize or label multiple files at once for easier discovery. For example, tag product images with `summer-sale` or `new-arrival`.
 
@@ -2798,7 +2798,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: remove-tags-bulk
+      operationId: remove_tags_bulk
       summary: Remove tags (bulk)
       description: |
         Removes specified tags from up to 50 files in a single request. Only the listed tags are removed — other tags on the files are preserved.
@@ -2926,7 +2926,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: remove-ai-tags-bulk
+      operationId: remove_ai_tags_bulk
       summary: Remove AI tags (bulk)
       description: |
         Removes specified AI-generated tags (AITags) from up to 50 files in a single request. AITags are automatically assigned by AI auto-tagging extensions (`google-auto-tagging` or `aws-auto-tagging`) and are separate from manually-assigned tags. Only the listed AITags are removed.
@@ -3048,12 +3048,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing folders
-      operationId: get-folder-details
+      operationId: get_folder_details
       summary: Get folder details
       description: |
         Retrieve details of a folder, including its name, path, and custom metadata values. Identify the folder by either `folderId` or `folderPath` (one is required).
 
-        **When to use:** Inspect a folder's metadata before updating it, or check what custom metadata values are set on a folder. To list files inside a folder, use `list-and-search-assets` with the `path` parameter instead.
+        **When to use:** Inspect a folder's metadata before updating it, or check what custom metadata values are set on a folder. To list files inside a folder, use `search_media_library` with the `path` parameter instead.
       parameters:
         - in: query
           name: folderId
@@ -3127,12 +3127,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing folders
-      operationId: update-folder-details
+      operationId: update_folder_details
       summary: Update folder details
       description: |
         Update custom metadata values on a folder. Identify the folder by either `folderId` or `folderPath` (one is required).
 
-        **When to use:** Set or change custom metadata on a folder (e.g., department, project). To update a folder's name or move it, use `rename-folder` or `move-folder` instead. To update metadata on files inside the folder, use `update-file-details` or `bulk-update-custom-metadata`.
+        **When to use:** Set or change custom metadata on a folder (e.g., department, project). To update a folder's name or move it, use `rename_folder` or `move_folder` instead. To update metadata on files inside the folder, use `update_file_details` or `update_metadata_bulk`.
       parameters:
         - in: query
           name: folderId
@@ -3221,7 +3221,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing folders
-      operationId: create-folder
+      operationId: create_folder
       summary: Create folder
       description: |
         Create a new folder at a specified location in the media library. Any missing parent folders in the path are created automatically.
@@ -3285,14 +3285,14 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing folders
-      operationId: delete-folder
+      operationId: delete_folder
       summary: Delete folder
       description: |
         Permanently deletes a folder and all its contents (nested files, subfolders, and their file versions). This operation cannot be undone.
 
         **When to use:** Remove an entire folder tree when you no longer need the assets. Note: The API will fail if the folder contains more than 100,000 nested items.
 
-        **Important:** This does not purge CDN cache for files that were in the folder. Use `purge-cache` separately if needed.
+        **Important:** This does not purge CDN cache for files that were in the folder. Use `purge_cache` separately if needed.
       requestBody:
         content:
           application/json:
@@ -3358,12 +3358,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing folders
-      operationId: list-bulk-jobs
+      operationId: list_bulk_jobs
       summary: List bulk jobs
       description: |
         List all asynchronous bulk folder operations (copy, move, rename) for the account. Only jobs from the last 30 days are returned, sorted newest first.
 
-        **When to use:** View the history and status of folder operations. Use the `status` filter to find in-progress or failed jobs. To check a specific job, use `bulk-job-status` with the `jobId` instead.
+        **When to use:** View the history and status of folder operations. Use the `status` filter to find in-progress or failed jobs. To check a specific job, use `get_bulk_job_status` with the `jobId` instead.
       parameters:
         - name: status
           in: query
@@ -3474,12 +3474,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing folders
-      operationId: copy-folder
+      operationId: copy_folder
       summary: Copy folder
       description: |
-        Copy a folder and all its contents (nested files, subfolders) to another location. This is an **async operation** — returns a `jobId` immediately. Poll `bulk-job-status` to check completion.
+        Copy a folder and all its contents (nested files, subfolders) to another location. This is an **async operation** — returns a `jobId` immediately. Poll `get_bulk_job_status` to check completion.
 
-        **When to use:** Duplicate an entire folder tree to a new location while keeping the original intact. To copy a single file, use `copy-file` instead.
+        **When to use:** Duplicate an entire folder tree to a new location while keeping the original intact. To copy a single file, use `copy_file` instead.
 
         **Behavior:** If a file at the destination has the same name as a source file, the source file's versions are appended to the destination file's version history. Set `includeVersions=true` to copy all file versions (default: only current version).
       requestBody:
@@ -3576,12 +3576,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing folders
-      operationId: move-folder
+      operationId: move_folder
       summary: Move folder
       description: |
-        Move a folder and all its contents (nested files, subfolders, and all file versions) to another location. The source folder is removed after the move. This is an **async operation** — returns a `jobId` immediately. Poll `bulk-job-status` to check completion.
+        Move a folder and all its contents (nested files, subfolders, and all file versions) to another location. The source folder is removed after the move. This is an **async operation** — returns a `jobId` immediately. Poll `get_bulk_job_status` to check completion.
 
-        **When to use:** Relocate an entire folder tree to a different location. To move a single file, use `move-file` instead. To keep the original folder, use `copy-folder`.
+        **When to use:** Relocate an entire folder tree to a different location. To move a single file, use `move_file` instead. To keep the original folder, use `copy_folder`.
 
         **Behavior:** If a file at the destination has the same name, source file versions are appended to the destination file's version history.
       requestBody:
@@ -3674,12 +3674,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing folders
-      operationId: rename-folder
+      operationId: rename_folder
       summary: Rename folder
       description: |
-        Rename an existing folder. All nested assets and subfolders keep their contents, but their paths update to reflect the new name. This is an **async operation** — returns a `jobId` immediately. Poll `bulk-job-status` to check completion.
+        Rename an existing folder. All nested assets and subfolders keep their contents, but their paths update to reflect the new name. This is an **async operation** — returns a `jobId` immediately. Poll `get_bulk_job_status` to check completion.
 
-        **When to use:** Change a folder's name while keeping it in the same location. To move a folder to a different parent, use `move-folder` instead.
+        **When to use:** Change a folder's name while keeping it in the same location. To move a folder to a different parent, use `move_folder` instead.
 
         **Important:** Old file URLs under the renamed folder path stop working immediately. Set `purgeCache=true` to clear CDN cache for the old URLs (counts against your monthly purge quota).
       requestBody:
@@ -3786,7 +3786,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Managing folders
-      operationId: bulk-job-status
+      operationId: get_bulk_job_status
       summary: Bulk job status
       description: |
         Returns the current status and details of a bulk job (copy folder, move folder, or rename folder). These operations run asynchronously — use the `jobId` returned by the copy/move/rename folder APIs to poll for completion.
@@ -3892,12 +3892,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Media Collections
-      operationId: list-media-collections
+      operationId: list_media_collections
       summary: List media collections
       description: |
         List all media collections in the account with optional filtering, sorting, and pagination. Media collections are curated groups of assets (like albums or boards) that organize files independently of folder structure.
 
-        **When to use:** Browse or search existing collections before adding/removing assets. Use `searchQuery` to filter by collection name. To see files inside a specific collection, use `get-media-collection-assets` instead.
+        **When to use:** Browse or search existing collections before adding/removing assets. Use `searchQuery` to filter by collection name. To see files inside a specific collection, use `list_collection_assets` instead.
       parameters:
         - in: query
           name: skip
@@ -3972,12 +3972,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Media Collections
-      operationId: create-media-collection
+      operationId: create_media_collection
       summary: Create media collection
       description: |
         Create a new media collection for organizing assets into a curated group. Optionally set custom metadata fields on the collection at creation time.
 
-        **When to use:** Create a collection before adding assets to it (e.g., "Summer Campaign 2024", "Product Catalog"). To add files to an existing collection, use `add-assets-to-media-collections`.
+        **When to use:** Create a collection before adding assets to it (e.g., "Summer Campaign 2024", "Product Catalog"). To add files to an existing collection, use `add_assets_to_media_collection`.
 
         **Constraints:** Collection name must be unique, cannot contain slashes (`/`), and cannot be empty.
       requestBody:
@@ -4048,12 +4048,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Media Collections
-      operationId: get-media-collection-details
+      operationId: get_media_collection_details
       summary: Get media collection details
       description: |
         Retrieve a media collection's name, custom metadata, creator info, and timestamps by its ID.
 
-        **When to use:** Inspect a collection's properties before updating it, or display collection details in a UI. To see the files inside the collection, use `get-media-collection-assets`. To check who has access, use `get-media-collection-access-list`.
+        **When to use:** Inspect a collection's properties before updating it, or display collection details in a UI. To see the files inside the collection, use `list_collection_assets`. To check who has access, use `get_collection_access_list`.
       parameters:
         - in: path
           name: mediaCollectionId
@@ -4105,12 +4105,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Media Collections
-      operationId: update-media-collection-details
+      operationId: update_media_collection_details
       summary: Update media collection custom metadata
       description: |
         Update **custom metadata fields** on a media collection (e.g., brand, campaign, season). Does not change the collection's name or access permissions.
 
-        **When to use:** Set or modify metadata values on a collection. To change the collection's **name or access permissions (ACL)**, use `update-media-collection` instead.
+        **When to use:** Set or modify metadata values on a collection. To change the collection's **name or access permissions (ACL)**, use `update_media_collection` instead.
       parameters:
         - in: path
           name: mediaCollectionId
@@ -4176,12 +4176,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Media Collections
-      operationId: update-media-collection
+      operationId: update_media_collection
       summary: Update media collection
       description: |
         Update a media collection's **name and/or access permissions (ACL)**. At least one of `name` or `acl` must be provided. Does not change custom metadata.
 
-        **When to use:** Rename a collection or change who can access it (add/remove users and groups with READ, CONTRIBUTE, or MANAGE permissions). To update **custom metadata fields** instead, use `update-media-collection-details`.
+        **When to use:** Rename a collection or change who can access it (add/remove users and groups with READ, CONTRIBUTE, or MANAGE permissions). To update **custom metadata fields** instead, use `update_media_collection_details`.
 
         **Permission:** Requires `MANAGE` permission on the media collection.
       parameters:
@@ -4311,12 +4311,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Media Collections
-      operationId: delete-media-collection
+      operationId: delete_media_collection
       summary: Delete media collection
       description: |
         Permanently delete a media collection. The assets inside the collection are **not deleted** — they remain in the media library. Only the collection grouping is removed. This cannot be undone.
 
-        **When to use:** Remove a collection that is no longer needed. To remove specific assets from a collection without deleting the collection itself, use `remove-assets-from-media-collections`.
+        **When to use:** Remove a collection that is no longer needed. To remove specific assets from a collection without deleting the collection itself, use `remove_assets_from_media_collection`.
       parameters:
         - in: path
           name: mediaCollectionId
@@ -4365,7 +4365,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Media Collections
-      operationId: add-assets-to-media-collections
+      operationId: add_assets_to_media_collection
       summary: Add assets to media collections
       description: |
         Adds files to one or more media collections in a single bulk request. Media collections are curated groups of assets (like albums or boards) used to organize files independently of their folder structure.
@@ -4476,7 +4476,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Media Collections
-      operationId: remove-assets-from-media-collections
+      operationId: remove_assets_from_media_collection
       summary: Remove assets from media collections
       description: |
         Removes files from one or more media collections in a single bulk request. This only removes the association between assets and collections — the files themselves are not deleted and remain in the media library.
@@ -4587,12 +4587,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Media Collections
-      operationId: get-media-collection-access-list
+      operationId: get_collection_access_list
       summary: Get media collection access control list
       description: |
         Retrieve the access control list (ACL) for a media collection — all users and user groups with their permission levels (READ, CONTRIBUTE, or MANAGE).
 
-        **When to use:** Check who has access to a collection before modifying permissions. To change permissions, use `update-media-collection` with the `acl` field.
+        **When to use:** Check who has access to a collection before modifying permissions. To change permissions, use `update_media_collection` with the `acl` field.
       parameters:
         - in: path
           name: mediaCollectionId
@@ -4673,12 +4673,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Media Collections
-      operationId: get-media-collection-assets
+      operationId: list_collection_assets
       summary: Get assets in media collection
       description: |
         List all files that belong to a specific media collection, with filtering, sorting, and pagination. Supports filtering by file type, name, and tags.
 
-        **When to use:** Browse the contents of a collection. To search across all files (not limited to a collection), use `list-and-search-assets` instead. To add or remove files from this collection, use `add-assets-to-media-collections` or `remove-assets-from-media-collections`.
+        **When to use:** Browse the contents of a collection. To search across all files (not limited to a collection), use `search_media_library` instead. To add or remove files from this collection, use `add_assets_to_media_collection` or `remove_assets_from_media_collection`.
       parameters:
         - in: path
           name: mediaCollectionId
@@ -4812,7 +4812,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Media Collections
-      operationId: update-media-collection-thumbnail
+      operationId: update_media_collection_thumbnail
       summary: Update media collection thumbnail
       description: |
         Upload or remove the thumbnail image displayed for a media collection. Send a thumbnail file to set it, or send an empty request to remove the existing thumbnail.
@@ -4899,7 +4899,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Public Links
-      operationId: list-public-links
+      operationId: list_public_links
       summary: List public links for an asset
       description: |
         This API returns all public links associated with a specific asset (file, folder, or media collection).
@@ -4957,7 +4957,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Public Links
-      operationId: create-public-link
+      operationId: create_public_link
       summary: Create public link for an asset
       description: |
         This API creates a new public link for sharing an asset (file, folder, or media collection) externally. Public links allow you to share content with people who don't have access to your ImageKit account.
@@ -5036,7 +5036,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Public Links
-      operationId: get-public-link
+      operationId: get_public_link
       summary: Get public link details
       description: |
         This API returns details of a specific public link by its ID.
@@ -5100,7 +5100,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Public Links
-      operationId: update-public-link
+      operationId: update_public_link
       summary: Update public link
       description: |
         This API updates an existing public link's settings including validity dates, password, and draft asset exposure.
@@ -5182,7 +5182,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Public Links
-      operationId: delete-public-link
+      operationId: delete_public_link
       summary: Delete public link
       description: |
         This API permanently deletes a specific public link. After deletion, the public URL will no longer be accessible.
@@ -5249,7 +5249,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - AI Image Generation
-      operationId: list-generated-images
+      operationId: list_ai_images
       summary: List generated images
       description: |
         Retrieves a list of AI-generated images for the account. Supports filtering by prompt text, date range, and user IDs, with pagination via skip and limit parameters.
@@ -5429,7 +5429,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - AI Image Generation
-      operationId: generate-images
+      operationId: generate_ai_image
       summary: Generate new AI images
       description: |
         Generates one or more AI images based on a text prompt. The API creates image URLs with the specified dimensions and returns the metadata for each generated image.
@@ -5605,7 +5605,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - AI Image Generation
-      operationId: delete-generated-images
+      operationId: delete_ai_images
       summary: Delete generated images
       description: |
         Deletes one or more AI-generated images by their IDs. This operation permanently removes the image records from the database.
@@ -5726,7 +5726,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - AI Image Generation
-      operationId: get-generated-image-details
+      operationId: get_ai_image_details
       summary: Get generated image details
       description: |
         Retrieves detailed information about a specific AI-generated image by its ID.
@@ -5869,7 +5869,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - AI Image Generation
-      operationId: download-generated-image
+      operationId: download_ai_image
       summary: Download generated image
       description: |
         Downloads a specific AI-generated image. This endpoint proxies the request to the actual image storage URL.
@@ -5963,7 +5963,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Threads & Comments
-      operationId: list-file-threads
+      operationId: get_comments
       summary: List threads for a file
       description: |
         Retrieves all comment threads associated with a specific file. Each thread contains all its comments, making this endpoint ideal for displaying file annotations and collaborative feedback.
@@ -6237,7 +6237,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Path Policies
-      operationId: list-path-policies
+      operationId: list_path_policies
       summary: List path policies
       description: |
         Returns all path policies for the account, sorted by last updated (newest first). Path policies enforce rules on specific folder paths — such as required custom metadata fields, validation functions that reject non-compliant uploads, and upload transform functions that modify files during ingestion.
@@ -6281,7 +6281,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Path Policies
-      operationId: create-path-policy
+      operationId: create_path_policy
       summary: Create path policy
       description: |
         Creates a new path policy that enforces rules on uploads to specific folder paths. A path policy can:
@@ -6368,7 +6368,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Path Policies
-      operationId: get-path-policy-details
+      operationId: get_path_policy
       summary: Get path policy details
       description: |
         Returns the full details of a single path policy, including its validate/upload function source code, all governed folder paths, and the complete set of custom metadata fields (both selected and unselected) with policy-level overrides merged in.
@@ -6421,7 +6421,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Path Policies
-      operationId: update-path-policy
+      operationId: update_path_policy
       summary: Update path policy
       description: |
         Updates an existing path policy. Supports two mutually exclusive modes:
@@ -6523,7 +6523,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Path Policies
-      operationId: delete-path-policy
+      operationId: delete_path_policy
       summary: Delete path policy
       description: |
         Permanently deletes a path policy and removes its associated validate/upload function code from storage. After deletion, the governed folder paths will no longer have any upload restrictions or metadata requirements enforced. This action cannot be undone.
@@ -6572,12 +6572,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Download
-      operationId: list-download-jobs
+      operationId: list_zip_downloads
       summary: List download jobs
       description: |
         List all download archive jobs for the account, including their status and archive URLs. Jobs are automatically deleted after 7 days.
 
-        **When to use:** Check the status of previously created download archives, or find the download URL for a completed archive. To create a new download archive, use `create-download-job`. To check a specific job, use `get-download-job-status` with the `jobId`.
+        **When to use:** Check the status of previously created download archives, or find the download URL for a completed archive. To create a new download archive, use `create_zip_download`. To check a specific job, use `get_zip_download_status` with the `jobId`.
       responses:
         "200":
           description: List of download jobs.
@@ -6651,10 +6651,10 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Download
-      operationId: create-download-job
+      operationId: create_zip_download
       summary: Create download archive
       description: |
-        Creates a new download archive job for the specified files and/or folders. The archive is created asynchronously — poll the job status using the `get-download-job-status` endpoint.
+        Creates a new download archive job for the specified files and/or folders. The archive is created asynchronously — poll the job status using the `get_zip_download_status` endpoint.
 
         **Limits:**
         - Maximum 300 items (files + folders combined) per request.
@@ -6827,12 +6827,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Download
-      operationId: get-download-job-status
+      operationId: get_zip_download_status
       summary: Get download job status
       description: |
         Check the status of a specific download archive job. When the job has succeeded, the response includes a `storageURL` to download the ZIP archive.
 
-        **When to use:** Poll this endpoint after calling `create-download-job` to check when the archive is ready. The `jobId` is returned by the create endpoint.
+        **When to use:** Poll this endpoint after calling `create_zip_download` to check when the archive is ready. The `jobId` is returned by the create endpoint.
 
         **Statuses:** `Pending` (still creating archive), `Succeeded` (ready — `storageURL` included), `Partially succeeded` (some files failed — `storageURL` still included), `Failed` (archive creation failed).
       parameters:
@@ -6927,7 +6927,7 @@ paths:
     post:
       tags:
         - Caching
-      operationId: purge-cache
+      operationId: purge_cache
       summary: Purge cache
       description: |
         Purges both CDN and ImageKit's internal cache for a specific file URL. After purging, the next request for that URL will fetch the latest version from the origin/media library instead of serving a cached copy.
@@ -6937,7 +6937,7 @@ paths:
         - After renaming or moving a file to clear stale cached URLs
         - Note: Deleting a file does NOT automatically purge the CDN cache
 
-        **Important:** This is an asynchronous operation. Use `purge-status` with the returned `requestId` to check when the purge completes. Purge requests count against your monthly purge quota.
+        **Important:** This is an asynchronous operation. Use `get_purge_status` with the returned `requestId` to check when the purge completes. Purge requests count against your monthly purge quota.
       requestBody:
         content:
           application/json:
@@ -6987,12 +6987,12 @@ paths:
     get:
       tags:
         - Caching
-      operationId: purge-status
+      operationId: get_purge_status
       summary: Get purge status
       description: |
         Returns the current status of a cache purge request. Status will be either `Pending` (still processing) or `Completed` (cache has been cleared).
 
-        **When to use:** Poll this endpoint after calling `purge-cache` to confirm when the cache has been fully cleared. The `requestId` parameter is returned by the `purge-cache` API.
+        **When to use:** Poll this endpoint after calling `purge_cache` to confirm when the cache has been fully cleared. The `requestId` parameter is returned by the `purge_cache` API.
       parameters:
         - description: |
             Should be a valid requestId.
@@ -7041,7 +7041,7 @@ paths:
     get:
       tags:
         - File Metadata
-      operationId: get-uploaded-file-metadata
+      operationId: get_metadata_by_file_id
       summary: Get uploaded file metadata
       description: |
         Returns technical metadata for an uploaded file in the media library, including EXIF data (camera info, GPS coordinates, exposure settings), perceptual hash (pHash) for image similarity comparison, and format/quality details.
@@ -7111,10 +7111,10 @@ paths:
     get:
       tags:
         - File Metadata
-      operationId: get-metadata-from-url
+      operationId: get_metadata_by_remote_url
       summary: Get metadata from remote URL
       description: |
-        Returns technical metadata (EXIF, pHash, dimensions, format) for a file accessible via an ImageKit URL. Unlike `get-uploaded-file-metadata` which takes a `fileId`, this endpoint works with any URL served through your ImageKit account.
+        Returns technical metadata (EXIF, pHash, dimensions, format) for a file accessible via an ImageKit URL. Unlike `get_metadata_by_file_id` which takes a `fileId`, this endpoint works with any URL served through your ImageKit account.
 
         **When to use:** Inspect metadata for a file when you only have its delivery URL (not its `fileId`). The URL must be accessible through your ImageKit.io account.
       parameters:
@@ -7177,10 +7177,10 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Saved Extensions
-      operationId: list-saved-extensions
+      operationId: list_saved_extensions
       summary: List all saved extension presets
       description: |
-        Retrieve all saved extension presets in your account. These can be referenced by ID in `bulk-apply-extensions`, `update-file-details`, or upload APIs.
+        Retrieve all saved extension presets in your account. These can be referenced by ID in `apply_extension_bulk`, `update_file_details`, or upload APIs.
         
         **When to use:** Call this before applying extensions to files to discover available extension IDs and their configurations (e.g., "remove-bg-preset", "auto-tag-products").
         
@@ -7204,12 +7204,12 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Saved Extensions
-      operationId: create-saved-extension
+      operationId: create_saved_extension
       summary: Create saved extension preset
       description: |
         Save an extension configuration (e.g., AI tasks, background removal settings) as a reusable preset. Reference by ID in future upload or update operations.
         
-        **When to use:** Create extension presets for frequently used AI/ML operations instead of repeating complex configs. Once saved, use the extension ID in `bulk-apply-extensions` or file update APIs.
+        **When to use:** Create extension presets for frequently used AI/ML operations instead of repeating complex configs. Once saved, use the extension ID in `apply_extension_bulk` or file update APIs.
         
         **Limit:** Maximum 100 saved extensions per account.
       requestBody:
@@ -7249,7 +7249,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Saved Extensions
-      operationId: get-saved-extension
+      operationId: get_saved_extension
       summary: Get saved extension preset details
       description: |
         Retrieve details of a specific saved extension preset by ID. Returns the extension configuration including name, description, and config object.
@@ -7306,7 +7306,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Saved Extensions
-      operationId: update-saved-extension
+      operationId: update_saved_extension
       summary: Update saved extension preset
       description: |
         Modify an existing saved extension's name, description, or configuration. Does not affect files that already had this extension applied.
@@ -7369,7 +7369,7 @@ paths:
       tags:
         - Digital Asset Management (DAM)
         - Saved Extensions
-      operationId: delete-saved-extension
+      operationId: delete_saved_extension
       summary: Delete saved extension preset
       description: |
         Permanently delete a saved extension preset. Does not affect files that already had this extension applied.
@@ -7422,7 +7422,7 @@ paths:
     get:
       tags:
         - Account Management API
-      operationId: get-usage
+      operationId: get_account_usage
       summary: Get account usage information
       description: >
         Returns account usage metrics (bandwidth, storage, video processing units, extension units) for a date range. The response includes data from the start date up to but not including the end date. Maximum date range is 90 days.
@@ -7503,7 +7503,7 @@ paths:
       tags:
         - Account Management API
         - Origins
-      operationId: list-origins
+      operationId: list_origins
       description: >
         **Note:** This API is currently in beta.
 
@@ -7530,7 +7530,7 @@ paths:
       tags:
         - Account Management API
         - Origins
-      operationId: create-origin
+      operationId: create_origin
       description: >
         **Note:** This API is currently in beta.
 
@@ -7577,7 +7577,7 @@ paths:
       tags:
         - Account Management API
         - Origins
-      operationId: get-origin
+      operationId: get_origin
       description: >
         **Note:** This API is currently in beta.
 
@@ -7624,7 +7624,7 @@ paths:
       tags:
         - Account Management API
         - Origins
-      operationId: update-origin
+      operationId: update_origin
       description: >
         **Note:** This API is currently in beta.
 
@@ -7684,7 +7684,7 @@ paths:
       tags:
         - Account Management API
         - Origins
-      operationId: delete-origin
+      operationId: delete_origin
       description: >
         **Note:** This API is currently in beta.
 
@@ -7717,7 +7717,7 @@ paths:
       tags:
         - Account Management API
         - URL endpoints
-      operationId: list-url-endpoints
+      operationId: list_url_endpoints
       description: >
         **Note:** This API is currently in beta.
 
@@ -7755,7 +7755,7 @@ paths:
       tags:
         - Account Management API
         - URL endpoints
-      operationId: create-url-endpoint
+      operationId: create_url_endpoint
       description: >
         **Note:** This API is currently in beta.
 
@@ -7803,7 +7803,7 @@ paths:
       tags:
         - Account Management API
         - URL endpoints
-      operationId: get-url-endpoint
+      operationId: get_url_endpoint
       description: >
         **Note:** This API is currently in beta.
 
@@ -7852,7 +7852,7 @@ paths:
       tags:
         - Account Management API
         - URL endpoints
-      operationId: update-url-endpoint
+      operationId: update_url_endpoint
       description: >
         **Note:** This API is currently in beta.
 
@@ -7913,7 +7913,7 @@ paths:
       tags:
         - Account Management API
         - URL endpoints
-      operationId: delete-url-endpoint
+      operationId: delete_url_endpoint
       description: >
         **Note:** This API is currently in beta.
 
@@ -8024,7 +8024,7 @@ components:
               type: string
               format: uri
               description: |
-                The final status of extensions after they have completed execution will be delivered to this endpoint as a POST request. [Learn more](/docs/api-reference/digital-asset-management-dam/managing-assets/update-file-details#webhook-payload-structure) about the webhook payload structure.
+                The final status of extensions after they have completed execution will be delivered to this endpoint as a POST request. [Learn more](/docs/api-reference/digital-asset-management-dam/managing-assets/update_file_details#webhook-payload-structure) about the webhook payload structure.
             extensions:
               $ref: "#/components/schemas/Extensions"
             tags:
@@ -9142,7 +9142,7 @@ components:
           type: string
           format: uri
           description: >
-            The final status of extensions after they have completed execution will be delivered to this endpoint as a POST request. [Learn more](/docs/api-reference/digital-asset-management-dam/managing-assets/update-file-details#webhook-payload-structure) about the webhook payload structure.
+            The final status of extensions after they have completed execution will be delivered to this endpoint as a POST request. [Learn more](/docs/api-reference/digital-asset-management-dam/managing-assets/update_file_details#webhook-payload-structure) about the webhook payload structure.
         overwriteFile:
           type: boolean
           default: true
@@ -9184,7 +9184,7 @@ components:
           description: >
             Server-side checks to run on the asset.
 
-            Read more about [Upload API checks](/docs/api-reference/upload-file/upload-file-v2#upload-api-checks).
+            Read more about [Upload API checks](/docs/api-reference/upload-file/upload_file#upload-api-checks).
           example: >
             "request.folder" : "marketing/"
         description:
@@ -12080,7 +12080,7 @@ components:
         A global `CustomMetadataField` whose `schema` is augmented with policy-level overrides:
         `isValueRequired`, `defaultValue`, and `readOnly`.
 
-        Used by both `list-path-policies` (with `folderPath`) and `get-path-policy-details`.
+        Used by both `list_path_policies` (with `folderPath`) and `get_path_policy`.
         When returned by the detail endpoint, an additional `isSelected` flag is present.
       allOf:
         - $ref: "#/components/schemas/CustomMetadataField"
@@ -12100,7 +12100,7 @@ components:
             isSelected:
               type: boolean
               description: |
-                Present **only** in the `get-path-policy-details` response.
+                Present **only** in the `get_path_policy` response.
                 `true` if this field is explicitly configured in the path policy;
                 `false` if it is an unselected global field included for reference.
                 Not returned by the list endpoint.
@@ -12145,7 +12145,7 @@ components:
     PathPolicyListItem:
       title: Path Policy List Item
       description: |
-        Lightweight summary returned by `list-path-policies`.
+        Lightweight summary returned by `list_path_policies`.
         Does **not** include folder paths, function code, or full custom metadata.
 
         When the optional `folderPath` query parameter is provided, the response may
@@ -12175,7 +12175,7 @@ components:
     PathPolicyDetail:
       title: Path Policy Detail
       description: |
-        Full path policy object returned by `get-path-policy-details`.
+        Full path policy object returned by `get_path_policy`.
         Use this when you need the complete picture of a policy — e.g. to understand which
         custom metadata fields are enforced and which are available but not selected.
 
@@ -12297,12 +12297,12 @@ components:
     PathPolicySaved:
       title: Path Policy Saved
       description: |
-        Confirmation object returned by `create-path-policy` and `update-path-policy`.
+        Confirmation object returned by `create_path_policy` and `update_path_policy`.
         Echoes back the persisted state of the policy after a successful write.
 
         Key difference from `PathPolicyDetail`: the `customMetadataFields` array contains
         **only** the fields you submitted (Input shape), not the full merged set of global
-        fields. If you need the complete merged view after a write, call `get-path-policy-details`.
+        fields. If you need the complete merged view after a write, call `get_path_policy`.
       allOf:
         - $ref: "#/components/schemas/PathPolicyBase"
         - type: object
