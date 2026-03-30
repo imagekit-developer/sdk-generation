@@ -2268,7 +2268,17 @@ paths:
       operationId: list-file-versions
       summary: List file versions
       description: |
-        This API returns details of all versions of a file.
+        Returns all versions of a file, including the current version and previous versions. Versions are created automatically when a file is overwritten (re-uploaded with the same name and path). Each version has its own `versionId`, URL, metadata (tags, dimensions, size), and timestamps.
+
+        **When to use:**
+        - View the history of changes to a file
+        - Find a specific past version to restore or compare
+        - Audit who modified a file and when
+
+        **Related endpoints:**
+        - Use `get-file-version-details` to inspect a single version
+        - Use `restore-file-version` to make a past version the current one
+        - Use `delete-file-version` to permanently remove specific old versions
       parameters:
         - description: |
             The unique `fileId` of the uploaded file. `fileId` is returned in list and search assets API and upload API.
@@ -2391,7 +2401,10 @@ paths:
         - Managing assets
       operationId: get-file-version-details
       summary: Get file version details
-      description: This API returns an object with details or attributes of a file version.
+      description: |
+        Returns the full details of a specific file version, including its URL, dimensions, size, tags, custom metadata, and timestamps. Use this to inspect a particular historical version of a file.
+
+        **When to use:** Retrieve a specific version's metadata when you already have the `fileId` and `versionId` (from `list-file-versions` or search results). The response includes a direct URL to access that specific version's content.
       parameters:
         - description: |
             The unique `fileId` of the uploaded file. `fileId` is returned in list and search assets API and upload API.
@@ -2488,9 +2501,9 @@ paths:
       operationId: delete-file-version
       summary: Delete file version
       description: |
-        This API deletes a non-current file version permanently. The API returns an empty response.
+        Permanently deletes a specific non-current file version. You cannot delete the current (latest) version — use `delete-file` for that, which removes the file and all its versions.
 
-        Note: If you want to delete all versions of a file, use the delete file API.
+        **When to use:** Free up storage by removing old versions you no longer need. Use `list-file-versions` first to identify which versions exist and their `versionId` values.
       parameters:
         - description: |
             The unique `fileId` of the uploaded file. `fileId` is returned in list and search assets API and upload API.
@@ -2557,7 +2570,11 @@ paths:
       operationId: restore-file-version
       summary: Restore file version
       description: |
-        This API restores a file version as the current file version.
+        Restores a previous file version, making it the current (active) version. The previously current version becomes a non-current version in the version history — it is not deleted.
+
+        **When to use:** Roll back to an earlier version of a file (e.g., revert an accidental overwrite). The restored version's content and metadata become the live version served via the file's URL.
+
+        **Tip:** Use `list-file-versions` first to find the `versionId` you want to restore.
       parameters:
         - description: |
             The unique `fileId` of the uploaded file. `fileId` is returned in list and search assets API and upload API.
@@ -2656,7 +2673,11 @@ paths:
       operationId: add-tags-bulk
       summary: Add tags (bulk)
       description: |
-        This API adds tags to multiple files in bulk. A maximum of 50 files can be specified at a time.
+        Adds one or more tags to up to 50 files in a single request. Tags are additive — existing tags on the files are preserved. Tags are used for organizing and searching files in the media library (e.g., via the `searchQuery` parameter in `list-and-search-assets`).
+
+        **When to use:** Categorize or label multiple files at once for easier discovery. For example, tag product images with `summer-sale` or `new-arrival`.
+
+        **Limits:** Maximum 50 files per request. Combined length of all tag strings must not exceed 500 characters.
       requestBody:
         content:
           application/json:
@@ -2780,7 +2801,11 @@ paths:
       operationId: remove-tags-bulk
       summary: Remove tags (bulk)
       description: |
-        This API removes tags from multiple files in bulk. A maximum of 50 files can be specified at a time.
+        Removes specified tags from up to 50 files in a single request. Only the listed tags are removed — other tags on the files are preserved.
+
+        **When to use:** Clean up outdated or incorrect manually-assigned tags from multiple files. For example, remove a `sale2019` tag from product images after a campaign ends.
+
+        **Limits:** Maximum 50 files per request.
       requestBody:
         content:
           application/json:
@@ -2904,7 +2929,11 @@ paths:
       operationId: remove-ai-tags-bulk
       summary: Remove AI tags (bulk)
       description: |
-        This API removes AITags from multiple files in bulk. A maximum of 50 files can be specified at a time.
+        Removes specified AI-generated tags (AITags) from up to 50 files in a single request. AITags are automatically assigned by AI auto-tagging extensions (`google-auto-tagging` or `aws-auto-tagging`) and are separate from manually-assigned tags. Only the listed AITags are removed.
+
+        **When to use:** Remove incorrect or irrelevant AI-generated tags. For example, if the AI incorrectly tagged images as `car` when they are actually `bicycle`.
+
+        **Limits:** Maximum 50 files per request.
       requestBody:
         content:
           application/json:
@@ -3022,7 +3051,9 @@ paths:
       operationId: get-folder-details
       summary: Get folder details
       description: |
-        This API returns details of a folder including its custom metadata. You can identify the folder using either `folderId` or `folderPath`.
+        Retrieve details of a folder, including its name, path, and custom metadata values. Identify the folder by either `folderId` or `folderPath` (one is required).
+
+        **When to use:** Inspect a folder's metadata before updating it, or check what custom metadata values are set on a folder. To list files inside a folder, use `list-and-search-assets` with the `path` parameter instead.
       parameters:
         - in: query
           name: folderId
@@ -3099,7 +3130,9 @@ paths:
       operationId: update-folder-details
       summary: Update folder details
       description: |
-        This API updates custom metadata for a folder. You can identify the folder using either `folderId` or `folderPath`.
+        Update custom metadata values on a folder. Identify the folder by either `folderId` or `folderPath` (one is required).
+
+        **When to use:** Set or change custom metadata on a folder (e.g., department, project). To update a folder's name or move it, use `rename-folder` or `move-folder` instead. To update metadata on files inside the folder, use `update-file-details` or `bulk-update-custom-metadata`.
       parameters:
         - in: query
           name: folderId
@@ -3191,7 +3224,9 @@ paths:
       operationId: create-folder
       summary: Create folder
       description: |
-        This will create a new folder. You can specify the folder name and location of the parent folder where this new folder should be created.
+        Create a new folder at a specified location in the media library. Any missing parent folders in the path are created automatically.
+
+        **When to use:** Organize assets into folders before uploading files. If you upload a file with a folder path that doesn't exist, the folder is created automatically during upload — so explicit folder creation is only needed when you want to create empty folders in advance.
       requestBody:
         content:
           application/json:
@@ -3253,7 +3288,11 @@ paths:
       operationId: delete-folder
       summary: Delete folder
       description: |
-        This will delete a folder and all its contents permanently. The API returns an empty response.
+        Permanently deletes a folder and all its contents (nested files, subfolders, and their file versions). This operation cannot be undone.
+
+        **When to use:** Remove an entire folder tree when you no longer need the assets. Note: The API will fail if the folder contains more than 100,000 nested items.
+
+        **Important:** This does not purge CDN cache for files that were in the folder. Use `purge-cache` separately if needed.
       requestBody:
         content:
           application/json:
@@ -3322,8 +3361,9 @@ paths:
       operationId: list-bulk-jobs
       summary: List bulk jobs
       description: |
-        Returns a list of bulk jobs (copy folder, move folder, rename folder) for the account.
-        Only jobs from the last 30 days are returned, sorted by creation date (newest first).
+        List all asynchronous bulk folder operations (copy, move, rename) for the account. Only jobs from the last 30 days are returned, sorted newest first.
+
+        **When to use:** View the history and status of folder operations. Use the `status` filter to find in-progress or failed jobs. To check a specific job, use `bulk-job-status` with the `jobId` instead.
       parameters:
         - name: status
           in: query
@@ -3437,7 +3477,11 @@ paths:
       operationId: copy-folder
       summary: Copy folder
       description: |
-        This will copy one folder into another. The selected folder, its nested folders, files, and their versions (in `includeVersions` is set to true) are copied in this operation. Note: If any file at the destination has the same name as the source file, then the source file and its versions will be appended to the destination file version history.
+        Copy a folder and all its contents (nested files, subfolders) to another location. This is an **async operation** — returns a `jobId` immediately. Poll `bulk-job-status` to check completion.
+
+        **When to use:** Duplicate an entire folder tree to a new location while keeping the original intact. To copy a single file, use `copy-file` instead.
+
+        **Behavior:** If a file at the destination has the same name as a source file, the source file's versions are appended to the destination file's version history. Set `includeVersions=true` to copy all file versions (default: only current version).
       requestBody:
         content:
           application/json:
@@ -3535,7 +3579,11 @@ paths:
       operationId: move-folder
       summary: Move folder
       description: |
-        This will move one folder into another. The selected folder, its nested folders, files, and their versions are moved in this operation. Note: If any file at the destination has the same name as the source file, then the source file and its versions will be appended to the destination file version history.
+        Move a folder and all its contents (nested files, subfolders, and all file versions) to another location. The source folder is removed after the move. This is an **async operation** — returns a `jobId` immediately. Poll `bulk-job-status` to check completion.
+
+        **When to use:** Relocate an entire folder tree to a different location. To move a single file, use `move-file` instead. To keep the original folder, use `copy-folder`.
+
+        **Behavior:** If a file at the destination has the same name, source file versions are appended to the destination file's version history.
       requestBody:
         content:
           application/json:
@@ -3629,7 +3677,11 @@ paths:
       operationId: rename-folder
       summary: Rename folder
       description: |
-        This API allows you to rename an existing folder. The folder and all its nested assets and sub-folders will remain unchanged, but their paths will be updated to reflect the new folder name.
+        Rename an existing folder. All nested assets and subfolders keep their contents, but their paths update to reflect the new name. This is an **async operation** — returns a `jobId` immediately. Poll `bulk-job-status` to check completion.
+
+        **When to use:** Change a folder's name while keeping it in the same location. To move a folder to a different parent, use `move-folder` instead.
+
+        **Important:** Old file URLs under the renamed folder path stop working immediately. Set `purgeCache=true` to clear CDN cache for the old URLs (counts against your monthly purge quota).
       requestBody:
         content:
           application/json:
@@ -3737,7 +3789,9 @@ paths:
       operationId: bulk-job-status
       summary: Bulk job status
       description: |
-        This API returns the status of a bulk job like copy and move folder operations.
+        Returns the current status and details of a bulk job (copy folder, move folder, or rename folder). These operations run asynchronously — use the `jobId` returned by the copy/move/rename folder APIs to poll for completion.
+
+        **Statuses:** `Pending` (still processing), `Completed` (finished successfully), `Partial success` (only possible for rename folder with `purgeCache: true` — the rename succeeded but cache purge failed).
       parameters:
         - description: |
             The `jobId` is returned in the response of bulk job API e.g. copy folder or move folder API.
@@ -3841,7 +3895,9 @@ paths:
       operationId: list-media-collections
       summary: List media collections
       description: |
-        This API returns a list of all media collections. You can use query parameters to filter, sort, and paginate the results.
+        List all media collections in the account with optional filtering, sorting, and pagination. Media collections are curated groups of assets (like albums or boards) that organize files independently of folder structure.
+
+        **When to use:** Browse or search existing collections before adding/removing assets. Use `searchQuery` to filter by collection name. To see files inside a specific collection, use `get-media-collection-assets` instead.
       parameters:
         - in: query
           name: skip
@@ -3919,7 +3975,11 @@ paths:
       operationId: create-media-collection
       summary: Create media collection
       description: |
-        This API creates a new media collection. A media collection is a group of assets that can be organized together. You can optionally set custom metadata fields on the collection. Collection name cannot contain slashes (/) and must be unique.
+        Create a new media collection for organizing assets into a curated group. Optionally set custom metadata fields on the collection at creation time.
+
+        **When to use:** Create a collection before adding assets to it (e.g., "Summer Campaign 2024", "Product Catalog"). To add files to an existing collection, use `add-assets-to-media-collections`.
+
+        **Constraints:** Collection name must be unique, cannot contain slashes (`/`), and cannot be empty.
       requestBody:
         required: true
         content:
@@ -3991,7 +4051,9 @@ paths:
       operationId: get-media-collection-details
       summary: Get media collection details
       description: |
-        This API returns details of a specific media collection including its metadata and creator information.
+        Retrieve a media collection's name, custom metadata, creator info, and timestamps by its ID.
+
+        **When to use:** Inspect a collection's properties before updating it, or display collection details in a UI. To see the files inside the collection, use `get-media-collection-assets`. To check who has access, use `get-media-collection-access-list`.
       parameters:
         - in: path
           name: mediaCollectionId
@@ -4046,7 +4108,9 @@ paths:
       operationId: update-media-collection-details
       summary: Update media collection custom metadata
       description: |
-        This API updates the custom metadata of a media collection. Only affects custom metadata fields; does not change name or ACL.
+        Update **custom metadata fields** on a media collection (e.g., brand, campaign, season). Does not change the collection's name or access permissions.
+
+        **When to use:** Set or modify metadata values on a collection. To change the collection's **name or access permissions (ACL)**, use `update-media-collection` instead.
       parameters:
         - in: path
           name: mediaCollectionId
@@ -4115,16 +4179,11 @@ paths:
       operationId: update-media-collection
       summary: Update media collection
       description: |
-        This API updates a media collection's name and/or access control list (ACL). You must provide at least one of `name` or `acl` in the request body.
-        
+        Update a media collection's **name and/or access permissions (ACL)**. At least one of `name` or `acl` must be provided. Does not change custom metadata.
+
+        **When to use:** Rename a collection or change who can access it (add/remove users and groups with READ, CONTRIBUTE, or MANAGE permissions). To update **custom metadata fields** instead, use `update-media-collection-details`.
+
         **Permission:** Requires `MANAGE` permission on the media collection.
-        
-        **ACL Rules:**
-        - Maximum of 50 entities in `addOrModify` array
-        - Cannot have duplicate entities in `addOrModify` or `remove` arrays
-        - Cannot have the same entity in both `addOrModify` and `remove`
-        - Entity type can be `USER` or `USER_GROUP`
-        - Permission can be `READ`, `CONTRIBUTE`, or `MANAGE`
       parameters:
         - in: path
           name: mediaCollectionId
@@ -4255,7 +4314,9 @@ paths:
       operationId: delete-media-collection
       summary: Delete media collection
       description: |
-        This API permanently deletes a media collection. This operation cannot be undone.
+        Permanently delete a media collection. The assets inside the collection are **not deleted** — they remain in the media library. Only the collection grouping is removed. This cannot be undone.
+
+        **When to use:** Remove a collection that is no longer needed. To remove specific assets from a collection without deleting the collection itself, use `remove-assets-from-media-collections`.
       parameters:
         - in: path
           name: mediaCollectionId
@@ -4307,7 +4368,11 @@ paths:
       operationId: add-assets-to-media-collections
       summary: Add assets to media collections
       description: |
-        This API adds assets to one or more media collections in bulk. You can add up to 100 assets to up to 10 media collections in a single request. Maximum 100 assets per request and maximum 10 media collections per request.
+        Adds files to one or more media collections in a single bulk request. Media collections are curated groups of assets (like albums or boards) used to organize files independently of their folder structure.
+
+        **When to use:** Organize files into collections for campaigns, projects, or themes — e.g., add product images to a "Summer Campaign 2024" collection. A single file can belong to multiple collections.
+
+        **Limits:** Maximum 100 assets and 10 media collections per request. Returns partial success (207) if some additions fail (e.g., asset already in collection or association limit exceeded).
       requestBody:
         required: true
         content:
@@ -4414,7 +4479,11 @@ paths:
       operationId: remove-assets-from-media-collections
       summary: Remove assets from media collections
       description: |
-        This API removes assets from one or more media collections in bulk. You can remove up to 100 assets from up to 10 media collections in a single request. Maximum 100 assets per request and maximum 10 media collections per request.
+        Removes files from one or more media collections in a single bulk request. This only removes the association between assets and collections — the files themselves are not deleted and remain in the media library.
+
+        **When to use:** Remove assets that no longer belong to a collection — e.g., remove discontinued products from a "Current Catalog" collection. The files remain accessible in their original folder locations.
+
+        **Limits:** Maximum 100 assets and 10 media collections per request. Returns partial success (207) if some removals fail.
       requestBody:
         required: true
         content:
@@ -4521,7 +4590,9 @@ paths:
       operationId: get-media-collection-access-list
       summary: Get media collection access control list
       description: |
-        This API returns the access control list (ACL) for a media collection, showing all users and user groups with their permissions.
+        Retrieve the access control list (ACL) for a media collection — all users and user groups with their permission levels (READ, CONTRIBUTE, or MANAGE).
+
+        **When to use:** Check who has access to a collection before modifying permissions. To change permissions, use `update-media-collection` with the `acl` field.
       parameters:
         - in: path
           name: mediaCollectionId
@@ -4605,7 +4676,9 @@ paths:
       operationId: get-media-collection-assets
       summary: Get assets in media collection
       description: |
-        This API returns all assets that belong to a specific media collection. Supports filtering, sorting, and pagination similar to the list files API.
+        List all files that belong to a specific media collection, with filtering, sorting, and pagination. Supports filtering by file type, name, and tags.
+
+        **When to use:** Browse the contents of a collection. To search across all files (not limited to a collection), use `list-and-search-assets` instead. To add or remove files from this collection, use `add-assets-to-media-collections` or `remove-assets-from-media-collections`.
       parameters:
         - in: path
           name: mediaCollectionId
@@ -4742,7 +4815,9 @@ paths:
       operationId: update-media-collection-thumbnail
       summary: Update media collection thumbnail
       description: |
-        This API updates the thumbnail image for a media collection. You can upload a new thumbnail image or remove the existing one.
+        Upload or remove the thumbnail image displayed for a media collection. Send a thumbnail file to set it, or send an empty request to remove the existing thumbnail.
+
+        **When to use:** Set a representative preview image for a collection (e.g., a hero image for a campaign collection). The thumbnail is shown when browsing collections in the media library UI.
       parameters:
         - in: path
           name: mediaCollectionId
@@ -6165,11 +6240,13 @@ paths:
       operationId: list-path-policies
       summary: List path policies
       description: |
-        Returns all path policies for the account, sorted by last updated (newest first).
+        Returns all path policies for the account, sorted by last updated (newest first). Path policies enforce rules on specific folder paths — such as required custom metadata fields, validation functions that reject non-compliant uploads, and upload transform functions that modify files during ingestion.
 
-        When the optional `folderPath` query parameter is provided, the API returns the single
-        nearest ancestor policy that applies to that path (hierarchical lookup by depth),
-        along with merged custom metadata fields. If no policy applies, an empty array is returned.
+        **Two modes:**
+        - **Without `folderPath`:** Returns all path policies (summary view, no function code or full metadata).
+        - **With `folderPath`:** Returns the single nearest ancestor policy that applies to that path (hierarchical lookup), along with its merged custom metadata fields. This is useful to check what rules apply before uploading to a specific folder.
+
+        **When to use:** Discover which upload rules and metadata requirements are enforced on specific folders, or list all policies for management purposes.
 
         **Permission:** Requires `SELF_MEDIA_LIBRARY_VIEW` permission.
         **Feature gate:** The `PATH_POLICY` feature must be enabled on the account's pricing plan.
@@ -6207,13 +6284,17 @@ paths:
       operationId: create-path-policy
       summary: Create path policy
       description: |
-        Creates a new path policy. Each policy enforces validation, upload transform functions,
-        and custom metadata field overrides on the specified folder paths.
+        Creates a new path policy that enforces rules on uploads to specific folder paths. A path policy can:
+        - **Require custom metadata fields** — make certain metadata mandatory for all uploads to the governed folders.
+        - **Run a validate function** — JavaScript code that runs before upload and can reject non-compliant files (e.g., enforce naming conventions, minimum dimensions).
+        - **Run an upload transform function** — JavaScript code that modifies the upload payload (e.g., auto-set metadata based on folder path).
+        - **Set read-only defaults** — lock metadata fields to specific values that uploaders cannot change.
+
+        **When to use:** Enforce governance on media uploads — for example, require a `brand` and `campaign` field on all files uploaded to `/marketing/`, or validate that product images meet minimum resolution requirements.
 
         **Constraints:**
         - Policy `name` must be unique per account (1–150 chars).
-        - `folderPaths` must not overlap with any other policy's folder paths.
-        - Root path `"/"` is not allowed.
+        - `folderPaths` must not overlap with any other policy's folder paths. Root path `"/"` is not allowed.
         - Each `customMetadataFields[].name` must reference an existing global custom metadata field and `type` must match.
         - When `uploadFunctionEnabled` is `true`, `uploadFunction` code is required and will be compiled.
         - When `validateFunctionEnabled` is `true`, `validateFunction` code is required and will be compiled.
@@ -6290,11 +6371,14 @@ paths:
       operationId: get-path-policy-details
       summary: Get path policy details
       description: |
-        Returns the full details of a single path policy, including:
-        - Function source code (retrieved from S3 storage)
-        - All folder paths the policy applies to
-        - All global custom metadata fields merged with policy-level overrides.
-          Fields configured in this policy have `isSelected: true`.
+        Returns the full details of a single path policy, including its validate/upload function source code, all governed folder paths, and the complete set of custom metadata fields (both selected and unselected) with policy-level overrides merged in.
+
+        **Response includes:**
+        - `folderPaths` — all folder paths this policy governs
+        - `validateFunction` / `uploadFunction` — the JavaScript source code (if enabled)
+        - `customMetadataFields` — every global custom metadata field, each with `isSelected: true/false` indicating whether this policy enforces it, plus any overrides (`isValueRequired`, `readOnly`, `defaultValue`)
+
+        **When to use:** Inspect the full configuration of a policy — e.g., to review its validation logic, see which metadata fields are enforced, or before updating it.
 
         **Permission:** Requires `SELF_MEDIA_LIBRARY_VIEW` permission.
         **Feature gate:** The `PATH_POLICY` feature must be enabled on the account's pricing plan.
@@ -6342,19 +6426,17 @@ paths:
       description: |
         Updates an existing path policy. Supports two mutually exclusive modes:
 
-        **Mode 1 — Incremental folder path update:**
-        Provide `addFolderPath` or `removeFolderPath` (not both). No other fields are allowed
-        in the same request.
+        **Mode 1 — Incremental folder path update (add/remove one path at a time):**
+        Provide `addFolderPath` or `removeFolderPath` (not both). No other fields are allowed in the same request. Use this when you just need to extend or shrink the policy's scope without changing its rules.
 
-        **Mode 2 — Full/partial update:**
-        Provide any combination of `name`, `description`, `folderPaths`, function fields, and
-        `customMetadataFields`. Only the provided fields are updated; omitted fields remain unchanged.
-        Setting a function to empty string `""` clears/deletes it from storage.
+        **Mode 2 — Full/partial update (modify policy rules):**
+        Provide any combination of `name`, `description`, `folderPaths`, function fields, and `customMetadataFields`. Only the provided fields are updated; omitted fields remain unchanged. Set a function to empty string `""` to clear/delete it.
+
+        **When to use:** Modify a policy's validation logic, change enforced metadata fields, rename it, or adjust which folders it governs.
 
         **Constraints:**
         - Policy `name` must remain unique per account.
-        - `folderPaths` must not overlap with other policies.
-        - Root path `"/"` is not allowed.
+        - `folderPaths` must not overlap with other policies. Root path `"/"` is not allowed.
         - Custom metadata field validations same as create.
 
         **Permission:** Requires `SELF_MEDIA_LIBRARY_MANAGE` permission.
@@ -6444,8 +6526,9 @@ paths:
       operationId: delete-path-policy
       summary: Delete path policy
       description: |
-        Permanently deletes a path policy and removes its associated function code from storage.
-        This action cannot be undone.
+        Permanently deletes a path policy and removes its associated validate/upload function code from storage. After deletion, the governed folder paths will no longer have any upload restrictions or metadata requirements enforced. This action cannot be undone.
+
+        **When to use:** Remove a policy when the governance rules are no longer needed for those folders.
 
         **Permission:** Requires `SELF_MEDIA_LIBRARY_MANAGE` permission.
         **Feature gate:** The `PATH_POLICY` feature must be enabled on the account's pricing plan.
@@ -6492,7 +6575,9 @@ paths:
       operationId: list-download-jobs
       summary: List download jobs
       description: |
-        Returns all download archive jobs for the authenticated account. Jobs are automatically deleted after 7 days (TTL).
+        List all download archive jobs for the account, including their status and archive URLs. Jobs are automatically deleted after 7 days.
+
+        **When to use:** Check the status of previously created download archives, or find the download URL for a completed archive. To create a new download archive, use `create-download-job`. To check a specific job, use `get-download-job-status` with the `jobId`.
       responses:
         "200":
           description: List of download jobs.
@@ -6745,7 +6830,11 @@ paths:
       operationId: get-download-job-status
       summary: Get download job status
       description: |
-        Returns the status and details of a specific download job. When the job has succeeded or partially succeeded, the response includes a `storageURL` to download the archive.
+        Check the status of a specific download archive job. When the job has succeeded, the response includes a `storageURL` to download the ZIP archive.
+
+        **When to use:** Poll this endpoint after calling `create-download-job` to check when the archive is ready. The `jobId` is returned by the create endpoint.
+
+        **Statuses:** `Pending` (still creating archive), `Succeeded` (ready — `storageURL` included), `Partially succeeded` (some files failed — `storageURL` still included), `Failed` (archive creation failed).
       parameters:
         - name: jobId
           in: path
@@ -6841,7 +6930,14 @@ paths:
       operationId: purge-cache
       summary: Purge cache
       description: |
-        This API will purge CDN cache and ImageKit.io's internal cache for a file.  Note: Purge cache is an asynchronous process and it may take some time to reflect the changes.
+        Purges both CDN and ImageKit's internal cache for a specific file URL. After purging, the next request for that URL will fetch the latest version from the origin/media library instead of serving a cached copy.
+
+        **When to use:**
+        - After updating a file (e.g., replacing an image) when you want the change to reflect immediately on the CDN
+        - After renaming or moving a file to clear stale cached URLs
+        - Note: Deleting a file does NOT automatically purge the CDN cache
+
+        **Important:** This is an asynchronous operation. Use `purge-status` with the returned `requestId` to check when the purge completes. Purge requests count against your monthly purge quota.
       requestBody:
         content:
           application/json:
@@ -6894,7 +6990,9 @@ paths:
       operationId: purge-status
       summary: Get purge status
       description: |
-        This API returns the status of a purge cache request.
+        Returns the current status of a cache purge request. Status will be either `Pending` (still processing) or `Completed` (cache has been cleared).
+
+        **When to use:** Poll this endpoint after calling `purge-cache` to confirm when the cache has been fully cleared. The `requestId` parameter is returned by the `purge-cache` API.
       parameters:
         - description: |
             Should be a valid requestId.
@@ -6946,9 +7044,15 @@ paths:
       operationId: get-uploaded-file-metadata
       summary: Get uploaded file metadata
       description: |
-        You can programmatically get image EXIF, pHash, and other metadata for uploaded files in the ImageKit.io media library using this API.
+        Returns technical metadata for an uploaded file in the media library, including EXIF data (camera info, GPS coordinates, exposure settings), perceptual hash (pHash) for image similarity comparison, and format/quality details.
 
-        You can also get the metadata in upload API response by passing `metadata` in `responseFields` parameter.
+        **When to use:**
+        - Retrieve EXIF data such as camera model, GPS location, or creation date
+        - Compare image similarity using the `pHash` value (similar images have similar pHash values)
+        - Check image dimensions, format, color profile, and transparency
+        - For video files: get codec, bitrate, and duration information
+
+        **Tip:** You can also get metadata at upload time by passing `metadata` in the `responseFields` parameter of the upload API.
       parameters:
         - description: |
             The unique `fileId` of the uploaded file. `fileId` is returned in the list and search assets API and upload API.
@@ -7010,7 +7114,9 @@ paths:
       operationId: get-metadata-from-url
       summary: Get metadata from remote URL
       description: |
-        Get image EXIF, pHash, and other metadata from ImageKit.io powered remote URL using this API.
+        Returns technical metadata (EXIF, pHash, dimensions, format) for a file accessible via an ImageKit URL. Unlike `get-uploaded-file-metadata` which takes a `fileId`, this endpoint works with any URL served through your ImageKit account.
+
+        **When to use:** Inspect metadata for a file when you only have its delivery URL (not its `fileId`). The URL must be accessible through your ImageKit.io account.
       parameters:
         - description: |
             Should be a valid file URL. It should be accessible using your ImageKit.io account.
@@ -7319,7 +7425,9 @@ paths:
       operationId: get-usage
       summary: Get account usage information
       description: >
-        Get the account usage information between two dates. Note that the API response includes data from the start date while excluding data from the end date. In other words, the data covers the period starting from the specified start date up to, but not including, the end date.
+        Returns account usage metrics (bandwidth, storage, video processing units, extension units) for a date range. The response includes data from the start date up to but not including the end date. Maximum date range is 90 days.
+
+        **When to use:** Monitor your account's resource consumption, track bandwidth usage trends, or check storage utilization for billing and capacity planning.
       parameters:
         - in: query
           name: startDate
@@ -7397,9 +7505,11 @@ paths:
         - Origins
       operationId: list-origins
       description: >
-        **Note:** This API is currently in beta.  
+        **Note:** This API is currently in beta.
 
-        Returns an array of all configured origins for the current account.
+        Returns all configured origins (external storage sources) for the account. Origins define where ImageKit fetches original files from when they are not found in the Media Library. Supported origin types: S3, S3-compatible, Google Cloud Storage, Azure Blob, Web Folder, Web Proxy, Cloudinary Backup, and Akeneo PIM.
+
+        **When to use:** List all connected storage origins to see which external sources are configured, before creating URL-endpoints or debugging file delivery issues.
       responses:
         "200":
           description: Successful response.
@@ -7422,9 +7532,11 @@ paths:
         - Origins
       operationId: create-origin
       description: >
-        **Note:** This API is currently in beta.  
+        **Note:** This API is currently in beta.
 
-        Creates a new origin and returns the origin object.
+        Creates a new origin (external storage source) that ImageKit will use to fetch files when they are not found in the Media Library. After creating an origin, attach it to a URL-endpoint using the URL-endpoint APIs.
+
+        **Supported origin types:** `S3`, `S3_COMPATIBLE`, `GCS` (Google Cloud Storage), `AZURE_BLOB`, `WEB_FOLDER`, `WEB_PROXY`, `CLOUDINARY_BACKUP`, `AKENEO_PIM`. Each type requires different credentials (e.g., bucket + access keys for S3, base URL for web folder).
       requestBody:
         required: true
         content:
@@ -7467,9 +7579,9 @@ paths:
         - Origins
       operationId: get-origin
       description: >
-        **Note:** This API is currently in beta.  
+        **Note:** This API is currently in beta.
 
-        Retrieves the origin identified by `id`.
+        Retrieves the origin identified by `id`, including its type, bucket/URL configuration, and prefix settings. Sensitive fields like secret keys are excluded from the response.
       parameters:
         - &a4
           in: path
@@ -7514,10 +7626,9 @@ paths:
         - Origins
       operationId: update-origin
       description: >
-        **Note:** This API is currently in beta.  
+        **Note:** This API is currently in beta.
 
-        Updates the origin identified by `id` and returns the updated
-        origin object.
+        Updates the origin identified by `id` and returns the updated origin object. Use this to change credentials, bucket name, prefix, or other settings for an existing origin.
       parameters:
         - *a4
       requestBody:
@@ -7575,10 +7686,9 @@ paths:
         - Origins
       operationId: delete-origin
       description: >
-        **Note:** This API is currently in beta.  
+        **Note:** This API is currently in beta.
 
-        Permanently removes the origin identified by `id`. If the origin is
-        in use by any URL‑endpoints, the API will return an error.
+        Permanently removes the origin identified by `id`. If the origin is in use by any URL-endpoints, the API will return an error — remove it from all URL-endpoints first.
       parameters:
         - *a4
       responses:
@@ -7609,10 +7719,11 @@ paths:
         - URL endpoints
       operationId: list-url-endpoints
       description: >
-        **Note:** This API is currently in beta.  
+        **Note:** This API is currently in beta.
 
-        Returns an array of all URL‑endpoints configured including the
-        default URL-endpoint generated by ImageKit during account creation.
+        Returns all URL-endpoints configured for the account, including the default endpoint created during account setup. A URL-endpoint is the base URL (e.g., `https://ik.imagekit.io/your_id/`) through which files are accessed. Each endpoint can be linked to one or more origins (fallback storage sources) that ImageKit checks when a file is not in the Media Library.
+
+        **When to use:** List all URL-endpoints to see your file delivery configuration, or to find endpoint IDs before updating/deleting them.
       responses:
         "200":
           description: Successful response.
@@ -7646,9 +7757,11 @@ paths:
         - URL endpoints
       operationId: create-url-endpoint
       description: >
-        **Note:** This API is currently in beta.  
+        **Note:** This API is currently in beta.
 
-        Creates a new URL‑endpoint and returns the resulting object.
+        Creates a new URL-endpoint for serving files. Each URL-endpoint has a `urlPrefix` (the path segment appended to your ImageKit base URL) and an ordered list of origin IDs that ImageKit falls back to when a file is not in the Media Library. Optionally configure URL rewriting for migration from Cloudinary, Imgix, or Akamai.
+
+        **Prerequisite:** Origins referenced in the `origins` array must already exist (create them via the origins API first).
       requestBody:
         required: true
         content:
@@ -7692,9 +7805,9 @@ paths:
         - URL endpoints
       operationId: get-url-endpoint
       description: >
-        **Note:** This API is currently in beta.  
+        **Note:** This API is currently in beta.
 
-        Retrieves the URL‑endpoint identified by `id`.
+        Retrieves the URL-endpoint identified by `id`, including its description, URL prefix, linked origin IDs, and URL rewriter configuration. For the default endpoint, the `id` is always `default`.
       parameters:
         - &a5
           in: path
@@ -7741,10 +7854,9 @@ paths:
         - URL endpoints
       operationId: update-url-endpoint
       description: >
-        **Note:** This API is currently in beta.  
+        **Note:** This API is currently in beta.
 
-        Updates the URL‑endpoint identified by `id` and returns the updated
-        object.
+        Updates the URL-endpoint identified by `id`. You can change the description, URL prefix, linked origins, and URL rewriter settings. Origins referenced in the request must already exist.
       parameters:
         - *a5
       requestBody:
@@ -7803,10 +7915,9 @@ paths:
         - URL endpoints
       operationId: delete-url-endpoint
       description: >
-        **Note:** This API is currently in beta.  
+        **Note:** This API is currently in beta.
 
-        Deletes the URL‑endpoint identified by `id`. You cannot delete the
-        default URL‑endpoint created by ImageKit during account creation.
+        Permanently deletes the URL-endpoint identified by `id`. You cannot delete the default URL-endpoint created during account setup. After deletion, files will no longer be accessible via this endpoint's URL prefix.
       parameters:
         - *a5
       responses:
