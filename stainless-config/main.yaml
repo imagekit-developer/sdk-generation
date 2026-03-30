@@ -152,7 +152,9 @@ resources:
       update_media_collection: patch /api/v2/media-collections/{mediaCollectionId}
       update_media_collection_details: patch /api/v2/media-collections/{mediaCollectionId}/details
       delete_media_collection: delete /api/v2/media-collections/{mediaCollectionId}
-      update_media_collection_thumbnail: put /api/v1/media-collections/{mediaCollectionId}/thumbnail
+      update_media_collection_thumbnail: 
+        endpoint: put /api/v1/media-collections/{mediaCollectionId}/thumbnail
+        skip: true
       add_assets_to_media_collection: post /api/v2/media-collections/add-assets
       remove_assets_from_media_collection: post /api/v2/media-collections/remove-assets
       list_collection_assets: get /api/v2/media-collections/{mediaCollectionId}/assets
