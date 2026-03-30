@@ -105,7 +105,7 @@ paths:
       tags:
         - Upload File
       operationId: upload_file
-      summary: Upload file to ImageKit media library (V2, JWT-secured)
+      summary: Upload file to ImageKit media library
       description: |
         Upload a file (image, video, audio, document) to ImageKit storage. Returns file metadata including URL, fileId, and dimensions.
 
@@ -1440,7 +1440,7 @@ paths:
         2. **Advanced text search:** Use `searchQuery` param with examples above. Combine with `sort=DESC_RELEVANCE` for best results with `HAS` operator.
         3. **AI semantic search:** Set `semantic=true` for text-based similarity OR `semanticUrl` for visual similarity. Returns results ranked by relevance score (filter with `minScore`).
         
-        **V2 features:** Semantic search with AI-powered text and image similarity matching.
+        Semantic search with AI-powered text and image similarity matching.
         
         **Note:** When `searchQuery` is used, the `tags`, `type`, and `name` query parameters are ignored.
       parameters:
@@ -1874,8 +1874,6 @@ paths:
         - **Duplicate file to new location:** Use this to copy a file while keeping the original
         - **Move instead:** Use `move_file` if you want to relocate (not duplicate) the file
         - **Version handling:** If destination has a file with the same name, source versions are appended to destination's version history
-        
-        **V2 change:** Returns copied file details (200) instead of empty response (204).
       requestBody:
         content:
           application/json:
@@ -1963,8 +1961,6 @@ paths:
         - **Relocate file:** Use this to move a file to a different folder (source is removed)
         - **Duplicate instead:** Use `copy_file` if you want to keep the original in place
         - **Version handling:** If destination has a file with the same name, all source versions are appended to destination's version history
-        
-        **V2 change:** Returns moved file details (200) instead of empty response (204).
       requestBody:
         content:
           application/json:
@@ -2189,8 +2185,6 @@ paths:
         - `publish=true`: Sets `isPublished` metadata to true on the file in S3
         - `publish=false`: Sets `isPublished=false` AND automatically purges CDN cache for the file URL
         - `includeFileVersions=true`: Applies the operation to all file versions
-        
-        **V2 only:** This endpoint is only available in API v2.
       parameters:
         - description: |
             The unique `fileId` of the file. `fileId` is returned in list and search assets API and upload API.
