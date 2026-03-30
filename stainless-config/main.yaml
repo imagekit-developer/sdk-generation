@@ -38,229 +38,188 @@ environments:
 #
 # [configuration guide]: https://www.stainless.com/docs/guides/configure#resources
 resources:
-  api:
-    # Subresources define resources that are nested within another for more powerful
-    # logical groupings, e.g. `cards.payments`.
-    subresources:
-      v1:
-        methods:
-          get_metadata: 
-            endpoint: get /api/v1/metadata
-            skip: true
-        subresources:
-          dummy:
-            # Configure the methods defined in this resource. Each key in the object is the
-            # name of the method and the value is either an endpoint (for example, `get /foo`)
-            # or an object with more detail.
-            #
-            # [reference]: https://www.stainless.com/docs/reference/config#method
-            # Configure the models--named types--defined in the resource. Each key in the
-            # object is the name of the model and the value is either the name of a schema in
-            # `#/components/schemas` or an object with more detail.
-            #
-            # [reference]: https://www.stainless.com/docs/reference/config#model
-            models:
-              removedot_bg_extension: '#/components/schemas/RemovedotBGExtension'
-              auto_tagging_extension: '#/components/schemas/AutoTaggingExtension'
-              auto_description_extension: '#/components/schemas/AutoDescriptionExtension'
-              ai_tasks_extension: '#/components/schemas/AITasksExtension'
-              ai_task_action: '#/components/schemas/AITaskAction'
-              extension_config: '#/components/schemas/ExtensionConfig'
-              extensions_items: '#/components/schemas/Extensions/items'
-              src_options: '#/components/schemas/SrcOptions'
-              transformation_position: '#/components/schemas/TransformationPosition'
-              transformation: '#/components/schemas/Transformation'
-              overlay: '#/components/schemas/Overlay'
-              base_overlay: '#/components/schemas/BaseOverlay'
-              overlay_position: '#/components/schemas/OverlayPosition'
-              overlay_timing: '#/components/schemas/OverlayTiming'
-              image_overlay: '#/components/schemas/ImageOverlay'
-              video_overlay: '#/components/schemas/VideoOverlay'
-              text_overlay_transformation: '#/components/schemas/TextOverlayTransformation'
-              subtitle_overlay_transformation: '#/components/schemas/SubtitleOverlayTransformation'
-              solid_color_overlay_transformation: '#/components/schemas/SolidColorOverlayTransformation'
-            methods:
-              test:
-                endpoint: post /api/v1/dummy/test
-                skip: true
-          custom_metadata_fields:
-            models:
-              custom_metadata_field: '#/components/schemas/CustomMetadataField'
-            methods:
-              create: post /api/v1/customMetadataFields
-              list: get /api/v1/customMetadataFields
-              update: patch /api/v1/customMetadataFields/{id}
-              delete: delete /api/v1/customMetadataFields/{id}
-          media_collections:
-            methods:
-              update_thumbnail: put /api/v1/media-collections/{mediaCollectionId}/thumbnail
-          download:
-            methods:
-              list: get /api/v1/download
-              create: post /api/v1/download
-              get_status: get /api/v1/download/{jobId}
-          files:
-            models:
-              metadata: '#/components/schemas/Metadata'
-            methods:
-              get_metadata: 
-                endpoint: get /api/v1/files/{fileId}/metadata
-                skip: true
-            subresources:
-              purge:
-                methods:
-                  cache: post /api/v1/files/purge
-                  get_status: get /api/v1/files/purge/{requestId}
-          saved_extensions:
-            models:
-              saved_extension: '#/components/schemas/SavedExtension'
-            methods:
-              list: get /api/v1/saved-extensions
-              create: post /api/v1/saved-extensions
-              get_details: get /api/v1/saved-extensions/{id}
-              update: patch /api/v1/saved-extensions/{id}
-              delete: delete /api/v1/saved-extensions/{id}
-          accounts:
-            methods:
-              get_usage: get /api/v1/accounts/usage
-            subresources:
-              origins:
-                models:
-                  origin_request: '#/components/schemas/OriginRequest'
-                  origin_response: '#/components/schemas/OriginResponse'
-                methods:
-                  list: get /api/v1/accounts/origins
-                  create: post /api/v1/accounts/origins
-                  retrieve: get /api/v1/accounts/origins/{id}
-                  update: put /api/v1/accounts/origins/{id}
-                  delete: delete /api/v1/accounts/origins/{id}
-              url_endpoints:
-                models:
-                  url_endpoint_request: '#/components/schemas/UrlEndpointRequest'
-                  url_endpoint_response: '#/components/schemas/UrlEndpointResponse'
-                methods:
-                  list: get /api/v1/accounts/url-endpoints
-                  create: post /api/v1/accounts/url-endpoints
-                  retrieve: get /api/v1/accounts/url-endpoints/{id}
-                  update: put /api/v1/accounts/url-endpoints/{id}
-                  delete: delete /api/v1/accounts/url-endpoints/{id}
-      v2:
-        subresources:
-          files:
-            methods:
-              upload: post /api/v2-alpha/files/upload
-              list: get /api/v2/files
-              delete: delete /api/v2/files/{fileId}
-              copy: post /api/v2/files/copy
-              move: post /api/v2/files/move
-              rename: put /api/v2/files/rename
-              publish: put /api/v2/files/{fileId}/publish
-              add_tags: post /api/v2/files/addTags
-              remove_tags: post /api/v2/files/removeTags
-              remove_ai_tags: post /api/v2/files/removeAITags
-            subresources:
-              details:
-                models:
-                  file_details: '#/components/schemas/FileDetails'
-                  extension_status: '#/components/schemas/ExtensionStatus'
-                methods:
-                  retrieve: get /api/v2/files/{fileId}/details
-                  update: patch /api/v2/files/{fileId}/details
-              batch:
-                methods:
-                  delete: post /api/v2/files/batch/deleteByFileIds
-              versions:
-                methods:
-                  list: get /api/v2/files/{fileId}/versions
-                  retrieve: get /api/v2/files/{fileId}/versions/{versionId}
-                  delete: delete /api/v2/files/{fileId}/versions/{versionId}
-                  restore: put /api/v2/files/{fileId}/versions/{versionId}/restore
-          folder:
-            methods:
-              create: post /api/v2/folder
-              delete: delete /api/v2/folder
-            subresources:
-              details:
-                models:
-                  folder_details: '#/components/schemas/FolderDetails'
-                methods:
-                  retrieve: get /api/v2/folder/details
-                  update: patch /api/v2/folder/details
-          bulk_jobs:
-            models:
-              job_response: '#/components/schemas/JobResponse'
-            methods:
-              list: get /api/v2/bulkJobs
-              copy_folder: post /api/v2/bulkJobs/copyFolder
-              move_folder: post /api/v2/bulkJobs/moveFolder
-              rename_folder: post /api/v2/bulkJobs/renameFolder
-              status: get /api/v2/bulkJobs/{jobId}
-          media_collections:
-            methods:
-              list: get /api/v2/media-collections
-              create: post /api/v2/media-collections
-              update: patch /api/v2/media-collections/{mediaCollectionId}
-              delete: delete /api/v2/media-collections/{mediaCollectionId}
-              add_assets: post /api/v2/media-collections/add-assets
-              remove_assets: post /api/v2/media-collections/remove-assets
-              access_list: get /api/v2/media-collections/{mediaCollectionId}/access-list
-              assets: get /api/v2/media-collections/{mediaCollectionId}/assets
-            subresources:
-              details:
-                models:
-                  media_collection_base: '#/components/schemas/MediaCollectionBase'
-                methods:
-                  retrieve: get /api/v2/media-collections/{mediaCollectionId}/details
-                  update: patch /api/v2/media-collections/{mediaCollectionId}/details
-      media_library:
-        subresources:
-          files:
-            methods:
-              list_threads: get /api/media-library/{clientNumber}/files/{fileId}/threads
-            subresources:
-              bulk:
-                methods:
-                  apply_extension: post /api/media-library/{clientNumber}/files/bulk/apply-extension
-                subresources:
-                  custom_metadata:
-                    methods:
-                      update: post /api/media-library/{clientNumber}/files/bulk/custom-metadata
-                      get_supported_fields: post /api/media-library/{clientNumber}/files/bulk/custom-metadata/supported-fields
-          assets:
-            subresources:
-              public_links:
-                models:
-                  public_link_request: '#/components/schemas/PublicLinkRequest'
-                  public_link_base: '#/components/schemas/PublicLinkBase'
-                  public_link_response: '#/components/schemas/PublicLinkResponse'
-                  public_link: '#/components/schemas/PublicLink'
-                methods:
-                  list: get /api/media-library/{clientNumber}/assets/{assetId}/public-links
-                  create: post /api/media-library/{clientNumber}/assets/{assetId}/public-links
-                  retrieve: get /api/media-library/{clientNumber}/assets/{assetId}/public-links/{linkId}
-                  update: put /api/media-library/{clientNumber}/assets/{assetId}/public-links/{linkId}
-                  delete: delete /api/media-library/{clientNumber}/assets/{assetId}/public-links/{linkId}
-          generate_image:
-            methods:
-              list: get /api/media-library/{clientNumber}/generate-image
-              create: post /api/media-library/{clientNumber}/generate-image
-              delete: delete /api/media-library/{clientNumber}/generate-image
-              retrieve: get /api/media-library/{clientNumber}/generate-image/{imageId}
-              download: get /api/media-library/{clientNumber}/generate-image/{imageId}/download
-      clients:
-        subresources:
-          path_policy:
-            models:
-              path_policy_custom_metadata_field_input: '#/components/schemas/PathPolicyCustomMetadataFieldInput'
-              path_policy_custom_metadata_field_merged: '#/components/schemas/PathPolicyCustomMetadataFieldMerged'
-              path_policy_base: '#/components/schemas/PathPolicyBase'
-              path_policy_saved: '#/components/schemas/PathPolicySaved'
-            methods:
-              list: get /api/clients/{clientNumber}/path-policy
-              create: post /api/clients/{clientNumber}/path-policy
-              retrieve: get /api/clients/{clientNumber}/path-policy/{policyId}
-              update: put /api/clients/{clientNumber}/path-policy/{policyId}
-              delete: delete /api/clients/{clientNumber}/path-policy/{policyId}
+  models:
+    # File and folder models
+    file_details: '#/components/schemas/FileDetails'
+    extension_status: '#/components/schemas/ExtensionStatus'
+    metadata: '#/components/schemas/Metadata'
+    folder_details: '#/components/schemas/FolderDetails'
+    job_response: '#/components/schemas/JobResponse'
+    
+    # Media collection models
+    media_collection_base: '#/components/schemas/MediaCollectionBase'
+    
+    # Custom metadata models
+    custom_metadata_field: '#/components/schemas/CustomMetadataField'
+    
+    # Extension models
+    saved_extension: '#/components/schemas/SavedExtension'
+    removedot_bg_extension: '#/components/schemas/RemovedotBGExtension'
+    auto_tagging_extension: '#/components/schemas/AutoTaggingExtension'
+    auto_description_extension: '#/components/schemas/AutoDescriptionExtension'
+    ai_tasks_extension: '#/components/schemas/AITasksExtension'
+    ai_task_action: '#/components/schemas/AITaskAction'
+    extension_config: '#/components/schemas/ExtensionConfig'
+    extensions_items: '#/components/schemas/Extensions/items'
+    
+    # Transformation models
+    src_options: '#/components/schemas/SrcOptions'
+    transformation_position: '#/components/schemas/TransformationPosition'
+    transformation: '#/components/schemas/Transformation'
+    overlay: '#/components/schemas/Overlay'
+    base_overlay: '#/components/schemas/BaseOverlay'
+    overlay_position: '#/components/schemas/OverlayPosition'
+    overlay_timing: '#/components/schemas/OverlayTiming'
+    image_overlay: '#/components/schemas/ImageOverlay'
+    video_overlay: '#/components/schemas/VideoOverlay'
+    text_overlay_transformation: '#/components/schemas/TextOverlayTransformation'
+    subtitle_overlay_transformation: '#/components/schemas/SubtitleOverlayTransformation'
+    solid_color_overlay_transformation: '#/components/schemas/SolidColorOverlayTransformation'
+    
+    # Public link models
+    public_link_request: '#/components/schemas/PublicLinkRequest'
+    public_link_base: '#/components/schemas/PublicLinkBase'
+    public_link_response: '#/components/schemas/PublicLinkResponse'
+    public_link: '#/components/schemas/PublicLink'
+    
+    # Path policy models
+    path_policy_custom_metadata_field_input: '#/components/schemas/PathPolicyCustomMetadataFieldInput'
+    path_policy_custom_metadata_field_merged: '#/components/schemas/PathPolicyCustomMetadataFieldMerged'
+    path_policy_base: '#/components/schemas/PathPolicyBase'
+    path_policy_saved: '#/components/schemas/PathPolicySaved'
+    
+    # Origin and URL endpoint models
+    origin_request: '#/components/schemas/OriginRequest'
+    origin_response: '#/components/schemas/OriginResponse'
+    url_endpoint_request: '#/components/schemas/UrlEndpointRequest'
+    url_endpoint_response: '#/components/schemas/UrlEndpointResponse'
+  
+  methods:
+      # File operations
+      upload_file: post /api/v2-alpha/files/upload
+      search_media_library: get /api/v2/files
+      get_metadata_by_file_id:
+        endpoint: get /api/v1/files/{fileId}/metadata
+        skip: true
+      get_file_details: get /api/v2/files/{fileId}/details
+      update_file_details: patch /api/v2/files/{fileId}/details
+      delete_file: delete /api/v2/files/{fileId}
+      delete_files_batch: post /api/v2/files/batch/deleteByFileIds
+      copy_file: post /api/v2/files/copy
+      move_file: post /api/v2/files/move
+      rename_file: put /api/v2/files/rename
+      publish_file: put /api/v2/files/{fileId}/publish
+      
+      # Tag management
+      add_tags_bulk: post /api/v2/files/addTags
+      remove_tags_bulk: post /api/v2/files/removeTags
+      remove_ai_tags_bulk: post /api/v2/files/removeAITags
+      
+      # File versions
+      list_file_versions: get /api/v2/files/{fileId}/versions
+      get_file_version_details: get /api/v2/files/{fileId}/versions/{versionId}
+      delete_file_version: delete /api/v2/files/{fileId}/versions/{versionId}
+      restore_file_version: put /api/v2/files/{fileId}/versions/{versionId}/restore
+      
+      # Cache management
+      purge_cache: post /api/v1/files/purge
+      get_purge_status: get /api/v1/files/purge/{requestId}
+      
+      # File collaboration
+      get_comments: get /api/media-library/{clientNumber}/files/{fileId}/threads
+      
+      # Bulk file operations
+      apply_extension_bulk: post /api/media-library/{clientNumber}/files/bulk/apply-extension
+      update_metadata_bulk: post /api/media-library/{clientNumber}/files/bulk/custom-metadata
+      get_supported_metadata_fields: post /api/media-library/{clientNumber}/files/bulk/custom-metadata/supported-fields
+      
+      # Folder operations
+      create_folder: post /api/v2/folder
+      delete_folder: delete /api/v2/folder
+      get_folder_details: get /api/v2/folder/details
+      update_folder_details: patch /api/v2/folder/details
+      copy_folder: post /api/v2/bulkJobs/copyFolder
+      move_folder: post /api/v2/bulkJobs/moveFolder
+      rename_folder: post /api/v2/bulkJobs/renameFolder
+      list_bulk_jobs: get /api/v2/bulkJobs
+      get_bulk_job_status: get /api/v2/bulkJobs/{jobId}
+      
+      # Media collections
+      list_media_collections: get /api/v2/media-collections
+      create_media_collection: post /api/v2/media-collections
+      get_media_collection_details: get /api/v2/media-collections/{mediaCollectionId}/details
+      update_media_collection: patch /api/v2/media-collections/{mediaCollectionId}
+      update_media_collection_details: patch /api/v2/media-collections/{mediaCollectionId}/details
+      delete_media_collection: delete /api/v2/media-collections/{mediaCollectionId}
+      update_media_collection_thumbnail: put /api/v1/media-collections/{mediaCollectionId}/thumbnail
+      add_assets_to_media_collection: post /api/v2/media-collections/add-assets
+      remove_assets_from_media_collection: post /api/v2/media-collections/remove-assets
+      list_collection_assets: get /api/v2/media-collections/{mediaCollectionId}/assets
+      get_collection_access_list: get /api/v2/media-collections/{mediaCollectionId}/access-list
+      
+      # Custom metadata fields
+      create_custom_metadata_field: post /api/v1/customMetadataFields
+      list_custom_metadata_fields: get /api/v1/customMetadataFields
+      update_custom_metadata_field: patch /api/v1/customMetadataFields/{id}
+      delete_custom_metadata_field: delete /api/v1/customMetadataFields/{id}
+      
+      # Saved extensions
+      list_saved_extensions: get /api/v1/saved-extensions
+      create_saved_extension: post /api/v1/saved-extensions
+      get_saved_extension: get /api/v1/saved-extensions/{id}
+      update_saved_extension: patch /api/v1/saved-extensions/{id}
+      delete_saved_extension: delete /api/v1/saved-extensions/{id}
+      
+      # Downloads
+      list_zip_downloads: get /api/v1/download
+      create_zip_download: post /api/v1/download
+      get_zip_download_status: get /api/v1/download/{jobId}
+      
+      # Public links
+      list_public_links: get /api/media-library/{clientNumber}/assets/{assetId}/public-links
+      create_public_link: post /api/media-library/{clientNumber}/assets/{assetId}/public-links
+      get_public_link: get /api/media-library/{clientNumber}/assets/{assetId}/public-links/{linkId}
+      update_public_link: put /api/media-library/{clientNumber}/assets/{assetId}/public-links/{linkId}
+      delete_public_link: delete /api/media-library/{clientNumber}/assets/{assetId}/public-links/{linkId}
+      
+      # AI image generation
+      list_ai_images: get /api/media-library/{clientNumber}/generate-image
+      generate_ai_image: post /api/media-library/{clientNumber}/generate-image
+      get_ai_image_details: get /api/media-library/{clientNumber}/generate-image/{imageId}
+      download_ai_image: get /api/media-library/{clientNumber}/generate-image/{imageId}/download
+      delete_ai_images: delete /api/media-library/{clientNumber}/generate-image
+      
+      # Path policies
+      list_path_policies: get /api/clients/{clientNumber}/path-policy
+      create_path_policy: post /api/clients/{clientNumber}/path-policy
+      get_path_policy: get /api/clients/{clientNumber}/path-policy/{policyId}
+      update_path_policy: put /api/clients/{clientNumber}/path-policy/{policyId}
+      delete_path_policy: delete /api/clients/{clientNumber}/path-policy/{policyId}
+      
+      # Origins
+      list_origins: get /api/v1/accounts/origins
+      create_origin: post /api/v1/accounts/origins
+      get_origin: get /api/v1/accounts/origins/{id}
+      update_origin: put /api/v1/accounts/origins/{id}
+      delete_origin: delete /api/v1/accounts/origins/{id}
+      
+      # URL endpoints
+      list_url_endpoints: get /api/v1/accounts/url-endpoints
+      create_url_endpoint: post /api/v1/accounts/url-endpoints
+      get_url_endpoint: get /api/v1/accounts/url-endpoints/{id}
+      update_url_endpoint: put /api/v1/accounts/url-endpoints/{id}
+      delete_url_endpoint: delete /api/v1/accounts/url-endpoints/{id}
+      
+      # Account
+      get_account_usage: get /api/v1/accounts/usage
+      
+      # Skipped/internal endpoints (kept for schema completeness)
+      get_metadata_by_remote_url:
+        endpoint: get /api/v1/metadata
+        skip: true
+      dummy_test:
+        endpoint: post /api/v1/dummy/test
+        skip: true
 
 settings:
   # All generated integration tests that hit the prism mock http server are marked
