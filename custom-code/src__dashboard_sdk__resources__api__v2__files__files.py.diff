@@ -1,0 +1,92 @@
+diff --git a/src/dashboard_sdk/resources/api/v2/files/files.py b/src/dashboard_sdk/resources/api/v2/files/files.py
+index 2da8bb3..738d492 100644
+--- a/src/dashboard_sdk/resources/api/v2/files/files.py
++++ b/src/dashboard_sdk/resources/api/v2/files/files.py
+@@ -64,6 +64,7 @@ from .....types.api.v2 import (
+     file_remove_tags_params,
+     file_remove_ai_tags_params,
+ )
++from .....lib.serialization_utils import serialize_upload_options
+ from .....types.api.v2.file_list_response import FileListResponse
+ from .....types.api.v2.files.file_details import FileDetails
+ from .....types.api.v2.file_rename_response import FileRenameResponse
+@@ -1075,15 +1076,36 @@ class FilesResource(SyncAPIResource):
+                 "webhook_url": webhook_url,
+             }
+         )
++
++        # Prepare upload payload for auth endpoint (copy of body without file and Omit values)
++        upload_payload = {k: v for k, v in body.items() if k not in ["file"] and not isinstance(v, Omit)}
++        # First transform keys (snake_case -> camelCase like use_unique_file_name -> useUniqueFileName)
++        upload_payload = maybe_transform(upload_payload, file_upload_params.FileUploadParams)
++        # Then serialize values (booleans -> strings, arrays -> comma-separated, etc.)
++        upload_payload = serialize_upload_options(cast(Dict[str, object], upload_payload))
++
++        # Get authentication token from auth endpoint
++        auth_response = self._post(
++            self._client.auth_endpoint,
++            body={
++                "publicKey": self._client.public_key,
++                "expire": 3600,
++                "uploadPayload": upload_payload,
++            },
++            options=make_request_options(extra_headers=extra_headers),
++            cast_to=Dict[str, object],
++        )
++
++        # Add token to body
++        body["token"] = cast(str, auth_response.get("token"))
++
+         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
+         # It should be noted that the actual Content-Type header that will be
+         # sent to the server will contain a `boundary` parameter, e.g.
+         # multipart/form-data; boundary=---abc--
+         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
+         return self._post(
+-            "/api/v2-alpha/files/upload"
+-            if self._client._base_url_overridden
+-            else "https://upload.imagekit.io/api/v2-alpha/files/upload",
++            self._client.upload_api_endpoint,
+             body=maybe_transform(body, file_upload_params.FileUploadParams),
+             files=files,
+             options=make_request_options(
+@@ -2092,15 +2114,36 @@ class AsyncFilesResource(AsyncAPIResource):
+                 "webhook_url": webhook_url,
+             }
+         )
++
++        # Prepare upload payload for auth endpoint (copy of body without file and Omit values)
++        upload_payload = {k: v for k, v in body.items() if k not in ["file"] and not isinstance(v, Omit)}
++        # First transform keys (snake_case -> camelCase like use_unique_file_name -> useUniqueFileName)
++        upload_payload = await async_maybe_transform(upload_payload, file_upload_params.FileUploadParams)
++        # Then serialize values (booleans -> strings, arrays -> comma-separated, etc.)
++        upload_payload = serialize_upload_options(cast(Dict[str, object], upload_payload))
++
++        # Get authentication token from auth endpoint
++        auth_response = await self._post(
++            self._client.auth_endpoint,
++            body={
++                "publicKey": self._client.public_key,
++                "expire": 3600,
++                "uploadPayload": upload_payload,
++            },
++            options=make_request_options(extra_headers=extra_headers),
++            cast_to=Dict[str, object],  # Use Dict from typing, not builtin dict
++        )
++
++        # Add token to body
++        body["token"] = cast(str, auth_response.get("token"))
++
+         files = extract_files(cast(Mapping[str, object], body), paths=[["file"]])
+         # It should be noted that the actual Content-Type header that will be
+         # sent to the server will contain a `boundary` parameter, e.g.
+         # multipart/form-data; boundary=---abc--
+         extra_headers = {"Content-Type": "multipart/form-data", **(extra_headers or {})}
+         return await self._post(
+-            "/api/v2-alpha/files/upload"
+-            if self._client._base_url_overridden
+-            else "https://upload.imagekit.io/api/v2-alpha/files/upload",
++            self._client.upload_api_endpoint,
+             body=await async_maybe_transform(body, file_upload_params.FileUploadParams),
+             files=files,
+             options=make_request_options(

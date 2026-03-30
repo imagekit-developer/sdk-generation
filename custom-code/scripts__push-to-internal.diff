@@ -1,0 +1,70 @@
+diff --git a/scripts/push-to-internal b/scripts/push-to-internal
+new file mode 100755
+index 0000000..f83d4b9
+--- /dev/null
++++ b/scripts/push-to-internal
+@@ -0,0 +1,64 @@
++#!/usr/bin/env bash
++
++set -e
++
++# Script to push code to the internal ImageKit repository
++
++REMOTE_NAME="imagekit-internal"
++
++echo "Choose authentication method:"
++echo "1) SSH (recommended - git@github.com:imagekit-internal/dashboard-sdk-python.git)"
++echo "2) HTTPS (https://github.com/imagekit-internal/dashboard-sdk-python)"
++echo ""
++read -p "Enter choice (1 or 2): " -n 1 -r
++echo ""
++
++if [[ $REPLY == "1" ]]; then
++    INTERNAL_REPO="git@github.com:imagekit-internal/dashboard-sdk-python.git"
++    echo "Using SSH authentication"
++elif [[ $REPLY == "2" ]]; then
++    INTERNAL_REPO="https://github.com/imagekit-internal/dashboard-sdk-python"
++    echo "Using HTTPS authentication"
++    echo ""
++    echo "⚠️  Note: HTTPS may fail with workflow files if your token lacks 'workflow' scope."
++    echo "   Consider using SSH (option 1) or a Personal Access Token with workflow scope."
++    echo ""
++else
++    echo "Invalid choice. Exiting."
++    exit 1
++fi
++
++echo ""
++echo "Setting up remote for internal repository..."
++
++# Check if the remote already exists
++if git remote get-url "$REMOTE_NAME" >/dev/null 2>&1; then
++    echo "Remote '$REMOTE_NAME' already exists. Updating URL..."
++    git remote set-url "$REMOTE_NAME" "$INTERNAL_REPO"
++else
++    echo "Adding remote '$REMOTE_NAME'..."
++    git remote add "$REMOTE_NAME" "$INTERNAL_REPO"
++fi
++
++echo ""
++echo "Current remotes:"
++git remote -v
++
++echo ""
++read -p "Push all branches and tags to $INTERNAL_REPO? (y/N) " -n 1 -r
++echo ""
++
++if [[ $REPLY =~ ^[Yy]$ ]]; then
++    echo "Pushing all branches..."
++    git push "$REMOTE_NAME" --all
++    
++    echo ""
++    echo "Pushing all tags..."
++    git push "$REMOTE_NAME" --tags
++    
++    echo ""
++    echo "✓ Successfully pushed to $INTERNAL_REPO"
++else
++    echo "Push cancelled."
++    exit 1
++fi
