@@ -38,63 +38,64 @@ environments:
 #
 # [configuration guide]: https://www.stainless.com/docs/guides/configure#resources
 resources:
-  models:
-    # File and folder models
-    file_details: '#/components/schemas/FileDetails'
-    extension_status: '#/components/schemas/ExtensionStatus'
-    metadata: '#/components/schemas/Metadata'
-    folder_details: '#/components/schemas/FolderDetails'
-    job_response: '#/components/schemas/JobResponse'
+  $client:
+    models:
+      # File and folder models
+      file_details: '#/components/schemas/FileDetails'
+      extension_status: '#/components/schemas/ExtensionStatus'
+      metadata: '#/components/schemas/Metadata'
+      folder_details: '#/components/schemas/FolderDetails'
+      job_response: '#/components/schemas/JobResponse'
+      
+      # Media collection models
+      media_collection_base: '#/components/schemas/MediaCollectionBase'
+      
+      # Custom metadata models
+      custom_metadata_field: '#/components/schemas/CustomMetadataField'
+      
+      # Extension models
+      saved_extension: '#/components/schemas/SavedExtension'
+      removedot_bg_extension: '#/components/schemas/RemovedotBGExtension'
+      auto_tagging_extension: '#/components/schemas/AutoTaggingExtension'
+      auto_description_extension: '#/components/schemas/AutoDescriptionExtension'
+      ai_tasks_extension: '#/components/schemas/AITasksExtension'
+      ai_task_action: '#/components/schemas/AITaskAction'
+      extension_config: '#/components/schemas/ExtensionConfig'
+      extensions_items: '#/components/schemas/Extensions/items'
+      
+      # Transformation models
+      src_options: '#/components/schemas/SrcOptions'
+      transformation_position: '#/components/schemas/TransformationPosition'
+      transformation: '#/components/schemas/Transformation'
+      overlay: '#/components/schemas/Overlay'
+      base_overlay: '#/components/schemas/BaseOverlay'
+      overlay_position: '#/components/schemas/OverlayPosition'
+      overlay_timing: '#/components/schemas/OverlayTiming'
+      image_overlay: '#/components/schemas/ImageOverlay'
+      video_overlay: '#/components/schemas/VideoOverlay'
+      text_overlay_transformation: '#/components/schemas/TextOverlayTransformation'
+      subtitle_overlay_transformation: '#/components/schemas/SubtitleOverlayTransformation'
+      solid_color_overlay_transformation: '#/components/schemas/SolidColorOverlayTransformation'
+      
+      # Public link models
+      public_link_request: '#/components/schemas/PublicLinkRequest'
+      public_link_base: '#/components/schemas/PublicLinkBase'
+      public_link_response: '#/components/schemas/PublicLinkResponse'
+      public_link: '#/components/schemas/PublicLink'
+      
+      # Path policy models
+      path_policy_custom_metadata_field_input: '#/components/schemas/PathPolicyCustomMetadataFieldInput'
+      path_policy_custom_metadata_field_merged: '#/components/schemas/PathPolicyCustomMetadataFieldMerged'
+      path_policy_base: '#/components/schemas/PathPolicyBase'
+      path_policy_saved: '#/components/schemas/PathPolicySaved'
+      
+      # Origin and URL endpoint models
+      origin_request: '#/components/schemas/OriginRequest'
+      origin_response: '#/components/schemas/OriginResponse'
+      url_endpoint_request: '#/components/schemas/UrlEndpointRequest'
+      url_endpoint_response: '#/components/schemas/UrlEndpointResponse'
     
-    # Media collection models
-    media_collection_base: '#/components/schemas/MediaCollectionBase'
-    
-    # Custom metadata models
-    custom_metadata_field: '#/components/schemas/CustomMetadataField'
-    
-    # Extension models
-    saved_extension: '#/components/schemas/SavedExtension'
-    removedot_bg_extension: '#/components/schemas/RemovedotBGExtension'
-    auto_tagging_extension: '#/components/schemas/AutoTaggingExtension'
-    auto_description_extension: '#/components/schemas/AutoDescriptionExtension'
-    ai_tasks_extension: '#/components/schemas/AITasksExtension'
-    ai_task_action: '#/components/schemas/AITaskAction'
-    extension_config: '#/components/schemas/ExtensionConfig'
-    extensions_items: '#/components/schemas/Extensions/items'
-    
-    # Transformation models
-    src_options: '#/components/schemas/SrcOptions'
-    transformation_position: '#/components/schemas/TransformationPosition'
-    transformation: '#/components/schemas/Transformation'
-    overlay: '#/components/schemas/Overlay'
-    base_overlay: '#/components/schemas/BaseOverlay'
-    overlay_position: '#/components/schemas/OverlayPosition'
-    overlay_timing: '#/components/schemas/OverlayTiming'
-    image_overlay: '#/components/schemas/ImageOverlay'
-    video_overlay: '#/components/schemas/VideoOverlay'
-    text_overlay_transformation: '#/components/schemas/TextOverlayTransformation'
-    subtitle_overlay_transformation: '#/components/schemas/SubtitleOverlayTransformation'
-    solid_color_overlay_transformation: '#/components/schemas/SolidColorOverlayTransformation'
-    
-    # Public link models
-    public_link_request: '#/components/schemas/PublicLinkRequest'
-    public_link_base: '#/components/schemas/PublicLinkBase'
-    public_link_response: '#/components/schemas/PublicLinkResponse'
-    public_link: '#/components/schemas/PublicLink'
-    
-    # Path policy models
-    path_policy_custom_metadata_field_input: '#/components/schemas/PathPolicyCustomMetadataFieldInput'
-    path_policy_custom_metadata_field_merged: '#/components/schemas/PathPolicyCustomMetadataFieldMerged'
-    path_policy_base: '#/components/schemas/PathPolicyBase'
-    path_policy_saved: '#/components/schemas/PathPolicySaved'
-    
-    # Origin and URL endpoint models
-    origin_request: '#/components/schemas/OriginRequest'
-    origin_response: '#/components/schemas/OriginResponse'
-    url_endpoint_request: '#/components/schemas/UrlEndpointRequest'
-    url_endpoint_response: '#/components/schemas/UrlEndpointResponse'
-  
-  methods:
+    methods:
       # File operations
       upload_file: post /api/v2-alpha/files/upload
       search_media_library: get /api/v2/files
