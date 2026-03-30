@@ -28,14 +28,14 @@ def parse_stainless_methods(config_path: str) -> list[dict]:
     for line in lines:
         stripped = line.rstrip("\n")
 
-        # Detect start of methods: section (exactly 2-space indent)
-        if re.match(r'^  methods:', stripped):
+        # Detect start of methods: section (2-space or 4-space indent)
+        if re.match(r'^    methods:', stripped) or re.match(r'^  methods:', stripped):
             in_methods = True
             continue
 
-        # Exit methods section when we hit another top-level key or non-indented line
-        if in_methods and stripped.strip() and not stripped.startswith("    "):
-            if not stripped.startswith("  methods"):
+        # Exit methods section when we hit another section at same or lower indent
+        if in_methods and stripped.strip() and not stripped.startswith("      "):
+            if not stripped.startswith("    methods") and not stripped.startswith("  methods"):
                 in_methods = False
                 continue
 
@@ -46,8 +46,25 @@ def parse_stainless_methods(config_path: str) -> list[dict]:
         if not stripped.strip() or stripped.strip().startswith("#"):
             continue
 
+        # Endpoint line under multi-line method (check BEFORE simple match)
+        if current_method_name:
+            endpoint_match = re.match(r'^\s+endpoint:\s+(get|post|put|patch|delete)\s+(/\S+)', stripped)
+            if endpoint_match:
+                http_method = endpoint_match.group(1).lower()
+                path = endpoint_match.group(2)
+                methods.append({
+                    "method_name": current_method_name,
+                    "http_method": http_method,
+                    "path": path,
+                })
+                current_method_name = None
+                continue
+            # If we hit skip: or another sub-key, stay in multi-line mode
+            if re.match(r'^\s+(skip|only|type|deprecated):', stripped):
+                continue
+
         # Simple method: "method_name: verb /path"
-        simple = re.match(r'^\s{4,6}(\w+):\s+(get|post|put|patch|delete)\s+(/\S+)', stripped)
+        simple = re.match(r'^\s{4,8}(\w+):\s+(get|post|put|patch|delete)\s+(/\S+)', stripped)
         if simple:
             method_name = simple.group(1)
             http_method = simple.group(2).lower()
@@ -61,24 +78,10 @@ def parse_stainless_methods(config_path: str) -> list[dict]:
             continue
 
         # Multi-line method: "method_name:" (value on next lines)
-        multi_start = re.match(r'^\s{4,6}(\w+):\s*$', stripped)
+        multi_start = re.match(r'^\s{4,8}(\w+):\s*$', stripped)
         if multi_start:
             current_method_name = multi_start.group(1)
             continue
-
-        # Endpoint line under multi-line method
-        if current_method_name:
-            endpoint_match = re.match(r'^\s+endpoint:\s+(get|post|put|patch|delete)\s+(/\S+)', stripped)
-            if endpoint_match:
-                http_method = endpoint_match.group(1).lower()
-                path = endpoint_match.group(2)
-                methods.append({
-                    "method_name": current_method_name,
-                    "http_method": http_method,
-                    "path": path,
-                })
-            # If we hit skip: true or another key, just keep current_method_name
-            # until the next method definition
 
     return methods
 
