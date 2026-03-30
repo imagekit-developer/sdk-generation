@@ -1252,9 +1252,9 @@ paths:
       tags:
         - Digital Asset Management (DAM)
       operationId: search_media_library
-      summary: List files and folders, or search with filters
+      summary: List and search assets, or search with filters
       description: |
-        List or search for files and folders in your media library. Supports multiple search modes: basic listing, text search, and AI-powered semantic search.
+        List or search for assets in your media library including files, file versions, folders, and media collections. Supports multiple search modes: basic listing, text search, and AI-powered semantic search.
         
         **When to use:**
         - **List all files in a folder:** Set `path=/folder/path`, omit `searchQuery`
@@ -1436,7 +1436,7 @@ paths:
         
         ## Search Modes Summary
         
-        1. **Basic listing:** Returns files in `path` folder (defaults to `/`). Filter by `fileType`. Max 1000 results per request.
+        1. **Basic listing:** Returns files and folders in `path` folder (defaults to `/`). Filter by `fileType`. Max 1000 results per request. Results can include files, file versions, folders, and media collections.
         2. **Advanced text search:** Use `searchQuery` param with examples above. Combine with `sort=DESC_RELEVANCE` for best results with `HAS` operator.
         3. **AI semantic search:** Set `semantic=true` for text-based similarity OR `semanticUrl` for visual similarity. Returns results ranked by relevance score (filter with `minScore`).
         
