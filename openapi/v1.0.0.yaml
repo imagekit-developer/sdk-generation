@@ -6886,7 +6886,26 @@ components:
             data:
               $ref: "#/components/schemas/FileDetails"
           required: [type, created_at, data]
-    
+
+    DamFileVersionCreateEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file version is created.
+          properties:
+            type:
+              type: string
+              const: "file-version.created"
+              description: Type of the webhook event.
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            data:
+              $ref: "#/components/schemas/FileVersionDetails"
+          required: [type, created_at, data]
+
     DamFileDeleteEvent:
       allOf:
         - $ref: "#/components/schemas/BaseWebhookEvent"
@@ -8572,9 +8591,9 @@ webhooks:
         "200":
           description: Acknowledge
 
-  dam.file.created:
+  file.created:
     post:
-      operationId: dam-file-created
+      operationId: file-created
       summary: File created
       description: |
         Triggered when a file is created.
@@ -8588,9 +8607,9 @@ webhooks:
         "200":
           description: Acknowledge
     
-  dam.file.updated:
+  file.updated:
     post:
-      operationId: dam-file-updated
+      operationId: file-updated
       summary: File updated
       description: |
         Triggered when a file is updated.
@@ -8604,9 +8623,9 @@ webhooks:
         "200":
           description: Acknowledge
 
-  dam.file.deleted:
+  file.deleted:
     post:
-      operationId: dam-file-deleted
+      operationId: file-deleted
       summary: File deleted
       description: |
         Triggered when a file is deleted.
@@ -8619,6 +8638,23 @@ webhooks:
       responses:
         "200":
           description: Acknowledge
+
+  file-version.created:
+    post:
+      operationId: file-version-created
+      summary: File version created
+      description: |
+        Triggered when a file version is created.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DamFileVersionCreateEvent"
+      responses:
+        "200":
+          description: Acknowledge
+  
   
 security:
   - basicAuth: []
