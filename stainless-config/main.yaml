@@ -255,6 +255,7 @@ resources:
       DamFileUpdateEvent: '#/components/schemas/DamFileUpdateEvent'
       DamFileDeleteEvent: '#/components/schemas/DamFileDeleteEvent'
       DamFileVersionCreateEvent: '#/components/schemas/DamFileVersionCreateEvent'
+      DamFileVersionDeleteEvent: '#/components/schemas/DamFileVersionDeleteEvent'
 
     methods:
       unwrap:
