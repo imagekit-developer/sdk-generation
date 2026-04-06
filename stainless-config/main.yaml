@@ -63,20 +63,6 @@ resources:
       extension_config: '#/components/schemas/ExtensionConfig'
       extensions_items: '#/components/schemas/Extensions/items'
       
-      # Transformation models
-      src_options: '#/components/schemas/SrcOptions'
-      transformation_position: '#/components/schemas/TransformationPosition'
-      transformation: '#/components/schemas/Transformation'
-      overlay: '#/components/schemas/Overlay'
-      base_overlay: '#/components/schemas/BaseOverlay'
-      overlay_position: '#/components/schemas/OverlayPosition'
-      overlay_timing: '#/components/schemas/OverlayTiming'
-      image_overlay: '#/components/schemas/ImageOverlay'
-      video_overlay: '#/components/schemas/VideoOverlay'
-      text_overlay_transformation: '#/components/schemas/TextOverlayTransformation'
-      subtitle_overlay_transformation: '#/components/schemas/SubtitleOverlayTransformation'
-      solid_color_overlay_transformation: '#/components/schemas/SolidColorOverlayTransformation'
-      
       # Public link models
       public_link_request: '#/components/schemas/PublicLinkRequest'
       public_link_base: '#/components/schemas/PublicLinkBase'
@@ -219,9 +205,6 @@ resources:
       # Skipped/internal endpoints (kept for schema completeness)
       get_metadata_by_remote_url:
         endpoint: get /api/v1/metadata
-        skip: true
-      dummy_test:
-        endpoint: post /api/v1/dummy/test
         skip: true
 
 settings:
