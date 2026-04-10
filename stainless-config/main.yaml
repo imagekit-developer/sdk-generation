@@ -251,6 +251,11 @@ resources:
       UploadPreTransformErrorEvent: '#/components/schemas/UploadPreTransformErrorEvent'
       UploadPostTransformSuccessEvent: '#/components/schemas/UploadPostTransformSuccessEvent'
       UploadPostTransformErrorEvent: '#/components/schemas/UploadPostTransformErrorEvent'
+      FileCreateEvent: '#/components/schemas/FileCreateEvent'
+      FileUpdateEvent: '#/components/schemas/FileUpdateEvent'
+      FileDeleteEvent: '#/components/schemas/FileDeleteEvent'
+      FileVersionCreateEvent: '#/components/schemas/FileVersionCreateEvent'
+      FileVersionDeleteEvent: '#/components/schemas/FileVersionDeleteEvent'
 
     methods:
       unwrap:

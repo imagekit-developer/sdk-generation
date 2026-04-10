@@ -6849,6 +6849,114 @@ components:
               required: [fileId, url, name, path, transformation]
           required: [type, created_at, request, data]
     
+    FileCreateEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file is created.
+          properties:
+            type:
+              type: string
+              const: "file.created"
+              description: Type of the webhook event.
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            data:
+              $ref: "#/components/schemas/FileDetails"
+          required: [type, created_at, data]
+    
+    FileUpdateEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file is updated.
+          properties:
+            type:
+              type: string
+              const: "file.updated"
+              description: Type of the webhook event.
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            data:
+              $ref: "#/components/schemas/FileDetails"
+          required: [type, created_at, data]
+
+    FileVersionCreateEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file version is created.
+          properties:
+            type:
+              type: string
+              const: "file-version.created"
+              description: Type of the webhook event.
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            data:
+              $ref: "#/components/schemas/FileDetails"
+          required: [type, created_at, data]
+
+    FileDeleteEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file is deleted.
+          properties:
+            type:
+              type: string
+              const: "file.deleted"
+              description: Type of the webhook event.
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            data:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: The unique `fileId` of the deleted file.
+              required: [fileId]
+          required: [type, created_at, data]
+
+    FileVersionDeleteEvent:
+      allOf:
+        - $ref: "#/components/schemas/BaseWebhookEvent"
+        - type: object
+          description: |
+            Triggered when a file version is deleted.
+          properties:
+            type:
+              type: string
+              const: "file-version.deleted"
+              description: Type of the webhook event.
+            created_at:
+              type: string
+              format: date-time
+              description: Timestamp of when the event occurred in ISO8601 format.
+            data:
+              type: object
+              properties:
+                fileId:
+                  type: string
+                  description: The unique `fileId` of the deleted file.
+                versionId:
+                  type: string
+                  description: The unique `versionId` of the deleted file version.
+              required: [fileId, versionId]
+          required: [type, created_at, data]
+
     SrcOptions:
       title: Source Options
       description: Options for generating ImageKit URLs with transformations. See the [Transformations guide](https://imagekit.io/docs/transformations).
@@ -8539,5 +8647,85 @@ webhooks:
         "200":
           description: Acknowledge
 
+  file.created:
+    post:
+      operationId: file-created
+      summary: File created
+      description: |
+        Triggered when a file is created.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FileCreateEvent"
+      responses:
+        "200":
+          description: Acknowledge
+    
+  file.updated:
+    post:
+      operationId: file-updated
+      summary: File updated
+      description: |
+        Triggered when a file is updated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FileUpdateEvent"
+      responses:
+        "200":
+          description: Acknowledge
+
+  file.deleted:
+    post:
+      operationId: file-deleted
+      summary: File deleted
+      description: |
+        Triggered when a file is deleted.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FileDeleteEvent"
+      responses:
+        "200":
+          description: Acknowledge
+
+  file-version.created:
+    post:
+      operationId: file-version-created
+      summary: File version created
+      description: |
+        Triggered when a file version is created.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FileVersionCreateEvent"
+      responses:
+        "200":
+          description: Acknowledge
+  
+  file-version.deleted:
+    post:
+      operationId: file-version-deleted
+      summary: File version deleted
+      description: |
+        Triggered when a file version is deleted.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FileVersionDeleteEvent"
+      responses:
+        "200":
+          description: Acknowledge
+  
 security:
   - basicAuth: []
