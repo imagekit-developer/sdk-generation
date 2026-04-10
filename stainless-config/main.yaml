@@ -95,7 +95,8 @@ resources:
       copy_file: post /api/v2/files/copy
       move_file: post /api/v2/files/move
       rename_file: put /api/v2/files/rename
-      publish_file: put /api/v2/files/{fileId}/publish
+      publish_files_bulk: put /api/v2/files/publish
+      get_publish_job_status: get /api/v2/files/publish/{jobId}
       
       # Tag management
       add_tags_bulk: post /api/v2/files/addTags

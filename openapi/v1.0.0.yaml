@@ -2094,47 +2094,47 @@ paths:
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
-  /api/v2/files/{fileId}/publish:
+  /api/v2/files/publish:
     put:
       tags:
         - Digital Asset Management (DAM)
         - Managing assets
-      operationId: publish_file
-      summary: Publish or unpublish file
+      operationId: publish_files_bulk
+      summary: Publish or unpublish files (bulk)
       description: |
-        Set publication status on a file. Publishing marks files as ready for production use. Unpublishing automatically purges CDN cache.
-        
-        **When to use:** Use this to control draft vs published status on files. Useful for content workflows where files need approval before going live.
+        Set publication status on multiple files (up to 100). Async operation that returns `jobId` immediately.
         
         **Behavior:**
-        - `publish=true`: Sets `isPublished` metadata to true on the file in S3
-        - `publish=false`: Sets `isPublished=false` AND automatically purges CDN cache for the file URL
-        - `includeFileVersions=true`: Applies the operation to all file versions
-      parameters:
-        - description: |
-            The unique `fileId` of the file. `fileId` is returned in list and search assets API and upload API.
-          in: path
-          name: fileId
-          required: true
-          schema:
-            type: string
+        - `publish=true` marks files as published
+        - `publish=false` marks files as unpublished and purges CDN cache
+        - `includeFileVersions=true` applies to all file versions
+        - Returns `jobId` - use `get_publish_job_status` to check completion
+        - If path policy rejects some files, they're excluded and listed in `errors`
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
               required:
+                - fileIds
                 - publish
               properties:
+                fileIds:
+                  type: array
+                  description: Array of file IDs (max 100).
+                  minItems: 1
+                  maxItems: 100
+                  items:
+                    type: string
+                  example: "507f1f77bcf86cd799439011"
                 publish:
                   type: boolean
-                  description: |
-                    Set to `true` to publish the file, or `false` to unpublish it.
+                  description: true to publish, false to unpublish.
                   example: true
                 includeFileVersions:
                   type: boolean
-                  description: |
-                    When set to `true`, the publish/unpublish operation will apply to all versions of the file. Default value - `false`.
+                  description: Apply to all file versions (default false).
                   example: false
       responses:
         "429":
@@ -2144,14 +2144,33 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
         "200":
-          description: File published/unpublished successfully. Returns an empty object.
+          description: Job created successfully. Returns `jobId` and optional `errors` array for path policy failures.
           content:
             application/json:
               schema:
                 type: object
-                example: {}
+                required:
+                  - jobId
+                properties:
+                  jobId:
+                    type: string
+                    description: Job ID to track operation status.
+                    example: "507f1f77bcf86cd799439013"
+                  errors:
+                    type: array
+                    description: Files rejected by path policy validation.
+                    items:
+                      type: object
+                      properties:
+                        fileId:
+                          type: string
+                        error:
+                          type: string
+                    example:
+                      - fileId: "507f1f77bcf86cd799439011"
+                        error: "Validate function for path policy - 'Production Assets' failed with message: File does not meet quality requirements"
         "404":
-          description: File not found.
+          description: One or more files not found.
           content:
             application/json:
               schema:
@@ -2159,26 +2178,98 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: The requested file does not exist.
+                  missingItems:
+                    type: array
+                    items:
+                      type: string
+        "400":
+          description: Missing/invalid parameters or all files rejected by path policy.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  help:
+                    type: string
+                  errors:
+                    type: array
+                    description: Present when all files rejected by path policy.
+                    items:
+                      type: object
+                      properties:
+                        fileId:
+                          type: string
+                        error:
+                          type: string
+  /api/v2/files/publish/{jobId}:
+    get:
+      tags:
+        - Digital Asset Management (DAM)
+        - Managing assets
+      operationId: get_publish_job_status
+      summary: Get publish job status
+      description: |
+        Check status of a bulk publish job.
+        
+        **When to use:** Poll this after `publish_files_bulk` to check when the operation completes.
+        
+        **Status values:**
+        - `Pending` - Still processing files
+        - `Completed` - All files processed (check file metadata for individual results)
+      parameters:
+        - description: Job ID from `publish_files_bulk` response.
+          in: path
+          name: jobId
+          required: true
+          schema:
+            type: string
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "200":
+          description: Publish job status retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - jobId
+                  - status
+                properties:
+                  jobId:
+                    type: string
+                    example: "507f1f77bcf86cd799439013"
+                  status:
+                    type: string
+                    enum:
+                      - Pending
+                      - Completed
+                    example: "Completed"
+        "404":
+          description: Job not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested job does not exist.
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
         "400":
-          description: Bad request. Missing or invalid parameters.
+          description: Invalid job ID format.
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  message:
-                    type: string
-                    examples:
-                      - Your request is missing 'publish' parameter.
-                      - Parameter 'publish' must be a boolean.
-                      - Parameter 'includeFileVersions' must be a boolean.
-                  help:
-                    type: string
-                    example: For support kindly contact us at support@imagekit.io.
   /api/v2/files/{fileId}/versions:
     get:
       tags:
