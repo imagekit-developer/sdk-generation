@@ -6849,7 +6849,7 @@ components:
               required: [fileId, url, name, path, transformation]
           required: [type, created_at, request, data]
     
-    DamFileCreateEvent:
+    FileCreateEvent:
       allOf:
         - $ref: "#/components/schemas/BaseWebhookEvent"
         - type: object
@@ -6868,7 +6868,7 @@ components:
               $ref: "#/components/schemas/FileDetails"
           required: [type, created_at, data]
     
-    DamFileUpdateEvent:
+    FileUpdateEvent:
       allOf:
         - $ref: "#/components/schemas/BaseWebhookEvent"
         - type: object
@@ -6887,7 +6887,7 @@ components:
               $ref: "#/components/schemas/FileDetails"
           required: [type, created_at, data]
 
-    DamFileVersionCreateEvent:
+    FileVersionCreateEvent:
       allOf:
         - $ref: "#/components/schemas/BaseWebhookEvent"
         - type: object
@@ -6906,7 +6906,7 @@ components:
               $ref: "#/components/schemas/FileDetails"
           required: [type, created_at, data]
 
-    DamFileDeleteEvent:
+    FileDeleteEvent:
       allOf:
         - $ref: "#/components/schemas/BaseWebhookEvent"
         - type: object
@@ -6930,7 +6930,7 @@ components:
               required: [fileId]
           required: [type, created_at, data]
 
-    DamFileVersionDeleteEvent:
+    FileVersionDeleteEvent:
       allOf:
         - $ref: "#/components/schemas/BaseWebhookEvent"
         - type: object
@@ -8658,7 +8658,7 @@ webhooks:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DamFileCreateEvent"
+              $ref: "#/components/schemas/FileCreateEvent"
       responses:
         "200":
           description: Acknowledge
@@ -8674,7 +8674,7 @@ webhooks:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DamFileUpdateEvent"
+              $ref: "#/components/schemas/FileUpdateEvent"
       responses:
         "200":
           description: Acknowledge
@@ -8690,7 +8690,7 @@ webhooks:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DamFileDeleteEvent"
+              $ref: "#/components/schemas/FileDeleteEvent"
       responses:
         "200":
           description: Acknowledge
@@ -8706,7 +8706,7 @@ webhooks:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DamFileVersionCreateEvent"
+              $ref: "#/components/schemas/FileVersionCreateEvent"
       responses:
         "200":
           description: Acknowledge
@@ -8722,7 +8722,7 @@ webhooks:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DamFileVersionDeleteEvent"
+              $ref: "#/components/schemas/FileVersionDeleteEvent"
       responses:
         "200":
           description: Acknowledge
