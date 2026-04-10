@@ -187,18 +187,38 @@ resources:
       delete_path_policy: delete /api/clients/{clientNumber}/path-policy/{policyId}
       
       # Origins
-      list_origins: get /api/v1/accounts/origins
-      create_origin: post /api/v1/accounts/origins
-      get_origin: get /api/v1/accounts/origins/{id}
-      update_origin: put /api/v1/accounts/origins/{id}
-      delete_origin: delete /api/v1/accounts/origins/{id}
+      list_origins:
+        endpoint: get /api/v1/accounts/origins
+        skip: true
+      create_origin:
+        endpoint: post /api/v1/accounts/origins
+        skip: true
+      get_origin:
+        endpoint: get /api/v1/accounts/origins/{id}
+        skip: true
+      update_origin:
+        endpoint: put /api/v1/accounts/origins/{id}
+        skip: true
+      delete_origin:
+        endpoint: delete /api/v1/accounts/origins/{id}
+        skip: true
       
       # URL endpoints
-      list_url_endpoints: get /api/v1/accounts/url-endpoints
-      create_url_endpoint: post /api/v1/accounts/url-endpoints
-      get_url_endpoint: get /api/v1/accounts/url-endpoints/{id}
-      update_url_endpoint: put /api/v1/accounts/url-endpoints/{id}
-      delete_url_endpoint: delete /api/v1/accounts/url-endpoints/{id}
+      list_url_endpoints:
+        endpoint: get /api/v1/accounts/url-endpoints
+        skip: true
+      create_url_endpoint:
+        endpoint: post /api/v1/accounts/url-endpoints
+        skip: true
+      get_url_endpoint:
+        endpoint: get /api/v1/accounts/url-endpoints/{id}
+        skip: true
+      update_url_endpoint:
+        endpoint: put /api/v1/accounts/url-endpoints/{id}
+        skip: true
+      delete_url_endpoint:
+        endpoint: delete /api/v1/accounts/url-endpoints/{id}
+        skip: true
       
       # Account
       get_account_usage: get /api/v1/accounts/usage
