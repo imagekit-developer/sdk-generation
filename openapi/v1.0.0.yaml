@@ -6903,7 +6903,7 @@ components:
               format: date-time
               description: Timestamp of when the event occurred in ISO8601 format.
             data:
-              $ref: "#/components/schemas/FileVersionDetails"
+              $ref: "#/components/schemas/FileDetails"
           required: [type, created_at, data]
 
     DamFileDeleteEvent:
