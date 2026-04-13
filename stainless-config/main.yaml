@@ -121,6 +121,21 @@ resources:
         openapi_uri: '#/components/schemas/SubtitleOverlayTransformation'
       SolidColorOverlayTransformation:
         openapi_uri: '#/components/schemas/SolidColorOverlayTransformation'
+      AITag:
+        openapi_uri: '#/components/schemas/AITag'
+        only: [go, ruby]
+      VersionInfo:
+        openapi_uri: '#/components/schemas/VersionInfo'
+        only: [go, ruby]
+      SelectedFieldsSchema:
+        openapi_uri: '#/components/schemas/SelectedFieldsSchema'
+        only: [go, ruby]
+      CustomMetadata:
+        openapi_uri: '#/components/schemas/CustomMetadata'
+        only: [go, ruby]
+      EmbeddedMetadata:
+        openapi_uri: '#/components/schemas/EmbeddedMetadata'
+        only: [go, ruby]
 
   dummy:
     only:
