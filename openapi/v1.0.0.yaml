@@ -324,6 +324,7 @@ paths:
                           x-stainless-variantName: Mixed
                           title: Mixed
                           items:
+                            title: Default value item
                             oneOf:
                               - type: string
                               - type: number
@@ -732,6 +733,7 @@ paths:
                           x-stainless-variantName: Mixed
                           title: Mixed
                           items:
+                            title: Default value item
                             oneOf:
                               - type: string
                               - type: number
@@ -5640,6 +5642,7 @@ components:
                     x-stainless-variantName: Mixed
                     title: Mixed
                     items:
+                      title: Metadata value item
                       oneOf:
                         - type: string
                         - type: number
@@ -5751,6 +5754,7 @@ components:
       title: Extensions Array
       type: array
       items:
+        title: Extension item
         discriminator:
           propertyName: name
         anyOf:
@@ -6411,6 +6415,7 @@ components:
                   x-stainless-variantName: Mixed
                   title: Mixed
                   items:
+                    title: Default value item
                     oneOf:
                       - type: string
                       - type: number
