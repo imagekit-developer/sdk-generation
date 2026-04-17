@@ -324,6 +324,7 @@ paths:
                           x-stainless-variantName: Mixed
                           title: Mixed
                           items:
+                            title: Default value item
                             oneOf:
                               - type: string
                               - type: number
@@ -732,6 +733,7 @@ paths:
                           x-stainless-variantName: Mixed
                           title: Mixed
                           items:
+                            title: Default value item
                             oneOf:
                               - type: string
                               - type: number
@@ -5640,6 +5642,7 @@ components:
                     x-stainless-variantName: Mixed
                     title: Mixed
                     items:
+                      title: Metadata value item
                       oneOf:
                         - type: string
                         - type: number
@@ -5751,6 +5754,7 @@ components:
       title: Extensions Array
       type: array
       items:
+        title: Extension item
         discriminator:
           propertyName: name
         anyOf:
@@ -6411,6 +6415,7 @@ components:
                   x-stainless-variantName: Mixed
                   title: Mixed
                   items:
+                    title: Default value item
                     oneOf:
                       - type: string
                       - type: number
@@ -7322,19 +7327,23 @@ components:
             An array of resolutions for adaptive bitrate streaming, e.g., [`240`, `360`, `480`, `720`, `1080`].
             See [Adaptive Bitrate Streaming](https://imagekit.io/docs/adaptive-bitrate-streaming).
         grayscale:
+          title: Enable
           const: true
           description: Enables a grayscale effect for images. See [Grayscale](https://imagekit.io/docs/effects-and-enhancements#grayscale---e-grayscale).
         aiUpscale:
+          title: Enable
           const: true
           description: |
             Upscales images beyond their original dimensions using AI. Not supported inside overlay.
             See [AI Upscale](https://imagekit.io/docs/ai-transformations#upscale-e-upscale).
         aiRetouch:
+          title: Enable
           const: true
           description: |
             Performs AI-based retouching to improve faces or product shots. Not supported inside overlay.
             See [AI Retouch](https://imagekit.io/docs/ai-transformations#retouch-e-retouch).
         aiVariation:
+          title: Enable
           const: true
           description: |
             Generates a variation of an image using AI. This produces a new image with slight variations from the original, 
@@ -7342,7 +7351,8 @@ components:
             See [AI Generate Variations](https://imagekit.io/docs/ai-transformations#generate-variations-of-an-image-e-genvar).
         aiDropShadow:
           oneOf:
-            - const: true
+            - title: Default
+              const: true
             - type: string
           description: |
             Adds an AI-based drop shadow around a foreground object on a transparent or removed background. 
@@ -7358,12 +7368,14 @@ components:
             Not supported inside overlay.
             See [AI Change Background](https://imagekit.io/docs/ai-transformations#change-background-e-changebg).
         aiRemoveBackground:
+          title: Enable
           const: true
           description: |
             Applies ImageKit's in-house background removal. 
             Supported inside overlay.
             See [AI Background Removal](https://imagekit.io/docs/ai-transformations#imagekit-background-removal-e-bgremove).
         aiRemoveBackgroundExternal:
+          title: Enable
           const: true
           description: |
             Uses third-party background removal. 
@@ -7378,13 +7390,15 @@ components:
             Not supported inside overlay.    
             See [AI Edit](https://imagekit.io/docs/ai-transformations#edit-image-e-edit).
         contrastStretch:
+          title: Enable
           const: true
           description: |
             Automatically enhances the contrast of an image (contrast stretch).
             See [Contrast Stretch](https://imagekit.io/docs/effects-and-enhancements#contrast-stretch---e-contrast).
         shadow:
           oneOf:
-            - const: true
+            - title: Default
+              const: true
             - type: string
           description: |
             Adds a shadow beneath solid objects in an image with a transparent background. 
@@ -7393,7 +7407,8 @@ components:
             See [Shadow](https://imagekit.io/docs/effects-and-enhancements#shadow---e-shadow).
         sharpen:
           oneOf:
-            - const: true
+            - title: Default
+              const: true
             - type: number
           description: |
             Sharpens the input image, highlighting edges and finer details. 
@@ -7401,7 +7416,8 @@ components:
             See [Sharpen](https://imagekit.io/docs/effects-and-enhancements#sharpen---e-sharpen).
         unsharpMask:
           oneOf:
-            - const: true
+            - title: Default
+              const: true
             - type: string
           description: |
             Applies Unsharp Masking (USM), an image sharpening technique. 
@@ -7409,7 +7425,8 @@ components:
             See [Unsharp Mask](https://imagekit.io/docs/effects-and-enhancements#unsharp-mask---e-usm).
         gradient:
           oneOf:
-            - const: true
+            - title: Default
+              const: true
             - type: string
           description: |
             Creates a linear gradient with two colors. Pass `true` for a default gradient, or provide a string for a custom gradient.
@@ -7443,7 +7460,8 @@ components:
           description: Specifies the opacity level of the output image. See [Opacity](https://imagekit.io/docs/effects-and-enhancements#opacity---o).
         trim:
           oneOf:
-            - const: true
+            - title: Default
+              const: true
             - type: number
           description: |
             Useful for images with a solid or nearly solid background and a central object. This parameter trims the background, 
@@ -7963,7 +7981,8 @@ components:
             Specifies the background color of the solid color overlay. Accepts an RGB hex code (e.g., `FF0000`), an RGBA code (e.g., `FFAABB50`), or a color name.
         gradient:
           oneOf:
-            - const: true
+            - title: Default
+              const: true
             - type: string
           description: |
             Creates a linear gradient with two colors. Pass `true` for a default gradient, or provide a string for a custom gradient.
