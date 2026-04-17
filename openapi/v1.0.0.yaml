@@ -5300,6 +5300,9 @@ components:
     TransformationObject:
       type: object
       additionalProperties: false
+      x-stainless-naming:
+        java:
+          type_name: UploadTransformation
       description: |
         Configure pre-processing (`pre`) and post-processing (`post`) transformations.
 
@@ -6212,6 +6215,9 @@ components:
           type: integer
     ExifDetails:
       description: Object containing Exif details.
+      x-stainless-naming:
+        java:
+          type_name: ExifDetails
       type: object
       properties:
         ExposureTime:

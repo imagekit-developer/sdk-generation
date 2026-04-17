@@ -123,19 +123,19 @@ resources:
         openapi_uri: '#/components/schemas/SolidColorOverlayTransformation'
       AITag:
         openapi_uri: '#/components/schemas/AITag'
-        only: [go, ruby]
+        only: [go, ruby, java]
       VersionInfo:
         openapi_uri: '#/components/schemas/VersionInfo'
-        only: [go, ruby]
+        only: [go, ruby, java]
       SelectedFieldsSchema:
         openapi_uri: '#/components/schemas/SelectedFieldsSchema'
-        only: [go, ruby]
+        only: [go, ruby, java]
       CustomMetadata:
         openapi_uri: '#/components/schemas/CustomMetadata'
-        only: [go, ruby]
+        only: [go, ruby, java]
       EmbeddedMetadata:
         openapi_uri: '#/components/schemas/EmbeddedMetadata'
-        only: [go, ruby]
+        only: [go, ruby, java]
 
   dummy:
     only:
