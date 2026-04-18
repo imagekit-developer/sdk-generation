@@ -81,6 +81,9 @@ resources:
     models:
       Extensions:
         openapi_uri: '#/components/schemas/Extensions'
+      ExtensionItem:
+        openapi_uri: '#/components/schemas/Extensions/items'
+        only: [java]
       SavedExtension:
         openapi_uri: '#/components/schemas/SavedExtension'
       ExtensionConfig:

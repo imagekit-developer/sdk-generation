@@ -5754,7 +5754,6 @@ components:
       title: Extensions Array
       type: array
       items:
-        title: Extension item
         discriminator:
           propertyName: name
         anyOf:
