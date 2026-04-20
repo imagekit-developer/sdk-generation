@@ -49,6 +49,7 @@ targets:
     # production_repo: imagekit-developer/imagekit-java#master
     publish:
       maven: false
+    production_repo: imagekit-developer/imagekit-java#master
   ruby:
     gem_name: imagekitio
     # production_repo: imagekit-developer/imagekit-ruby#master
@@ -89,7 +90,7 @@ resources:
         openapi_uri: '#/components/schemas/Extensions'
       ExtensionItem:
         openapi_uri: '#/components/schemas/Extensions/items'
-        only: [java]
+        only: [ java ]
       SavedExtension:
         openapi_uri: '#/components/schemas/SavedExtension'
       ExtensionConfig:
@@ -132,19 +133,19 @@ resources:
         openapi_uri: '#/components/schemas/SolidColorOverlayTransformation'
       AITag:
         openapi_uri: '#/components/schemas/AITag'
-        only: [go, ruby, java]
+        only: [ go, ruby, java ]
       VersionInfo:
         openapi_uri: '#/components/schemas/VersionInfo'
-        only: [go, ruby, java]
+        only: [ go, ruby, java ]
       SelectedFieldsSchema:
         openapi_uri: '#/components/schemas/SelectedFieldsSchema'
-        only: [go, ruby, java]
+        only: [ go, ruby, java ]
       CustomMetadata:
         openapi_uri: '#/components/schemas/CustomMetadata'
-        only: [go, ruby, java]
+        only: [ go, ruby, java ]
       EmbeddedMetadata:
         openapi_uri: '#/components/schemas/EmbeddedMetadata'
-        only: [go, ruby, java]
+        only: [ go, ruby, java ]
 
   dummy:
     only:
