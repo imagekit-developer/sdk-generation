@@ -65,6 +65,12 @@ targets:
       hashicorp_registry: false
     options:
       infer_all_services: false
+  kotlin:
+    edition: kotlin.2025-10-08
+    reverse_domain: com.imagekit.api
+    production_repo: null
+    publish:
+      maven: false
 
 # `environments` are a map of the name of the environment (e.g. "sandbox",
 # "production") to the corresponding url to use.
