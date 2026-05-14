@@ -7428,6 +7428,320 @@ paths:
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
+  /api/creative-templates:
+    get:
+      tags:
+        - Digital Asset Management (DAM)
+        - Creative Templates
+        - ImageKit Editor
+      operationId: list_creative_templates
+      summary: List creative templates
+      description: |
+        Returns creative templates visible to the current user for the authenticated account.
+        Pinned templates for the current user appear first, then remaining templates sorted by `updatedAt` descending.
+
+        **When to use:** Discover reusable creative templates before applying them to assets or building URLs.
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "200":
+          description: Ordered list of creative templates.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CreativeTemplate"
+    post:
+      tags:
+        - Digital Asset Management (DAM)
+        - Creative Templates
+        - ImageKit Editor
+      operationId: create_creative_template
+      summary: Create a creative template
+      description: |
+        Creates a new creative template with a name and / or ordered transformation steps.
+
+        **When to use:** Save a transformation pipeline (e.g. resize, watermark, effects) as a reusable preset which can be applied to assets or building URLs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCreativeTemplate"
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "201":
+          description: Template created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreativeTemplate"
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid request body.
+  /api/creative-templates/{id}:
+    get:
+      tags:
+        - Digital Asset Management (DAM)
+        - Creative Templates
+        - ImageKit Editor
+      operationId: get_creative_template
+      summary: Get creative template by ID
+      description: |
+        Returns a single template if it exists and the current user may view it (public templates or private templates they created).
+
+        **When to use:** Get the details of a creative template to inspect it before applying it to assets or building URLs.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Template ID (UUID v4).
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "200":
+          description: Template details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreativeTemplate"
+        "404":
+          description: Creative template not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Creative template not found.
+        "400":
+          description: Invalid template ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid template id. Expected a UUID v4 string.
+    patch:
+      tags:
+        - Digital Asset Management (DAM)
+        - Creative Templates
+        - ImageKit Editor
+      operationId: update_creative_template
+      summary: Update a creative template
+      description: |
+        Partially updates a template. At least one of `name`, `isPrivate`, or `transformations` must be provided.
+
+        **When to use:** Update the name, visibility, and / or transformation steps of a creative template.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Template ID (UUID v4).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCreativeTemplate"
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User is not allowed to perform the requested operation.
+        "200":
+          description: Template updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreativeTemplate"
+        "404":
+          description: Template not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Creative template not found.
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid request body.
+    delete:
+      tags:
+        - Digital Asset Management (DAM)
+        - Creative Templates
+        - ImageKit Editor
+      operationId: delete_creative_template
+      summary: Delete a creative template
+      description: |
+        Deletes a creative template. Only the creator may delete (public templates included).
+
+        **When to use:** Delete a creative template that is no longer needed.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Template ID (UUID v4).
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User is not allowed to perform the requested operation.
+        "200":
+          description: Template deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteCreativeTemplateResponse"
+        "404":
+          description: Template not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Creative template not found.
+        "400":
+          description: Invalid template ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid template id. Expected a UUID v4 string.
+  /api/creative-templates/{id}/pin:
+    put:
+      tags:
+        - Digital Asset Management (DAM)
+        - Creative Templates
+        - ImageKit Editor
+      operationId: pin_creative_template
+      summary: Pin or unpin a creative template
+      description: |
+        Sets whether the current user has pinned the template for quicker access in list views.
+
+        **When to use:** Pin a creative template for quicker access in list views. Unpin a creative template to remove it from the pinned list.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Template ID (UUID v4).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PinCreativeTemplateRequest"
+      responses:
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User is not allowed to perform the requested operation.
+        "200":
+          description: Updated template with pin state for the current user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreativeTemplate"
+        "404":
+          description: Template not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Creative template not found.
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid request body.
   /api/v1/accounts/usage:
     get:
       tags:
@@ -9643,6 +9957,166 @@ components:
           type: string
           format: date-time
           description: Timestamp when the saved extension was last updated.
+    CreativeTemplateCreator:
+      title: Creative Template Creator
+      type: object
+      required:
+        - userId
+        - name
+        - email
+      properties:
+        userId:
+          type: string
+          description: Dashboard user ID of the actor.
+        name:
+          type: string
+          description: Display name of the actor.
+        email:
+          type: string
+          format: email
+          description: Email of the actor.
+    CreativeTemplateTransformationStep:
+      title: Creative Template Transformation Step
+      type: object
+      additionalProperties: false
+      required:
+        - type
+        - name
+        - key
+        - value
+        - version
+      properties:
+        type:
+          type: string
+          minLength: 1
+          description: Step category (e.g. transformation family).
+        name:
+          type: string
+          minLength: 1
+          description: Human-readable step name.
+        key:
+          type: string
+          minLength: 1
+          description: Transformation or effect key.
+        value:
+          type: object
+          additionalProperties: true
+          description: Parameters for the transformation step.
+        version:
+          type: string
+          enum:
+            - v1
+          description: Schema version for the step payload.
+        enabled:
+          type: boolean
+          description: When false, the step may be ignored by clients that support it i.e. this step will not be applied to the transformation pipeline.
+    CreativeTemplate:
+      title: Creative Template
+      description: A reusable template for creating creative assets using ImageKit's URL-based transformations.
+      type: object
+      required:
+        - id
+        - clientNumber
+        - isPrivate
+        - name
+        - transformations
+        - isPinned
+        - createdBy
+        - updatedBy
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique template ID (UUID v4).
+        clientNumber:
+          type: string
+          description: Client number of the account this template belongs to.
+        isPrivate:
+          type: boolean
+          description: When true, only the creator has access to the template.
+        name:
+          type: string
+          description: Template display name.
+        transformations:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreativeTemplateTransformationStep"
+          description: Ordered transformation steps applied when using the template.
+        isPinned:
+          type: boolean
+          description: Whether the current user has pinned this template.
+        createdBy:
+          $ref: "#/components/schemas/CreativeTemplateCreator"
+        updatedBy:
+          $ref: "#/components/schemas/CreativeTemplateCreator"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CreateCreativeTemplate:
+      title: Create Creative Template
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - transformations
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Template display name.
+        transformations:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreativeTemplateTransformationStep"
+        isPrivate:
+          type: boolean
+          description: When true, the template is visible only to its creator.
+        pinnedBy:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          description: Optional list of user IDs that should treat the template as pinned on create.
+    UpdateCreativeTemplate:
+      title: Update Creative Template
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          minLength: 1
+        isPrivate:
+          type: boolean
+        transformations:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreativeTemplateTransformationStep"
+    PinCreativeTemplateRequest:
+      title: Pin Creative Template Request
+      type: object
+      additionalProperties: false
+      required:
+        - isPinned
+      properties:
+        isPinned:
+          type: boolean
+          description: When true, pins the template for the current user; when false, unpins it.
+    DeleteCreativeTemplateResponse:
+      title: Delete Creative Template Response
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the template that was deleted.
     Extensions:
       title: Extensions Array
       type: array

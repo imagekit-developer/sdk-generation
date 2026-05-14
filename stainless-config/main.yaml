@@ -55,6 +55,13 @@ resources:
       
       # Extension models
       saved_extension: '#/components/schemas/SavedExtension'
+      creative_template: '#/components/schemas/CreativeTemplate'
+      creative_template_creator: '#/components/schemas/CreativeTemplateCreator'
+      creative_template_transformation_step: '#/components/schemas/CreativeTemplateTransformationStep'
+      creative_template_create_body: '#/components/schemas/CreateCreativeTemplate'
+      creative_template_update_body: '#/components/schemas/UpdateCreativeTemplate'
+      pin_creative_template_request: '#/components/schemas/PinCreativeTemplateRequest'
+      delete_creative_template_response: '#/components/schemas/DeleteCreativeTemplateResponse'
       removedot_bg_extension: '#/components/schemas/RemovedotBGExtension'
       auto_tagging_extension: '#/components/schemas/AutoTaggingExtension'
       auto_description_extension: '#/components/schemas/AutoDescriptionExtension'
@@ -159,6 +166,14 @@ resources:
       get_saved_extension: get /api/v1/saved-extensions/{id}
       update_saved_extension: patch /api/v1/saved-extensions/{id}
       delete_saved_extension: delete /api/v1/saved-extensions/{id}
+      
+      # Creative templates (media library transformation presets)
+      list_creative_templates: get /api/creative-templates
+      create_creative_template: post /api/creative-templates
+      get_creative_template: get /api/creative-templates/{id}
+      update_creative_template: patch /api/creative-templates/{id}
+      delete_creative_template: delete /api/creative-templates/{id}
+      pin_creative_template: put /api/creative-templates/{id}/pin
       
       # Downloads
       list_zip_downloads: get /api/v1/download
