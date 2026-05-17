@@ -37,7 +37,7 @@ targets:
     package_name: Imagekit
     publish:
       nuget: false
-    # production_repo: imagekit-developer/imagekit-dotnet#master
+    production_repo: imagekit-developer/imagekit-dotnet#master
   go:
     package_name: imagekit
     # production_repo: imagekit-developer/imagekit-go#master
@@ -47,7 +47,7 @@ targets:
   java:
     reverse_domain: io.imagekit
     publish:
-      maven: 
+      maven:
         sonatype_platform: portal
     production_repo: imagekit-developer/imagekit-java#master
   ruby:
@@ -90,7 +90,7 @@ resources:
         openapi_uri: '#/components/schemas/Extensions'
       ExtensionItem:
         openapi_uri: '#/components/schemas/Extensions/items'
-        only: [ java, ruby ]
+        only: [ java, ruby, csharp ]
       SavedExtension:
         openapi_uri: '#/components/schemas/SavedExtension'
       ExtensionConfig:
