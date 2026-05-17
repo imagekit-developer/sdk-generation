@@ -15,7 +15,7 @@ targets:
   csharp:
     package_name: Imagekit
     publish:
-      nuget: false
+      nuget: true
     production_repo: imagekit-developer/imagekit-dotnet#master
 
 # `environments` are a map of the name of the environment (e.g. "sandbox",
@@ -306,11 +306,6 @@ diagnostics:
   ignored:
     Pagination/NotConfigured:
       - "#/pagination"
-    ReadmeExample/MissingParam:
-      - (resource) files > (method) upload
     Model/Recommended: true
     Model/IsConstant: true
-    Java/SchemaUnionDiscriminatorMissing:
-      - (resource) files > (method) update > (params) default > (param) update > (schema)
-    Ruby/NameShadowedBuiltin: true
     Name/Collision: true
