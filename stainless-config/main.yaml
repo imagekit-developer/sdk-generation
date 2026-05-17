@@ -12,66 +12,11 @@ organization:
 # `targets` define the output targets and their customization options, such as
 # whether to emit the Node SDK and what it's package name should be.
 targets:
-  typescript:
-    package_name: "@imagekit/nodejs"
-    production_repo: imagekit-developer/imagekit-nodejs#master
-    publish:
-      npm: true
-    options:
-      mcp_server:
-        package_name: "@imagekit/api-mcp"
-        enable_all_resources: true
-        generate_cloudflare_worker: true
-  python:
-    package_name: imagekitio
-    publish:
-      pypi: true
-    production_repo: imagekit-developer/imagekit-python#master
-    project_name: imagekitio
-    # production_repo: imagekit-developer/imagekit-python#master
-  php:
-    package_name: imagekit
-    composer_package_name: 'imagekit/imagekit'
-    # production_repo: imagekit-developer/imagekit-php#master
   csharp:
     package_name: Imagekit
     publish:
       nuget: false
     production_repo: imagekit-developer/imagekit-dotnet#master
-  go:
-    package_name: imagekit
-    # production_repo: imagekit-developer/imagekit-go#master
-    options:
-      enable_v2: true
-    production_repo: imagekit-developer/imagekit-go#master
-  java:
-    reverse_domain: io.imagekit
-    publish:
-      maven:
-        sonatype_platform: portal
-    production_repo: imagekit-developer/imagekit-java#master
-  ruby:
-    gem_name: imagekitio
-    # production_repo: imagekit-developer/imagekit-ruby#master
-    publish:
-      rubygems: true
-    production_repo: imagekit-developer/imagekit-ruby#master
-  cli:
-    binary_name: imagekit
-    production_repo: null
-  terraform:
-    provider_name: imagekit
-    production_repo: null
-    publish:
-      hashicorp_registry: false
-    options:
-      infer_all_services: false
-  kotlin:
-    edition: kotlin.2025-10-08
-    reverse_domain: io.imagekit
-    production_repo: null
-    publish:
-      maven: false
 
 # `environments` are a map of the name of the environment (e.g. "sandbox",
 # "production") to the corresponding url to use.
