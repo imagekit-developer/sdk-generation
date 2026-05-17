@@ -151,6 +151,7 @@ resources:
     only:
       - go
       - python
+      - csharp
     methods:
       create: post /v1/dummy/test
 
