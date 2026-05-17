@@ -45,10 +45,10 @@ targets:
       enable_v2: true
     production_repo: imagekit-developer/imagekit-go#master
   java:
-    reverse_domain: com.imagekit.api
-    # production_repo: imagekit-developer/imagekit-java#master
+    reverse_domain: io.imagekit
     publish:
-      maven: false
+      maven: 
+        sonatype_platform: portal
     production_repo: imagekit-developer/imagekit-java#master
   ruby:
     gem_name: imagekitio
@@ -90,7 +90,7 @@ resources:
         openapi_uri: '#/components/schemas/Extensions'
       ExtensionItem:
         openapi_uri: '#/components/schemas/Extensions/items'
-        only: [ java ]
+        only: [ java, ruby ]
       SavedExtension:
         openapi_uri: '#/components/schemas/SavedExtension'
       ExtensionConfig:
