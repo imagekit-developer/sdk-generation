@@ -7174,11 +7174,11 @@ components:
           example: "5_FF0000"
         crop:
           type: string
-          enum: ["force", "at_max", "at_max_enlarge", "at_least", "maintain_ratio"]
+          enum: ["force", "at_max", "at_max_enlarge", "at_least", "maintain_ratio", "maintain_ratio_no_enlarge"]
           description: Crop modes for image resizing. See [Crop modes & focus](https://imagekit.io/docs/image-resize-and-crop#crop-crop-modes--focus).
         cropMode:
           type: string
-          enum: ["pad_resize", "extract", "pad_extract"]
+          enum: ["pad_resize", "extract", "pad_extract" , "pad_resize_no_enlarge", "pad_extract_no_shrink"]
           description: Additional crop modes for image resizing. See [Crop modes & focus](https://imagekit.io/docs/image-resize-and-crop#crop-crop-modes--focus).
         dpr:
           type: number
@@ -7477,6 +7477,14 @@ components:
             - `toColor_tolerance_fromColor` - Replace a specific color with another within tolerance range.
             Colors can be hex codes (e.g., `FF0022`) or names (e.g., `red`, `blue`).
             See [Color replacement](https://imagekit.io/docs/effects-and-enhancements#color-replace---cr).
+        colorize:
+          type: string
+          description: |
+            Applies a color tint to the image. Accepts color and intensity as optional parameters.
+            - `co-color` - Color to apply (e.g., `red`, `blue`, `FF0022`). Default is gray color.
+            - `in-intensity` - Intensity of the color (0-100). Default is 35.
+            See [Colorize](https://imagekit.io/docs/effects-and-enhancements#colorize---e-colorize).
+
         distort:
           type: string
           description: |
