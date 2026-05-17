@@ -34,7 +34,7 @@ targets:
     composer_package_name: 'imagekit/imagekit'
     # production_repo: imagekit-developer/imagekit-php#master
   csharp:
-    package_name: ImageKit
+    package_name: Imagekit
     publish:
       nuget: false
     # production_repo: imagekit-developer/imagekit-dotnet#master
@@ -68,7 +68,7 @@ targets:
       infer_all_services: false
   kotlin:
     edition: kotlin.2025-10-08
-    reverse_domain: com.imagekit.api
+    reverse_domain: io.imagekit
     production_repo: null
     publish:
       maven: false
