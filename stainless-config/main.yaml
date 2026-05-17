@@ -313,3 +313,4 @@ diagnostics:
     Java/SchemaUnionDiscriminatorMissing:
       - (resource) files > (method) update > (params) default > (param) update > (schema)
     Ruby/NameShadowedBuiltin: true
+    Name/Collision: true
