@@ -6177,17 +6177,24 @@ components:
     ExifImage:
       description: Object containing EXIF image information.
       type: object
+      additionalProperties: true
       properties:
         Make:
           type: string
         Model:
           type: string
+        ImageDescription:
+          type: string
+        Artist:
+          type: string
+        Copyright:
+          type: string
         Orientation:
           type: integer
         XResolution:
-          type: integer
+          type: number
         YResolution:
-          type: integer
+          type: number
         ResolutionUnit:
           type: integer
         Software:
@@ -6203,13 +6210,14 @@ components:
     Thumbnail:
       description: Object containing Thumbnail information.
       type: object
+      additionalProperties: true
       properties:
         Compression:
           type: integer
         XResolution:
-          type: integer
+          type: number
         YResolution:
-          type: integer
+          type: number
         ResolutionUnit:
           type: integer
         ThumbnailOffset:
@@ -6222,6 +6230,7 @@ components:
         java:
           type_name: ExifDetails
       type: object
+      additionalProperties: true
       properties:
         ExposureTime:
           type: number
@@ -6247,8 +6256,24 @@ components:
           type: integer
         Flash:
           type: integer
-        FocalLength:
+        BrightnessValue:
+          type: number
+        MaxApertureValue:
+          type: number
+        LightSource:
           type: integer
+        FocalLength:
+          type: number
+        UserComment:
+          type: string
+        SensingMethod:
+          type: integer
+        SceneType:
+          type: string
+        FocalLengthIn35mmFormat:
+          type: integer
+        LensModel:
+          type: string
         SubSecTime:
           type: string
         FlashpixVersion:
@@ -6278,14 +6303,42 @@ components:
     Gps:
       description: Object containing GPS information.
       type: object
+      additionalProperties: true
       properties:
         GPSVersionID:
           type: array
           items:
             type: integer
+        GPSLatitudeRef:
+          type: string
+        GPSLatitude:
+          type: array
+          items:
+            type: number
+        GPSLongitudeRef:
+          type: string
+        GPSLongitude:
+          type: array
+          items:
+            type: number
+        GPSAltitudeRef:
+          type: integer
+        GPSAltitude:
+          type: number
+        GPSTimeStamp:
+          type: array
+          items:
+            type: number
+        GPSImgDirectionRef:
+          type: string
+        GPSImgDirection:
+          type: number
+        GPSDateStamp:
+          type: string
     Interoperability:
       description: JSON object.
       type: object
+      additionalProperties: true
       properties:
         InteropIndex:
           type: string
@@ -6294,6 +6347,7 @@ components:
     Metadata:
       description: JSON object containing metadata.
       type: object
+      additionalProperties: true
       properties:
         height:
           type: integer
@@ -6336,6 +6390,7 @@ components:
           description: The video codec used in the video (only for video).
         exif:
           type: object
+          additionalProperties: true
           properties:
             image:
               $ref: "#/components/schemas/ExifImage"
