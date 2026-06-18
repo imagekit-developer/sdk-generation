@@ -11241,8 +11241,8 @@ components:
               type: string
               description: |
                 JavaScript function code for the validation hook.
-                Receives `(operation, payload, user)` and can throw to reject the operation.
-              example: "function handler(operation, payload, user) {\n}"
+                Receives `(operation, payload, user, asset)` and can throw to reject the operation.
+              example: "function handler(operation, payload, user, asset) {\n}"
             customMetadataFields:
               type: array
               description: |
@@ -11304,8 +11304,8 @@ components:
           type: string
           description: |
             JavaScript function code for the validation hook. Required when `validateFunctionEnabled` is `true`.
-            The function signature is `function handler(operation, payload, user)`.
-          example: "function handler(operation, payload, user) {\n}"
+            The function signature is `function handler(operation, payload, user, asset)`.
+          example: "function handler(operation, payload, user, asset) {\n}"
         customMetadataFields:
           type: array
           uniqueItems: true
@@ -11358,7 +11358,7 @@ components:
               description: |
                 JavaScript function code for the validation hook (as submitted).
                 Present only when `validateFunctionEnabled` is `true`.
-              example: "function handler(operation, payload, user) {\n}"
+              example: "function handler(operation, payload, user, asset) {\n}"
             customMetadataFields:
               type: array
               items:
