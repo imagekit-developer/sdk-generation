@@ -4026,17 +4026,25 @@ components:
               default: ""
               type: string
               maxLength: 100
+            useIAMRole:
+              description: >
+                Use IAM role for authentication instead of access/secret keys.
+                When set to `true`, send an empty string for both `accessKey` and
+                `secretKey`.
+              example: true
+              default: false
+              type: boolean
             accessKey:
-              description: Access key for the bucket.
+              description: >
+                Access key for the bucket. When `useIAMRole` is `true`, send an empty string.
               example: AKIAIOSFODNN7EXAMPLE
               type: string
-              minLength: 1
               maxLength: 100
             secretKey:
-              description: Secret key for the bucket.
+              description: >
+                  Secret key for the bucket. When `useIAMRole` is `true`, send an empty string.
               example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
               type: string
-              minLength: 1
               maxLength: 100
           required:
             - name
@@ -4145,17 +4153,25 @@ components:
               default: ""
               type: string
               maxLength: 100
+            useIAMRole:
+              description: >
+                Use IAM role for authentication instead of access/secret keys.
+                When set to `true`, send an empty string for both `accessKey` and
+                `secretKey`.
+              example: true
+              default: false
+              type: boolean
             accessKey:
-              description: Access key for the bucket.
+              description: >
+                Access key for the bucket. When `useIAMRole` is `true`, send an empty string.
               example: AKIAIOSFODNN7EXAMPLE
               type: string
-              minLength: 1
               maxLength: 100
             secretKey:
-              description: Secret key for the bucket.
+              description: >
+                Secret key for the bucket. When `useIAMRole` is `true`, send an empty string.
               example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
               type: string
-              minLength: 1
               maxLength: 100
           required:
             - name
@@ -4428,6 +4444,14 @@ components:
               type: string
               description: Path prefix inside the bucket.
               example: raw-assets
+            useIAMRole:
+              description: >
+                Whether the origin authenticates using an IAM role instead of
+                access/secret keys. When `true`, the access and secret keys are
+                empty.
+              example: true
+              default: false
+              type: boolean
             id:
               readOnly: true
               description:
@@ -4534,6 +4558,14 @@ components:
               type: string
               description: Path prefix inside the bucket.
               example: raw-assets
+            useIAMRole:
+              description: >
+                Whether the origin authenticates using an IAM role instead of
+                access/secret keys. When `true`, the access and secret keys are
+                empty.
+              example: true
+              default: false
+              type: boolean
             id:
               readOnly: true
               description:
