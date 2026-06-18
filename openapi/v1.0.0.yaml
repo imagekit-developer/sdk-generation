@@ -4447,8 +4447,7 @@ components:
                 Whether the origin authenticates using an IAM role instead of
                 access/secret keys. When `true`, the access and secret keys are
                 empty.
-              example: true
-              default: false
+              example: true false
               type: boolean
             id:
               readOnly: true
@@ -4561,8 +4560,7 @@ components:
                 Whether the origin authenticates using an IAM role instead of
                 access/secret keys. When `true`, the access and secret keys are
                 empty.
-              example: true
-              default: false
+              example: true false
               type: boolean
             id:
               readOnly: true
