@@ -4445,9 +4445,9 @@ components:
             useIAMRole:
               description: >
                 Whether the origin authenticates using an IAM role instead of
-                access/secret keys. When `true`, the access and secret keys are
-                empty.
-              example: true false
+                access/secret keys.
+              example: true
+              default: false
               type: boolean
             id:
               readOnly: true
@@ -4558,9 +4558,9 @@ components:
             useIAMRole:
               description: >
                 Whether the origin authenticates using an IAM role instead of
-                access/secret keys. When `true`, the access and secret keys are
-                empty.
-              example: true false
+                access/secret keys.
+              example: true
+              default: false
               type: boolean
             id:
               readOnly: true
