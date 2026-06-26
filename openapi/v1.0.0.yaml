@@ -3365,6 +3365,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  meta:
+                    $ref: "#/components/schemas/UsageMeta"
                   bandwidthBytes:
                     type: integer
                     description: Amount of bandwidth used in bytes.
@@ -3380,14 +3382,222 @@ paths:
                   originalCacheStorageBytes:
                     type: integer
                     description: Storage used by the original cache in bytes.
+                  requestCount:
+                    type: integer
+                    description: Number of requests made.
+                  videoProcessingUnitsUsage:
+                    $ref: "#/components/schemas/VideoProcessingUnitsUsage"
+                  extensionUnitsUsage:
+                    $ref: "#/components/schemas/ExtensionUnitsUsage"
+                  topBreakdownsByRequest:
+                    allOf:
+                      - $ref: "#/components/schemas/UsageBreakdowns"
+                    description: Top breakdowns ranked by request count.
+                  topBreakdownsByBandwidth:
+                    allOf:
+                      - $ref: "#/components/schemas/UsageBreakdowns"
+                    description: Top breakdowns ranked by bandwidth.           
               examples:
                 default:
+                  summary: Usage for a sample date range
                   value:
-                    bandwidthBytes: 21991583578
-                    mediaLibraryStorageBytes: 1878758298
-                    videoProcessingUnitsCount: 0
+                    meta:
+                      from: "2026-06-01"
+                      to: "2026-06-26"
+                    bandwidthBytes: 18273487
+                    mediaLibraryStorageBytes: 697650923
+                    videoProcessingUnitsCount: 232
                     extensionUnitsCount: 0
                     originalCacheStorageBytes: 0
+                    requestCount: 160
+                    videoProcessingUnitsUsage:
+                      SD: 232
+                      HD: 0
+                      "4K": 0
+                      "8K": 0
+                      "16K": 0
+                    extensionUnitsUsage:
+                      total: 0
+                      aws-auto-tagging: 0
+                      google-auto-tagging: 0
+                      ai-auto-description: 0
+                      ikremovebg: 0
+                      remove-bg: 0
+                      upscale: 0
+                      retouch: 0
+                      genvar: 0
+                      genfill: 0
+                      genimg: 0
+                      dropshadow: 0
+                      change-bg: 0
+                      edit: 0
+                      ai-tasks: 0
+                      ai-video-transcription: 0
+                      creative-banner: 0
+                    topBreakdownsByRequest:
+                      statusCodes:
+                        - value: "200"
+                          requests: 148
+                          bandwidthBytes: 13924675
+                        - value: "404"
+                          requests: 7
+                          bandwidthBytes: 4250
+                        - value: "206"
+                          requests: 4
+                          bandwidthBytes: 4344030
+                      formats:
+                        - value: image/webp
+                          requests: 119
+                          bandwidthBytes: 5261379
+                        - value: image/jpeg
+                          requests: 20
+                          bandwidthBytes: 4570132
+                        - value: video/webm
+                          requests: 8
+                          bandwidthBytes: 6727289
+                      cache:
+                        - value: Miss
+                          requests: 96
+                          bandwidthBytes: 12276318
+                        - value: Hit
+                          requests: 56
+                          bandwidthBytes: 5992387
+                        - value: Error
+                          requests: 8
+                          bandwidthBytes: 4782
+                      geography:
+                        - value: India
+                          countryCode: IN
+                          requests: 136
+                          bandwidthBytes: 11218939
+                        - value: Singapore
+                          countryCode: SG
+                          requests: 22
+                          bandwidthBytes: 5669799
+                      devices:
+                        - value: Desktop
+                          requests: 139
+                          bandwidthBytes: 16644941
+                        - value: Smartphone
+                          requests: 17
+                          bandwidthBytes: 237432
+                      transformations:
+                        - value: n-ik_ml_thumbnail
+                          requests: 80
+                          bandwidthBytes: 868433
+                      images:
+                        - value: https://ik.imagekit.io/your_id/photo.jpeg
+                          requests: 80
+                          bandwidthBytes: 868433
+                      videos:
+                        - value: https://ik.imagekit.io/your_id/clip.mp4
+                          requests: 8
+                          bandwidthBytes: 6727289
+                      others:
+                        - value: https://ik.imagekit.io/your_id/design.psd
+                          requests: 2
+                          bandwidthBytes: 1389412
+                      referral: []
+                      videoTransformations: []
+                      resultType:
+                        - value: Miss
+                          requests: 96
+                          bandwidthBytes: 12276318
+                        - value: Hit
+                          requests: 56
+                          bandwidthBytes: 5992387
+                        - value: Error
+                          requests: 8
+                          bandwidthBytes: 4782
+                      userAgents:
+                        - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
+                          requests: 103
+                          bandwidthBytes: 10238534
+                        - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36
+                          requests: 22
+                          bandwidthBytes: 5669799
+                    topBreakdownsByBandwidth:
+                      statusCodes:
+                        - value: "200"
+                          requests: 148
+                          bandwidthBytes: 13924675
+                        - value: "206"
+                          requests: 4
+                          bandwidthBytes: 4344030
+                        - value: "404"
+                          requests: 7
+                          bandwidthBytes: 4250
+                      formats:
+                        - value: video/webm
+                          requests: 8
+                          bandwidthBytes: 6727289
+                        - value: image/webp
+                          requests: 119
+                          bandwidthBytes: 5261379
+                        - value: image/jpeg
+                          requests: 20
+                          bandwidthBytes: 4570132
+                      cache:
+                        - value: Miss
+                          requests: 96
+                          bandwidthBytes: 12276318
+                        - value: Hit
+                          requests: 56
+                          bandwidthBytes: 5992387
+                        - value: Error
+                          requests: 8
+                          bandwidthBytes: 4782
+                      geography:
+                        - value: India
+                          countryCode: IN
+                          requests: 136
+                          bandwidthBytes: 11218939
+                        - value: Singapore
+                          countryCode: SG
+                          requests: 22
+                          bandwidthBytes: 5669799
+                      devices:
+                        - value: Desktop
+                          requests: 139
+                          bandwidthBytes: 16644941
+                        - value: Smartphone
+                          requests: 17
+                          bandwidthBytes: 237432
+                      transformations:
+                        - value: n-ik_ml_thumbnail
+                          requests: 80
+                          bandwidthBytes: 868433
+                      images:
+                        - value: https://ik.imagekit.io/your_id/photo.jpeg
+                          requests: 80
+                          bandwidthBytes: 868433
+                      videos:
+                        - value: https://ik.imagekit.io/your_id/clip.mp4
+                          requests: 8
+                          bandwidthBytes: 6727289
+                      others:
+                        - value: https://ik.imagekit.io/your_id/design.psd
+                          requests: 2
+                          bandwidthBytes: 1389412
+                      referral: []
+                      videoTransformations: []
+                      resultType:
+                        - value: Miss
+                          requests: 96
+                          bandwidthBytes: 12276318
+                        - value: Hit
+                          requests: 56
+                          bandwidthBytes: 5992387
+                        - value: Error
+                          requests: 8
+                          bandwidthBytes: 4782
+                      userAgents:
+                        - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
+                          requests: 103
+                          bandwidthBytes: 10238534
+                        - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36
+                          requests: 22
+                          bandwidthBytes: 5669799
         "400":
           description: Bad request.
           content:
@@ -8066,6 +8276,216 @@ components:
             Creates a linear gradient with two colors. Pass `true` for a default gradient, or provide a string for a custom gradient.
             Only works if the base asset is an image. See [gradient](https://imagekit.io/docs/effects-and-enhancements#gradient---e-gradient).
       additionalProperties: false
+
+    VideoProcessingUnitsUsage:
+      type: object
+      description: VPU consumption broken down by output resolution.
+      properties:
+        SD:
+          type: integer
+          format: int64
+        HD:
+          type: integer
+          format: int64
+        "4K":
+          type: integer
+          format: int64
+        "8K":
+          type: integer
+          format: int64
+        "16K":
+          type: integer
+          format: int64
+      required:
+        - SD
+        - HD
+        - "4K"
+        - "8K"
+        - "16K"
+
+    ExtensionUnitsUsage:
+      type: object
+      description: Extension-unit consumption broken down by extension.
+      properties:
+        total:
+          type: integer
+          format: int64
+        aws-auto-tagging:
+          type: integer
+          format: int64
+        google-auto-tagging:
+          type: integer
+          format: int64
+        ai-auto-description:
+          type: integer
+          format: int64
+        ikremovebg:
+          type: integer
+          format: int64
+        remove-bg:
+          type: integer
+          format: int64
+        upscale:
+          type: integer
+          format: int64
+        retouch:
+          type: integer
+          format: int64
+        genvar:
+          type: integer
+          format: int64
+        genfill:
+          type: integer
+          format: int64
+        genimg:
+          type: integer
+          format: int64
+        dropshadow:
+          type: integer
+          format: int64
+        change-bg:
+          type: integer
+          format: int64
+        edit:
+          type: integer
+          format: int64
+        ai-tasks:
+          type: integer
+          format: int64
+        ai-video-transcription:
+          type: integer
+          format: int64
+        creative-banner:
+          type: integer
+          format: int64
+      required:
+        - total
+
+    UsageBreakdowns:
+      type: object
+      description: >-
+        A collection of top-N breakdown lists. Each list ranks entities by the
+        relevant metric (request count or bandwidth, depending on the parent).
+      properties:
+        statusCodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        formats:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        cache:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        geography:
+          type: array
+          items:
+            $ref: "#/components/schemas/GeographyBreakdownItem"
+        devices:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        transformations:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        videos:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        others:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        referral:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        videoTransformations:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        resultType:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        userAgents:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+      required:
+        - statusCodes
+        - formats
+        - cache
+        - geography
+        - devices
+        - transformations
+        - images
+        - videos
+        - others
+        - referral
+        - videoTransformations
+        - resultType
+        - userAgents
+
+    BreakdownItem:
+      type: object
+      description: A single ranked breakdown row.
+      properties:
+        value:
+          type: string
+          description: >-
+            The entity this row represents (e.g. a status code, format, URL,
+            device type or user-agent string), depending on the parent list.
+        requests:
+          type: integer
+          format: int64
+          description: Number of requests attributed to this entity.
+        bandwidthBytes:
+          type: integer
+          format: int64
+          description: Bandwidth attributed to this entity, in bytes.
+      required:
+        - value
+        - requests
+        - bandwidthBytes
+
+    GeographyBreakdownItem:
+      description: A breakdown row for a country, extending BreakdownItem.
+      allOf:
+        - $ref: "#/components/schemas/BreakdownItem"
+        - type: object
+          properties:
+            countryCode:
+              type: string
+              description: ISO 3166-1 alpha-2 country code.
+              example: IN
+          required:
+            - countryCode
+   
+    UsageMeta:
+      type: object
+      description: The date range the usage data covers.
+      properties:
+        from:
+          type: string
+          format: date
+          example: "2026-06-01"
+        to:
+          type: string
+          format: date
+          example: "2026-06-26"
+      required:
+        - from
+        - to
+
+
 
   examples:
     UploadResponseWithEmbeddedMetadata:
