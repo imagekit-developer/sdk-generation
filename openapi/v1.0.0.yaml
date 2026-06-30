@@ -3365,239 +3365,214 @@ paths:
               schema:
                 type: object
                 properties:
-                  meta:
-                    $ref: "#/components/schemas/UsageMeta"
                   bandwidthBytes:
                     type: integer
+                    format: int64
                     description: Amount of bandwidth used in bytes.
                   mediaLibraryStorageBytes:
                     type: integer
+                    format: int64
                     description: Storage used by media library in bytes.
                   videoProcessingUnitsCount:
                     type: integer
+                    format: int64
                     description: Number of video processing units used.
                   extensionUnitsCount:
                     type: integer
+                    format: int64
                     description: Number of extension units used.
                   originalCacheStorageBytes:
                     type: integer
+                    format: int64
                     description: Storage used by the original cache in bytes.
                   requestCount:
                     type: integer
+                    format: int64
                     description: Number of requests made.
-                  videoProcessingUnitsUsage:
-                    $ref: "#/components/schemas/VideoProcessingUnitsUsage"
-                  extensionUnitsUsage:
-                    $ref: "#/components/schemas/ExtensionUnitsUsage"
-                  topBreakdownsByRequest:
-                    allOf:
-                      - $ref: "#/components/schemas/UsageBreakdowns"
-                    description: Top breakdowns ranked by request count.
-                  topBreakdownsByBandwidth:
-                    allOf:
-                      - $ref: "#/components/schemas/UsageBreakdowns"
-                    description: Top breakdowns ranked by bandwidth.           
+                  analytics:
+                    type: object
+                    description: Detailed usage analytics and ranked breakdowns for the selected date range.
+                    additionalProperties: true
+                    properties:
+                      videoProcessingUnitsUsage:
+                        $ref: "#/components/schemas/VideoProcessingUnitsUsage"
+                      extensionUnitsUsage:
+                        $ref: "#/components/schemas/ExtensionUnitsUsage"
+                      topBreakdownsByRequest:
+                        allOf:
+                          - $ref: "#/components/schemas/UsageBreakdowns"
+                        description: Top breakdowns ranked by request count.
+                      topBreakdownsByBandwidth:
+                        allOf:
+                          - $ref: "#/components/schemas/UsageBreakdowns"
+                        description: Top breakdowns ranked by bandwidth.
+                    required:
+                      - videoProcessingUnitsUsage
+                      - extensionUnitsUsage
+                      - topBreakdownsByRequest
+                      - topBreakdownsByBandwidth
+                required:
+                  - bandwidthBytes
+                  - mediaLibraryStorageBytes
+                  - videoProcessingUnitsCount
+                  - extensionUnitsCount
+                  - originalCacheStorageBytes
+                  - requestCount
+                  - analytics 
               examples:
                 default:
                   summary: Usage for a sample date range
                   value:
-                    meta:
-                      from: "2026-06-01"
-                      to: "2026-06-26"
                     bandwidthBytes: 18273487
                     mediaLibraryStorageBytes: 697650923
                     videoProcessingUnitsCount: 232
                     extensionUnitsCount: 0
                     originalCacheStorageBytes: 0
                     requestCount: 160
-                    videoProcessingUnitsUsage:
-                      SD: 232
-                      HD: 0
-                      "4K": 0
-                      "8K": 0
-                      "16K": 0
-                    extensionUnitsUsage:
-                      total: 0
-                      aws-auto-tagging: 0
-                      google-auto-tagging: 0
-                      ai-auto-description: 0
-                      ikremovebg: 0
-                      remove-bg: 0
-                      upscale: 0
-                      retouch: 0
-                      genvar: 0
-                      genfill: 0
-                      genimg: 0
-                      dropshadow: 0
-                      change-bg: 0
-                      edit: 0
-                      ai-tasks: 0
-                      ai-video-transcription: 0
-                      creative-banner: 0
-                    topBreakdownsByRequest:
-                      statusCodes:
-                        - value: "200"
-                          requests: 148
-                          bandwidthBytes: 13924675
-                        - value: "404"
-                          requests: 7
-                          bandwidthBytes: 4250
-                        - value: "206"
-                          requests: 4
-                          bandwidthBytes: 4344030
-                      formats:
-                        - value: image/webp
-                          requests: 119
-                          bandwidthBytes: 5261379
-                        - value: image/jpeg
-                          requests: 20
-                          bandwidthBytes: 4570132
-                        - value: video/webm
-                          requests: 8
-                          bandwidthBytes: 6727289
-                      cache:
-                        - value: Miss
-                          requests: 96
-                          bandwidthBytes: 12276318
-                        - value: Hit
-                          requests: 56
-                          bandwidthBytes: 5992387
-                        - value: Error
-                          requests: 8
-                          bandwidthBytes: 4782
-                      geography:
-                        - value: India
-                          countryCode: IN
-                          requests: 136
-                          bandwidthBytes: 11218939
-                        - value: Singapore
-                          countryCode: SG
-                          requests: 22
-                          bandwidthBytes: 5669799
-                      devices:
-                        - value: Desktop
-                          requests: 139
-                          bandwidthBytes: 16644941
-                        - value: Smartphone
-                          requests: 17
-                          bandwidthBytes: 237432
-                      transformations:
-                        - value: n-ik_ml_thumbnail
-                          requests: 80
-                          bandwidthBytes: 868433
-                      images:
-                        - value: https://ik.imagekit.io/your_id/photo.jpeg
-                          requests: 80
-                          bandwidthBytes: 868433
-                      videos:
-                        - value: https://ik.imagekit.io/your_id/clip.mp4
-                          requests: 8
-                          bandwidthBytes: 6727289
-                      others:
-                        - value: https://ik.imagekit.io/your_id/design.psd
-                          requests: 2
-                          bandwidthBytes: 1389412
-                      referral: []
-                      videoTransformations: []
-                      resultType:
-                        - value: Miss
-                          requests: 96
-                          bandwidthBytes: 12276318
-                        - value: Hit
-                          requests: 56
-                          bandwidthBytes: 5992387
-                        - value: Error
-                          requests: 8
-                          bandwidthBytes: 4782
-                      userAgents:
-                        - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
-                          requests: 103
-                          bandwidthBytes: 10238534
-                        - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36
-                          requests: 22
-                          bandwidthBytes: 5669799
-                    topBreakdownsByBandwidth:
-                      statusCodes:
-                        - value: "200"
-                          requests: 148
-                          bandwidthBytes: 13924675
-                        - value: "206"
-                          requests: 4
-                          bandwidthBytes: 4344030
-                        - value: "404"
-                          requests: 7
-                          bandwidthBytes: 4250
-                      formats:
-                        - value: video/webm
-                          requests: 8
-                          bandwidthBytes: 6727289
-                        - value: image/webp
-                          requests: 119
-                          bandwidthBytes: 5261379
-                        - value: image/jpeg
-                          requests: 20
-                          bandwidthBytes: 4570132
-                      cache:
-                        - value: Miss
-                          requests: 96
-                          bandwidthBytes: 12276318
-                        - value: Hit
-                          requests: 56
-                          bandwidthBytes: 5992387
-                        - value: Error
-                          requests: 8
-                          bandwidthBytes: 4782
-                      geography:
-                        - value: India
-                          countryCode: IN
-                          requests: 136
-                          bandwidthBytes: 11218939
-                        - value: Singapore
-                          countryCode: SG
-                          requests: 22
-                          bandwidthBytes: 5669799
-                      devices:
-                        - value: Desktop
-                          requests: 139
-                          bandwidthBytes: 16644941
-                        - value: Smartphone
-                          requests: 17
-                          bandwidthBytes: 237432
-                      transformations:
-                        - value: n-ik_ml_thumbnail
-                          requests: 80
-                          bandwidthBytes: 868433
-                      images:
-                        - value: https://ik.imagekit.io/your_id/photo.jpeg
-                          requests: 80
-                          bandwidthBytes: 868433
-                      videos:
-                        - value: https://ik.imagekit.io/your_id/clip.mp4
-                          requests: 8
-                          bandwidthBytes: 6727289
-                      others:
-                        - value: https://ik.imagekit.io/your_id/design.psd
-                          requests: 2
-                          bandwidthBytes: 1389412
-                      referral: []
-                      videoTransformations: []
-                      resultType:
-                        - value: Miss
-                          requests: 96
-                          bandwidthBytes: 12276318
-                        - value: Hit
-                          requests: 56
-                          bandwidthBytes: 5992387
-                        - value: Error
-                          requests: 8
-                          bandwidthBytes: 4782
-                      userAgents:
-                        - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
-                          requests: 103
-                          bandwidthBytes: 10238534
-                        - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36
-                          requests: 22
-                          bandwidthBytes: 5669799
+                    analytics:
+                      videoProcessingUnitsUsage:
+                        SD: 232
+                        HD: 0
+                        resolution_4K: 0
+                        resolution_8K: 0
+                        resolution_16K: 0
+                      extensionUnitsUsage:
+                        aws-auto-tagging: 0
+                        google-auto-tagging: 0
+                        ai-auto-description: 0
+                        ikremovebg: 0
+                        remove-bg: 0
+                        upscale: 0
+                        retouch: 0
+                        genvar: 0
+                        genfill: 0
+                        genimg: 0
+                        dropshadow: 0
+                        change-bg: 0
+                        edit: 0
+                        ai-tasks: 0
+                        ai-video-transcription: 0
+                        creative-banner: 0
+                      topBreakdownsByRequest:
+                        statusCodes:
+                          - value: "200"
+                            requestCount: 148
+                            bandwidthBytes: 13924675
+                          - value: "404"
+                            requestCount: 7
+                            bandwidthBytes: 4250
+                          - value: "206"
+                            requestCount: 4
+                            bandwidthBytes: 4344030
+                        formats:
+                          - value: image/webp
+                            requestCount: 119
+                            bandwidthBytes: 5261379
+                          - value: image/jpeg
+                            requestCount: 20
+                            bandwidthBytes: 4570132
+                          - value: video/webm
+                            requestCount: 8
+                            bandwidthBytes: 6727289
+                        geography:
+                          - value: India
+                            requestCount: 136
+                            bandwidthBytes: 11218939
+                          - value: Singapore
+                            requestCount: 22
+                            bandwidthBytes: 5669799
+                        devices:
+                          - value: Desktop
+                            requestCount: 139
+                            bandwidthBytes: 16644941
+                          - value: Smartphone
+                            requestCount: 17
+                            bandwidthBytes: 237432
+                        imageTransformations:
+                          - value: n-ik_ml_thumbnail
+                            requestCount: 80
+                            bandwidthBytes: 868433
+                        images:
+                          - value: https://ik.imagekit.io/your_id/photo.jpeg
+                            requestCount: 80
+                            bandwidthBytes: 868433
+                        videos:
+                          - value: https://ik.imagekit.io/your_id/clip.mp4
+                            requestCount: 8
+                            bandwidthBytes: 6727289
+                        others:
+                          - value: https://ik.imagekit.io/your_id/design.psd
+                            requestCount: 2
+                            bandwidthBytes: 1389412
+                        referral: []
+                        videoTransformations: []
+                        userAgents:
+                          - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
+                            requestCount: 103
+                            bandwidthBytes: 10238534
+                          - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36
+                            requestCount: 22
+                            bandwidthBytes: 5669799
+                      topBreakdownsByBandwidth:
+                        statusCodes:
+                          - value: "200"
+                            requestCount: 148
+                            bandwidthBytes: 13924675
+                          - value: "206"
+                            requestCount: 4
+                            bandwidthBytes: 4344030
+                          - value: "404"
+                            requestCount: 7
+                            bandwidthBytes: 4250
+                        formats:
+                          - value: video/webm
+                            requestCount: 8
+                            bandwidthBytes: 6727289
+                          - value: image/webp
+                            requestCount: 119
+                            bandwidthBytes: 5261379
+                          - value: image/jpeg
+                            requestCount: 20
+                            bandwidthBytes: 4570132
+                        geography:
+                          - value: India
+                            requestCount: 136
+                            bandwidthBytes: 11218939
+                          - value: Singapore
+                            requestCount: 22
+                            bandwidthBytes: 5669799
+                        devices:
+                          - value: Desktop
+                            requestCount: 139
+                            bandwidthBytes: 16644941
+                          - value: Smartphone
+                            requestCount: 17
+                            bandwidthBytes: 237432
+                        imageTransformations:
+                          - value: n-ik_ml_thumbnail
+                            requestCount: 80
+                            bandwidthBytes: 868433
+                        images:
+                          - value: https://ik.imagekit.io/your_id/photo.jpeg
+                            requestCount: 80
+                            bandwidthBytes: 868433
+                        videos:
+                          - value: https://ik.imagekit.io/your_id/clip.mp4
+                            requestCount: 8
+                            bandwidthBytes: 6727289
+                        others:
+                          - value: https://ik.imagekit.io/your_id/design.psd
+                            requestCount: 2
+                            bandwidthBytes: 1389412
+                        referral: []
+                        videoTransformations: []
+                        userAgents:
+                          - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
+                            requestCount: 103
+                            bandwidthBytes: 10238534
+                          - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36
+                            requestCount: 22
+                            bandwidthBytes: 5669799
         "400":
           description: Bad request.
           content:
@@ -8280,6 +8255,7 @@ components:
     VideoProcessingUnitsUsage:
       type: object
       description: VPU consumption broken down by output resolution.
+      additionalProperties: true
       properties:
         SD:
           type: integer
@@ -8287,29 +8263,27 @@ components:
         HD:
           type: integer
           format: int64
-        "4K":
+        "resolution_4K":
           type: integer
           format: int64
-        "8K":
+        "resolution_8K":
           type: integer
           format: int64
-        "16K":
+        "resolution_16K":
           type: integer
           format: int64
       required:
         - SD
         - HD
-        - "4K"
-        - "8K"
-        - "16K"
+        - resolution_4K
+        - resolution_8K
+        - resolution_16K
 
     ExtensionUnitsUsage:
       type: object
       description: Extension-unit consumption broken down by extension.
+      additionalProperties: true
       properties:
-        total:
-          type: integer
-          format: int64
         aws-auto-tagging:
           type: integer
           format: int64
@@ -8358,14 +8332,16 @@ components:
         creative-banner:
           type: integer
           format: int64
-      required:
-        - total
 
     UsageBreakdowns:
       type: object
       description: >-
         A collection of top-N breakdown lists. Each list ranks entities by the
         relevant metric (request count or bandwidth, depending on the parent).
+      additionalProperties:
+        type: array
+        items:
+          $ref: "#/components/schemas/BreakdownItem"
       properties:
         statusCodes:
           type: array
@@ -8375,19 +8351,15 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/BreakdownItem"
-        cache:
-          type: array
-          items:
-            $ref: "#/components/schemas/BreakdownItem"
         geography:
           type: array
           items:
-            $ref: "#/components/schemas/GeographyBreakdownItem"
+            $ref: "#/components/schemas/BreakdownItem"
         devices:
           type: array
           items:
             $ref: "#/components/schemas/BreakdownItem"
-        transformations:
+        imageTransformations:
           type: array
           items:
             $ref: "#/components/schemas/BreakdownItem"
@@ -8411,10 +8383,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/BreakdownItem"
-        resultType:
-          type: array
-          items:
-            $ref: "#/components/schemas/BreakdownItem"
         userAgents:
           type: array
           items:
@@ -8422,16 +8390,14 @@ components:
       required:
         - statusCodes
         - formats
-        - cache
         - geography
         - devices
-        - transformations
+        - imageTransformations
         - images
         - videos
         - others
         - referral
         - videoTransformations
-        - resultType
         - userAgents
 
     BreakdownItem:
@@ -8443,7 +8409,7 @@ components:
           description: >-
             The entity this row represents (e.g. a status code, format, URL,
             device type or user-agent string), depending on the parent list.
-        requests:
+        requestCount:
           type: integer
           format: int64
           description: Number of requests attributed to this entity.
@@ -8453,38 +8419,8 @@ components:
           description: Bandwidth attributed to this entity, in bytes.
       required:
         - value
-        - requests
+        - requestCount
         - bandwidthBytes
-
-    GeographyBreakdownItem:
-      description: A breakdown row for a country, extending BreakdownItem.
-      allOf:
-        - $ref: "#/components/schemas/BreakdownItem"
-        - type: object
-          properties:
-            countryCode:
-              type: string
-              description: ISO 3166-1 alpha-2 country code.
-              example: IN
-          required:
-            - countryCode
-   
-    UsageMeta:
-      type: object
-      description: The date range the usage data covers.
-      properties:
-        from:
-          type: string
-          format: date
-          example: "2026-06-01"
-        to:
-          type: string
-          format: date
-          example: "2026-06-26"
-      required:
-        - from
-        - to
-
 
 
   examples:
