@@ -3367,27 +3367,212 @@ paths:
                 properties:
                   bandwidthBytes:
                     type: integer
+                    format: int64
                     description: Amount of bandwidth used in bytes.
                   mediaLibraryStorageBytes:
                     type: integer
+                    format: int64
                     description: Storage used by media library in bytes.
                   videoProcessingUnitsCount:
                     type: integer
+                    format: int64
                     description: Number of video processing units used.
                   extensionUnitsCount:
                     type: integer
+                    format: int64
                     description: Number of extension units used.
                   originalCacheStorageBytes:
                     type: integer
+                    format: int64
                     description: Storage used by the original cache in bytes.
+                  requestCount:
+                    type: integer
+                    format: int64
+                    description: Number of requests made.
+                  analytics:
+                    type: object
+                    description: Detailed usage analytics and ranked breakdowns for the selected date range.
+                    additionalProperties: true
+                    properties:
+                      videoProcessingUnitsUsage:
+                        $ref: "#/components/schemas/VideoProcessingUnitsUsage"
+                      extensionUnitsUsage:
+                        $ref: "#/components/schemas/ExtensionUnitsUsage"
+                      topBreakdownsByRequest:
+                        allOf:
+                          - $ref: "#/components/schemas/UsageBreakdowns"
+                        description: Top breakdowns ranked by request count.
+                      topBreakdownsByBandwidth:
+                        allOf:
+                          - $ref: "#/components/schemas/UsageBreakdowns"
+                        description: Top breakdowns ranked by bandwidth.
+                    required:
+                      - videoProcessingUnitsUsage
+                      - extensionUnitsUsage
+                      - topBreakdownsByRequest
+                      - topBreakdownsByBandwidth
+                required:
+                  - bandwidthBytes
+                  - mediaLibraryStorageBytes
+                  - videoProcessingUnitsCount
+                  - extensionUnitsCount
+                  - originalCacheStorageBytes
+                  - requestCount
+                  - analytics 
               examples:
                 default:
+                  summary: Usage for a sample date range
                   value:
-                    bandwidthBytes: 21991583578
-                    mediaLibraryStorageBytes: 1878758298
-                    videoProcessingUnitsCount: 0
+                    bandwidthBytes: 18273487
+                    mediaLibraryStorageBytes: 697650923
+                    videoProcessingUnitsCount: 232
                     extensionUnitsCount: 0
                     originalCacheStorageBytes: 0
+                    requestCount: 160
+                    analytics:
+                      videoProcessingUnitsUsage:
+                        SD: 232
+                        HD: 0
+                        resolution_4K: 0
+                        resolution_8K: 0
+                        resolution_16K: 0
+                      extensionUnitsUsage:
+                        aws-auto-tagging: 0
+                        google-auto-tagging: 0
+                        ai-auto-description: 0
+                        ikremovebg: 0
+                        remove-bg: 0
+                        upscale: 0
+                        retouch: 0
+                        genvar: 0
+                        genfill: 0
+                        genimg: 0
+                        dropshadow: 0
+                        change-bg: 0
+                        edit: 0
+                        ai-tasks: 0
+                        ai-video-transcription: 0
+                        creative-banner: 0
+                      topBreakdownsByRequest:
+                        statusCodes:
+                          - value: "200"
+                            requestCount: 148
+                            bandwidthBytes: 13924675
+                          - value: "404"
+                            requestCount: 7
+                            bandwidthBytes: 4250
+                          - value: "206"
+                            requestCount: 4
+                            bandwidthBytes: 4344030
+                        formats:
+                          - value: image/webp
+                            requestCount: 119
+                            bandwidthBytes: 5261379
+                          - value: image/jpeg
+                            requestCount: 20
+                            bandwidthBytes: 4570132
+                          - value: video/webm
+                            requestCount: 8
+                            bandwidthBytes: 6727289
+                        geography:
+                          - value: India
+                            requestCount: 136
+                            bandwidthBytes: 11218939
+                          - value: Singapore
+                            requestCount: 22
+                            bandwidthBytes: 5669799
+                        devices:
+                          - value: Desktop
+                            requestCount: 139
+                            bandwidthBytes: 16644941
+                          - value: Smartphone
+                            requestCount: 17
+                            bandwidthBytes: 237432
+                        imageTransformations:
+                          - value: n-ik_ml_thumbnail
+                            requestCount: 80
+                            bandwidthBytes: 868433
+                        images:
+                          - value: https://ik.imagekit.io/your_id/photo.jpeg
+                            requestCount: 80
+                            bandwidthBytes: 868433
+                        videos:
+                          - value: https://ik.imagekit.io/your_id/clip.mp4
+                            requestCount: 8
+                            bandwidthBytes: 6727289
+                        others:
+                          - value: https://ik.imagekit.io/your_id/design.psd
+                            requestCount: 2
+                            bandwidthBytes: 1389412
+                        referral: []
+                        videoTransformations: []
+                        userAgents:
+                          - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
+                            requestCount: 103
+                            bandwidthBytes: 10238534
+                          - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36
+                            requestCount: 22
+                            bandwidthBytes: 5669799
+                      topBreakdownsByBandwidth:
+                        statusCodes:
+                          - value: "200"
+                            requestCount: 148
+                            bandwidthBytes: 13924675
+                          - value: "206"
+                            requestCount: 4
+                            bandwidthBytes: 4344030
+                          - value: "404"
+                            requestCount: 7
+                            bandwidthBytes: 4250
+                        formats:
+                          - value: video/webm
+                            requestCount: 8
+                            bandwidthBytes: 6727289
+                          - value: image/webp
+                            requestCount: 119
+                            bandwidthBytes: 5261379
+                          - value: image/jpeg
+                            requestCount: 20
+                            bandwidthBytes: 4570132
+                        geography:
+                          - value: India
+                            requestCount: 136
+                            bandwidthBytes: 11218939
+                          - value: Singapore
+                            requestCount: 22
+                            bandwidthBytes: 5669799
+                        devices:
+                          - value: Desktop
+                            requestCount: 139
+                            bandwidthBytes: 16644941
+                          - value: Smartphone
+                            requestCount: 17
+                            bandwidthBytes: 237432
+                        imageTransformations:
+                          - value: n-ik_ml_thumbnail
+                            requestCount: 80
+                            bandwidthBytes: 868433
+                        images:
+                          - value: https://ik.imagekit.io/your_id/photo.jpeg
+                            requestCount: 80
+                            bandwidthBytes: 868433
+                        videos:
+                          - value: https://ik.imagekit.io/your_id/clip.mp4
+                            requestCount: 8
+                            bandwidthBytes: 6727289
+                        others:
+                          - value: https://ik.imagekit.io/your_id/design.psd
+                            requestCount: 2
+                            bandwidthBytes: 1389412
+                        referral: []
+                        videoTransformations: []
+                        userAgents:
+                          - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36
+                            requestCount: 103
+                            bandwidthBytes: 10238534
+                          - value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36
+                            requestCount: 22
+                            bandwidthBytes: 5669799
         "400":
           description: Bad request.
           content:
@@ -8066,6 +8251,177 @@ components:
             Creates a linear gradient with two colors. Pass `true` for a default gradient, or provide a string for a custom gradient.
             Only works if the base asset is an image. See [gradient](https://imagekit.io/docs/effects-and-enhancements#gradient---e-gradient).
       additionalProperties: false
+
+    VideoProcessingUnitsUsage:
+      type: object
+      description: VPU consumption broken down by output resolution.
+      additionalProperties: true
+      properties:
+        SD:
+          type: integer
+          format: int64
+        HD:
+          type: integer
+          format: int64
+        "resolution_4K":
+          type: integer
+          format: int64
+        "resolution_8K":
+          type: integer
+          format: int64
+        "resolution_16K":
+          type: integer
+          format: int64
+      required:
+        - SD
+        - HD
+        - resolution_4K
+        - resolution_8K
+        - resolution_16K
+
+    ExtensionUnitsUsage:
+      type: object
+      description: Extension-unit consumption broken down by extension.
+      additionalProperties: true
+      properties:
+        aws-auto-tagging:
+          type: integer
+          format: int64
+        google-auto-tagging:
+          type: integer
+          format: int64
+        ai-auto-description:
+          type: integer
+          format: int64
+        ikremovebg:
+          type: integer
+          format: int64
+        remove-bg:
+          type: integer
+          format: int64
+        upscale:
+          type: integer
+          format: int64
+        retouch:
+          type: integer
+          format: int64
+        genvar:
+          type: integer
+          format: int64
+        genfill:
+          type: integer
+          format: int64
+        genimg:
+          type: integer
+          format: int64
+        dropshadow:
+          type: integer
+          format: int64
+        change-bg:
+          type: integer
+          format: int64
+        edit:
+          type: integer
+          format: int64
+        ai-tasks:
+          type: integer
+          format: int64
+        ai-video-transcription:
+          type: integer
+          format: int64
+        creative-banner:
+          type: integer
+          format: int64
+
+    UsageBreakdowns:
+      type: object
+      description: >-
+        A collection of top-N breakdown lists. Each list ranks entities by the
+        relevant metric (request count or bandwidth, depending on the parent).
+      additionalProperties:
+        type: array
+        items:
+          $ref: "#/components/schemas/BreakdownItem"
+      properties:
+        statusCodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        formats:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        geography:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        devices:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        imageTransformations:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        videos:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        others:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        referral:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        videoTransformations:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+        userAgents:
+          type: array
+          items:
+            $ref: "#/components/schemas/BreakdownItem"
+      required:
+        - statusCodes
+        - formats
+        - geography
+        - devices
+        - imageTransformations
+        - images
+        - videos
+        - others
+        - referral
+        - videoTransformations
+        - userAgents
+
+    BreakdownItem:
+      type: object
+      description: A single ranked breakdown row.
+      properties:
+        value:
+          type: string
+          description: >-
+            The entity this row represents (e.g. a status code, format, URL,
+            device type or user-agent string), depending on the parent list.
+        requestCount:
+          type: integer
+          format: int64
+          description: Number of requests attributed to this entity.
+        bandwidthBytes:
+          type: integer
+          format: int64
+          description: Bandwidth attributed to this entity, in bytes.
+      required:
+        - value
+        - requestCount
+        - bandwidthBytes
+
 
   examples:
     UploadResponseWithEmbeddedMetadata:
