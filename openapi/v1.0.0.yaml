@@ -3865,6 +3865,231 @@ paths:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
         "429": *a3
+  /v1/accounts/usage-analytics:
+    get:
+      operationId: getUsageAnalytics
+      summary: Get usage analytics breakdown
+      description: >
+        Returns CDN, video processing, and extension usage
+        breakdowns over the given date range.
+      tags:
+        - Usage Analytics
+      parameters:
+        - in: query
+          required: true
+          description: >
+            Start of the date range, inclusive. Must be strictly before
+            `endDate`.
+          schema:
+            type: string
+            format: date
+          example: "2026-06-28"
+        - in: query
+          required: true
+          description: End of the date range, inclusive.
+          schema:
+            type: string
+            format: date
+          example: "2026-06-30"
+      responses:
+        "200":
+          description: Usage analytics for the requested date range.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsageAnalyticsResponse"
+              example:
+                startDate: "2026-06-28"
+                endDate: "2026-06-30"
+                generatedAt: "2026-07-04T09:12:33Z"
+                requestCount: 18442310
+                bandwidthBytes: 21985004312
+                statusCodes:
+                  - name: "200"
+                    requestCount: 18012400
+                  - name: "404"
+                    requestCount: 271430
+                errorReasons:
+                  - name: asset-not-found
+                    requestCount: 261488
+                  - name: signature-invalid
+                    requestCount: 84210
+                top404Assets:
+                  - name: /products/discontinued-sku-4421.jpg
+                    requestCount: 88210
+                  - name: /img/legacy/logo-old.svg
+                    requestCount: 17204
+                extensions:
+                  - name: remove-bg
+                    operationCount: 980
+                  - name: genfill
+                    operationCount: 100
+                cache:
+                  hitCount: 17150348
+                  missCount: 1198320
+                  errorCount: 93642
+                videoProcessing:
+                  - resolution: SD
+                    codec: h264
+                    durationSeconds: 600
+                  - resolution: HD
+                    codec: h264
+                    durationSeconds: 1000
+                  - resolution: HD
+                    codec: av1
+                    durationSeconds: 400
+                  - resolution: "4K"
+                    codec: h264
+                    durationSeconds: 200
+                country:
+                  byRequests:
+                    - code: IN
+                      name: India
+                      requestCount: 9120400
+                      bandwidthBytes: 9855012340
+                    - code: US
+                      name: United States
+                      requestCount: 4210330
+                      bandwidthBytes: 6120458821
+                  byBandwidth:
+                    - code: IN
+                      name: India
+                      requestCount: 9120400
+                      bandwidthBytes: 9855012340
+                    - code: US
+                      name: United States
+                      requestCount: 4210330
+                      bandwidthBytes: 6120458821
+                format:
+                  byRequests:
+                    - name: image/avif
+                      requestCount: 10204112
+                      bandwidthBytes: 8122504430
+                  byBandwidth:
+                    - name: image/webp
+                      requestCount: 6120033
+                      bandwidthBytes: 7943310022
+                deviceType:
+                  byRequests:
+                    - name: mobile
+                      requestCount: 11204488
+                      bandwidthBytes: 11020448120
+                  byBandwidth:
+                    - name: desktop
+                      requestCount: 6811222
+                      bandwidthBytes: 10412030448
+                browser:
+                  byRequests:
+                    - name: Chrome
+                      requestCount: 12010448
+                      bandwidthBytes: 14012448821
+                  byBandwidth:
+                    - name: Chrome
+                      requestCount: 12010448
+                      bandwidthBytes: 14012448821
+                urlEndpoints:
+                  byRequests:
+                    - name: default
+                      requestCount: 14200110
+                      bandwidthBytes: 16820044120
+                    - name: ecommerce
+                      requestCount: 4242200
+                      bandwidthBytes: 5164960192
+                  byBandwidth:
+                    - name: default
+                      requestCount: 14200110
+                      bandwidthBytes: 16820044120
+                    - name: ecommerce
+                      requestCount: 4242200
+                      bandwidthBytes: 5164960192
+                topImages:
+                  byRequests:
+                    - name: /products/hero-banner.jpg
+                      requestCount: 820441
+                      bandwidthBytes: 410220500
+                  byBandwidth:
+                    - name: /catalog/summer/shoe-01.png
+                      requestCount: 611230
+                      bandwidthBytes: 733476000
+                topVideos:
+                  byRequests:
+                    - name: /promos/launch-2026.mp4
+                      requestCount: 44210
+                      bandwidthBytes: 2210500000
+                  byBandwidth:
+                    - name: /promos/launch-2026.mp4
+                      requestCount: 44210
+                      bandwidthBytes: 2210500000
+                topOtherAssets:
+                  byRequests:
+                    - name: /docs/spec-sheet.pdf
+                      requestCount: 9021
+                      bandwidthBytes: 45210330
+                  byBandwidth:
+                    - name: /docs/spec-sheet.pdf
+                      requestCount: 9021
+                      bandwidthBytes: 45210330
+                topImageTransforms:
+                  byRequests:
+                    - name: "tr:w-400,h-400,fo-auto"
+                      requestCount: 3120448
+                      bandwidthBytes: 1204488210
+                  byBandwidth:
+                    - name: "tr:w-1200,q-80,f-auto"
+                      requestCount: 2210330
+                      bandwidthBytes: 3310220400
+                topVideoTransforms:
+                  byRequests:
+                    - name: "tr:h-720,f-mp4"
+                      requestCount: 38210
+                      bandwidthBytes: 1820440200
+                  byBandwidth:
+                    - name: "tr:sr-240_360_480_720"
+                      requestCount: 12044
+                      bandwidthBytes: 2210338100
+                topReferrers:
+                  byRequests:
+                    - name: https://www.acmestore.com
+                      requestCount: 10204488
+                      bandwidthBytes: 12010448821
+                  byBandwidth:
+                    - name: https://www.acmestore.com
+                      requestCount: 10204488
+                      bandwidthBytes: 12010448821
+                topUserAgents:
+                  byRequests:
+                    - name: "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5) AppleWebKit/605.1.15"
+                      requestCount: 5120448
+                      bandwidthBytes: 4210338210
+                  byBandwidth:
+                    - name: "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5) AppleWebKit/605.1.15"
+                      requestCount: 5120448
+                      bandwidthBytes: 4210338210
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    examples:
+                      - startDate and endDate should be within 90 days.
+                      - startDate and endDate are required in query parameters.
+                      - startDate and endDate should be in format YYYY-MM-DD.
+                      - startDate should be before endDate.
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+
 components:
   schemas:
     BaseWebhookEvent:
@@ -8066,6 +8291,194 @@ components:
             Creates a linear gradient with two colors. Pass `true` for a default gradient, or provide a string for a custom gradient.
             Only works if the base asset is an image. See [gradient](https://imagekit.io/docs/effects-and-enhancements#gradient---e-gradient).
       additionalProperties: false
+
+    UsageAnalyticsResponse:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        generatedAt:
+          type: string
+          format: date-time
+          description: >
+            ISO 8601 UTC timestamp indicating when the data was actually computed for consumers to gauge freshness of the computed data.
+        requestCount:
+          type: number
+        bandwidthBytes:
+          type: number
+        statusCodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/NameRequestCount"
+          description: Request count grouped by HTTP status code.
+        errorReasons:
+          type: array
+          items:
+            $ref: "#/components/schemas/NameRequestCount"
+          description: Request count grouped by error reason code.
+        top404Assets:
+          type: array
+          items:
+            $ref: "#/components/schemas/NameRequestCount"
+          description: Top request paths returning 404.
+        extensions:
+          type: array
+          items:
+            $ref: "#/components/schemas/NameOperationCount"
+        cache:
+          $ref: "#/components/schemas/CacheBreakdown"
+        videoProcessing:
+          type: array
+          items:
+            $ref: "#/components/schemas/VideoProcessingEntry"
+        country:
+          $ref: "#/components/schemas/CountryBreakdown"
+        format:
+          $ref: "#/components/schemas/SortedBreakdown"
+        deviceType:
+          $ref: "#/components/schemas/SortedBreakdown"
+        browser:
+          $ref: "#/components/schemas/SortedBreakdown"
+        urlEndpoints:
+          $ref: "#/components/schemas/SortedBreakdown"
+        topImages:
+          $ref: "#/components/schemas/SortedBreakdown"
+        topVideos:
+          $ref: "#/components/schemas/SortedBreakdown"
+        topOtherAssets:
+          $ref: "#/components/schemas/SortedBreakdown"
+        topImageTransforms:
+          $ref: "#/components/schemas/SortedBreakdown"
+        topVideoTransforms:
+          $ref: "#/components/schemas/SortedBreakdown"
+        topReferrers:
+          $ref: "#/components/schemas/SortedBreakdown"
+        topUserAgents:
+          $ref: "#/components/schemas/SortedBreakdown"
+      required:
+        - startDate
+        - endDate
+        - generatedAt
+        - requestCount
+        - bandwidthBytes
+        - statusCodes
+        - errorReasons
+        - top404Assets
+        - extensions
+        - cache
+        - videoProcessing
+        - country
+        - format
+        - deviceType
+        - browser
+        - urlEndpoints
+        - topImages
+        - topVideos
+        - topOtherAssets
+        - topImageTransforms
+        - topVideoTransforms
+        - topReferrers
+        - topUserAgents
+
+    NameRequestCount:
+      type: object
+      description: A named bucket with a request count.
+      properties:
+        name:
+          type: string
+        requestCount:
+          type: number
+      required: [name, requestCount]
+
+    NameOperationCount:
+      type: object
+      properties:
+        name:
+          type: string
+        operationCount:
+          type: number
+      required: [name, operationCount]
+
+    RequestBandwidthEntry:
+      type: object
+      description: A named bucket with both request count and bandwidth.
+      properties:
+        name:
+          type: string
+        requestCount:
+          type: number
+        bandwidthBytes:
+          type: number
+      required: [name, requestCount, bandwidthBytes]
+
+    SortedBreakdown:
+      type: object
+      properties:
+        byRequests:
+          type: array
+          items:
+            $ref: "#/components/schemas/RequestBandwidthEntry"
+        byBandwidth:
+          type: array
+          items:
+            $ref: "#/components/schemas/RequestBandwidthEntry"
+      required: [byRequests, byBandwidth]
+
+    CountryBreakdown:
+      type: object
+      properties:
+        byRequests:
+          type: array
+          items:
+            allOf:
+              - $ref: "#/components/schemas/RequestBandwidthEntry"
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    description: ISO country code.
+                required: [code]
+        byBandwidth:
+          type: array
+          items:
+            allOf:
+              - $ref: "#/components/schemas/RequestBandwidthEntry"
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    description: ISO country code.
+                required: [code]
+      required: [byRequests, byBandwidth]
+
+    CacheBreakdown:
+      type: object
+      properties:
+        hitCount:
+          type: number
+        missCount:
+          type: number
+        errorCount:
+          type: number
+      required: [hitCount, missCount, errorCount]
+
+    VideoProcessingEntry:
+      type: object
+      description: >
+        Raw observed transcode output duration by resolution and codec.
+      properties:
+        resolution:
+          type: string
+        codec:
+          type: string
+        durationSeconds:
+          type: number
+      required: [resolution, codec, durationSeconds]
+   
 
   examples:
     UploadResponseWithEmbeddedMetadata:
