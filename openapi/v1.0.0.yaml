@@ -3867,15 +3867,17 @@ paths:
         "429": *a3
   /v1/accounts/usage-analytics:
     get:
-      operationId: getUsageAnalytics
+      operationId: get-usage-analytics
       summary: Get usage analytics breakdown
       description: >
         Returns CDN, video processing, and extension usage
         breakdowns over the given date range.
       tags:
+        - Account Management API
         - Usage Analytics
       parameters:
         - in: query
+          name: startDate
           required: true
           description: >
             Start of the date range, inclusive. Must be strictly before
@@ -3885,6 +3887,7 @@ paths:
             format: date
           example: "2026-06-28"
         - in: query
+          name: endDate
           required: true
           description: End of the date range, inclusive.
           schema:
