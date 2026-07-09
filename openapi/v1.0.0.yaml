@@ -8305,60 +8305,451 @@ components:
           type: string
           format: date-time
           description: >
-            ISO 8601 UTC timestamp indicating when the data was actually computed for consumers to gauge freshness of the computed data.
+            Date and time when the analytics data was computed. Use this to gauge how fresh the returned data is. The date and time is in ISO8601 format.
         requestCount:
           type: number
         bandwidthBytes:
           type: number
         statusCodes:
           type: array
-          items:
-            $ref: "#/components/schemas/NameRequestCount"
           description: Request count grouped by HTTP status code.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: HTTP status code.
+                example: "200"
+              requestCount:
+                type: number
+                description: Number of requests that received this status code.
+            required: [name, requestCount]
         errorReasons:
           type: array
-          items:
-            $ref: "#/components/schemas/NameRequestCount"
           description: Request count grouped by error reason code.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Reason for the error.
+              requestCount:
+                type: number
+                description: Number of errored requests.
+            required: [name, requestCount]
         top404Assets:
           type: array
-          items:
-            $ref: "#/components/schemas/NameRequestCount"
           description: Top request paths returning 404.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: File path.
+                example: /products/discontinued-sku-4421.jpg
+              requestCount:
+                type: number
+                description: Number of requests which returned 404 for this path.
+            required: [name, requestCount]
         extensions:
           type: array
+          description: Per-extension operation counts. 
           items:
-            $ref: "#/components/schemas/NameOperationCount"
+            type: object
+            properties:
+              name:
+                type: string
+                description: Extension identifier.
+                example: remove-bg
+              operationCount:
+                type: number
+                description: Number of operations performed by this extension.
+            required: [name, operationCount]
         cache:
-          $ref: "#/components/schemas/CacheBreakdown"
+          type: object
+          description: >
+            Cache hit, miss and error counts.
+          properties:
+            hitCount:
+              type: number
+              description: Number of requests served from cache (cache hits).
+            missCount:
+              type: number
+              description: Number of requests that were not found in cache (cache misses).
+            errorCount:
+              type: number
+              description: Number of errored requests.
+          required: [hitCount, missCount, errorCount]
         videoProcessing:
           type: array
+          description: Raw observed transcode output duration by resolution and codec.
           items:
-            $ref: "#/components/schemas/VideoProcessingEntry"
+            type: object
+            properties:
+              resolution:
+                type: string
+                description: Output resolution tier (e.g. `SD`, `HD`, `4K`).
+              codec:
+                type: string
+                description: Video codec (e.g. `h264`, `av1`).
+              durationSeconds:
+                type: number
+                description: Total output duration in seconds for this resolution and codec combination.
+            required: [resolution, codec, durationSeconds]
         country:
-          $ref: "#/components/schemas/CountryBreakdown"
+          type: object
+          description: CDN traffic grouped by country.
+          properties:
+            byRequests:
+              description: Top requesting countries sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Country name.
+                      code:
+                        type: string
+                        description: ISO country code.
+                    required: [name, code]
+            byBandwidth:
+              description: Top requesting countries sorted by total bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Country name.
+                      code:
+                        type: string
+                        description: ISO country code.
+                    required: [name, code]
+          required: [byRequests, byBandwidth]
         format:
-          $ref: "#/components/schemas/SortedBreakdown"
+          type: object
+          description: CDN traffic grouped by response `Content-Type`.
+          properties:
+            byRequests:
+              description: Top content types sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: MIME type (e.g. `image/webp`).
+                    required: [name]
+            byBandwidth:
+              description: Top content types sorted by bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: MIME type (e.g. `image/webp`).
+                    required: [name]
+          required: [byRequests, byBandwidth]
         deviceType:
-          $ref: "#/components/schemas/SortedBreakdown"
+          type: object
+          description: CDN traffic grouped by device type.
+          properties:
+            byRequests:
+              description: Top device categories sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Device category (e.g. `mobile`, `desktop`).
+                    required: [name]
+            byBandwidth:
+              description: Top device categories sorted by bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Device category (e.g. `mobile`, `desktop`).
+                    required: [name]
+          required: [byRequests, byBandwidth]
         browser:
-          $ref: "#/components/schemas/SortedBreakdown"
+          type: object
+          description: CDN traffic grouped by browser.
+          properties:
+            byRequests:
+              description: Top browsers sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Browser name (e.g. `Chrome`).
+                    required: [name]
+            byBandwidth:
+              description: Top browsers sorted by bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Browser name (e.g. `Chrome`).
+                    required: [name]
+          required: [byRequests, byBandwidth]
         urlEndpoints:
-          $ref: "#/components/schemas/SortedBreakdown"
+          type: object
+          description: CDN traffic grouped by URL endpoint.
+          properties:
+            byRequests:
+              description: Top URL endpoints sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: URL endpoint identifier (e.g. `default`).
+                    required: [name]
+            byBandwidth:
+              description: Top URL endpoints sorted by bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: URL endpoint identifier (e.g. `default`).
+                    required: [name]
+          required: [byRequests, byBandwidth]
         topImages:
-          $ref: "#/components/schemas/SortedBreakdown"
+          type: object
+          description: Top image assets by traffic.
+          properties:
+            byRequests:
+              description: Top image assets sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Image file path.
+                    required: [name]
+            byBandwidth:
+              description: Top image assets sorted by bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Image file path.
+                    required: [name]
+          required: [byRequests, byBandwidth]
         topVideos:
-          $ref: "#/components/schemas/SortedBreakdown"
+          type: object
+          description: Top video assets by traffic.
+          properties:
+            byRequests:
+              description: Top video assets sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Video file path.
+                    required: [name]
+            byBandwidth:
+              description: Top video assets sorted by bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Video file path.
+                    required: [name]
+          required: [byRequests, byBandwidth]
         topOtherAssets:
-          $ref: "#/components/schemas/SortedBreakdown"
+          type: object
+          description: Top non-image, non-video assets by traffic.
+          properties:
+            byRequests:
+              description: Top non-image, non-video assets sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: File path.
+                    required: [name]
+            byBandwidth:
+              description: Top non-image, non-video assets sorted by bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: File path.
+                    required: [name]
+          required: [byRequests, byBandwidth]
         topImageTransforms:
-          $ref: "#/components/schemas/SortedBreakdown"
+          type: object
+          description: Top image transformation strings by traffic.
+          properties:
+            byRequests:
+              description: Top image transformation strings sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Image transformation string (e.g. `tr:w-400,h-400`).
+                    required: [name]
+            byBandwidth:
+              description: Top image transformation strings sorted by bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Image transformation string (e.g. `tr:w-400,h-400`).
+                    required: [name]
+          required: [byRequests, byBandwidth]
         topVideoTransforms:
-          $ref: "#/components/schemas/SortedBreakdown"
+          type: object
+          description: Top video transformation strings by traffic.
+          properties:
+            byRequests:
+              description: Top video transformation strings sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Video transformation string (e.g. `tr:h-720,f-mp4`).
+                    required: [name]
+            byBandwidth:
+              description: Top video transformation strings sorted by bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Video transformation string (e.g. `tr:h-720,f-mp4`).
+                    required: [name]
+          required: [byRequests, byBandwidth]
         topReferrers:
-          $ref: "#/components/schemas/SortedBreakdown"
+          type: object
+          description: Top HTTP referrers by traffic.
+          properties:
+            byRequests:
+              description: Top HTTP referrers sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Referrer URL.
+                    required: [name]
+            byBandwidth:
+              description: Top HTTP referrers sorted by bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Referrer URL.
+                    required: [name]
+          required: [byRequests, byBandwidth]
         topUserAgents:
-          $ref: "#/components/schemas/SortedBreakdown"
+          type: object
+          description: Top user agents by traffic.
+          properties:
+            byRequests:
+              description: Top user agents sorted by request count.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: User agent string.
+                    required: [name]
+            byBandwidth:
+              description: Top user agents sorted by bandwidth utilized.
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/RequestBandwidthEntry"
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        description: User agent string.
+                    required: [name]
+          required: [byRequests, byBandwidth]
       required:
         - startDate
         - endDate
@@ -8383,102 +8774,18 @@ components:
         - topVideoTransforms
         - topReferrers
         - topUserAgents
-
-    NameRequestCount:
-      type: object
-      description: A named bucket with a request count.
-      properties:
-        name:
-          type: string
-        requestCount:
-          type: number
-      required: [name, requestCount]
-
-    NameOperationCount:
-      type: object
-      properties:
-        name:
-          type: string
-        operationCount:
-          type: number
-      required: [name, operationCount]
+      additionalProperties: true
 
     RequestBandwidthEntry:
       type: object
-      description: A named bucket with both request count and bandwidth.
       properties:
-        name:
-          type: string
         requestCount:
           type: number
+          description: Number of requests.
         bandwidthBytes:
           type: number
-      required: [name, requestCount, bandwidthBytes]
-
-    SortedBreakdown:
-      type: object
-      properties:
-        byRequests:
-          type: array
-          items:
-            $ref: "#/components/schemas/RequestBandwidthEntry"
-        byBandwidth:
-          type: array
-          items:
-            $ref: "#/components/schemas/RequestBandwidthEntry"
-      required: [byRequests, byBandwidth]
-
-    CountryBreakdown:
-      type: object
-      properties:
-        byRequests:
-          type: array
-          items:
-            allOf:
-              - $ref: "#/components/schemas/RequestBandwidthEntry"
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    description: ISO country code.
-                required: [code]
-        byBandwidth:
-          type: array
-          items:
-            allOf:
-              - $ref: "#/components/schemas/RequestBandwidthEntry"
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    description: ISO country code.
-                required: [code]
-      required: [byRequests, byBandwidth]
-
-    CacheBreakdown:
-      type: object
-      properties:
-        hitCount:
-          type: number
-        missCount:
-          type: number
-        errorCount:
-          type: number
-      required: [hitCount, missCount, errorCount]
-
-    VideoProcessingEntry:
-      type: object
-      description: >
-        Raw observed transcode output duration by resolution and codec.
-      properties:
-        resolution:
-          type: string
-        codec:
-          type: string
-        durationSeconds:
-          type: number
-      required: [resolution, codec, durationSeconds]
-   
+          description: Total bandwidth used in bytes.
+      required: [requestCount, bandwidthBytes]
 
   examples:
     UploadResponseWithEmbeddedMetadata:
