@@ -3870,18 +3870,15 @@ paths:
       operationId: get-usage-analytics
       summary: Get usage analytics breakdown
       description: >
-        Returns CDN, video processing, and extension usage
-        breakdowns over the given date range.
+        Get the account analytics data between two dates. Note that the API response includes data from the start data to the end date. In other words, the data covers the period starting from the specified start date to the end date both inclusive. Dates are interpreted as UTC calendar days
       tags:
         - Account Management API
-        - Usage Analytics
       parameters:
         - in: query
           name: startDate
           required: true
           description: >
-            Start of the date range, inclusive. Must be strictly before
-            `endDate`.
+            Specify a `startDate` in `YYYY-MM-DD` format. It should be before the `endDate`. The difference between `startDate` and `endDate` should be less than 90 days.
           schema:
             type: string
             format: date
@@ -3889,7 +3886,7 @@ paths:
         - in: query
           name: endDate
           required: true
-          description: End of the date range, inclusive.
+          description: Specify a `endDate` in `YYYY-MM-DD` format. It should be after the `startDate`. The difference between `startDate` and `endDate` should be less than 90 days.
           schema:
             type: string
             format: date
