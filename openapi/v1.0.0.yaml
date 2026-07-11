@@ -3915,9 +3915,9 @@ paths:
                   - name: signature-invalid
                     requestCount: 84210
                 top404Assets:
-                  - name: /products/discontinued-sku-4421.jpg
+                  - name: ik.imagekit.io/demo/products/discontinued-sku-4421.jpg
                     requestCount: 88210
-                  - name: /img/legacy/logo-old.svg
+                  - name: ik.imagekit.io/demo/img/legacy/logo-old.svg
                     requestCount: 17204
                 extensions:
                   - name: remove-bg
@@ -4004,29 +4004,29 @@ paths:
                       bandwidthBytes: 5164960192
                 topImages:
                   byRequests:
-                    - name: /products/hero-banner.jpg
+                    - name: https://ik.imagekit.io/demo/products/hero-banner.jpg
                       requestCount: 820441
                       bandwidthBytes: 410220500
                   byBandwidth:
-                    - name: /catalog/summer/shoe-01.png
+                    - name: https://ik.imagekit.io/demo/catalog/summer/shoe-01.png
                       requestCount: 611230
                       bandwidthBytes: 733476000
                 topVideos:
                   byRequests:
-                    - name: /promos/launch-2026.mp4
+                    - name: https://ik.imagekit.io/demo/promos/launch-2026.mp4
                       requestCount: 44210
                       bandwidthBytes: 2210500000
                   byBandwidth:
-                    - name: /promos/launch-2026.mp4
+                    - name: https://ik.imagekit.io/demo/promos/launch-2026.mp4
                       requestCount: 44210
                       bandwidthBytes: 2210500000
                 topOtherAssets:
                   byRequests:
-                    - name: /docs/spec-sheet.pdf
+                    - name: https://ik.imagekit.io/demo/docs/spec-sheet.pdf
                       requestCount: 9021
                       bandwidthBytes: 45210330
                   byBandwidth:
-                    - name: /docs/spec-sheet.pdf
+                    - name: https://ik.imagekit.io/demo/docs/spec-sheet.pdf
                       requestCount: 9021
                       bandwidthBytes: 45210330
                 topImageTransforms:
@@ -4049,11 +4049,11 @@ paths:
                       bandwidthBytes: 2210338100
                 topReferrers:
                   byRequests:
-                    - name: https://www.acmestore.com
+                    - name: https://imagekit.io
                       requestCount: 10204488
                       bandwidthBytes: 12010448821
                   byBandwidth:
-                    - name: https://www.acmestore.com
+                    - name: https://ik.imagekit.io
                       requestCount: 10204488
                       bandwidthBytes: 12010448821
                 topUserAgents:
@@ -8296,9 +8296,11 @@ components:
       type: object
       properties:
         startDate:
+          description: Start date of the computed analytics data.
           type: string
           format: date
         endDate:
+          description: End date of the computed analytics data.
           type: string
           format: date
         generatedAt:
@@ -8308,8 +8310,10 @@ components:
             Date and time when the analytics data was computed. Use this to gauge how fresh the returned data is. The date and time is in ISO8601 format.
         requestCount:
           type: number
+          description: Total number of requests made during the specified date range.
         bandwidthBytes:
           type: number
+          description: Total bandwidth utilized during the specified date range.
         statusCodes:
           type: array
           description: Request count grouped by HTTP status code.
@@ -8345,8 +8349,8 @@ components:
             properties:
               name:
                 type: string
-                description: File path.
-                example: /products/discontinued-sku-4421.jpg
+                description: URLs that returned 404.
+                example: https://ik.imagekit.io/demo/products/discontinued-sku-4421.jpg
               requestCount:
                 type: number
                 description: Number of requests which returned 404 for this path.
@@ -8561,7 +8565,7 @@ components:
                     properties:
                       name:
                         type: string
-                        description: Image file path.
+                        description: URL of the image asset.
                     required: [name]
             byBandwidth:
               description: Top image assets sorted by bandwidth utilized.
@@ -8573,7 +8577,7 @@ components:
                     properties:
                       name:
                         type: string
-                        description: Image file path.
+                        description: URL of the image asset.
                     required: [name]
           required: [byRequests, byBandwidth]
         topVideos:
@@ -8590,7 +8594,7 @@ components:
                     properties:
                       name:
                         type: string
-                        description: Video file path.
+                        description: Full URL of the video asset (e.g. `https://ik.imagekit.io/demo/clip.mp4`).
                     required: [name]
             byBandwidth:
               description: Top video assets sorted by bandwidth utilized.
@@ -8602,7 +8606,7 @@ components:
                     properties:
                       name:
                         type: string
-                        description: Video file path.
+                        description: URL of the video asset.
                     required: [name]
           required: [byRequests, byBandwidth]
         topOtherAssets:
@@ -8619,7 +8623,7 @@ components:
                     properties:
                       name:
                         type: string
-                        description: File path.
+                        description: URL of the non-image, non-video asset.
                     required: [name]
             byBandwidth:
               description: Top non-image, non-video assets sorted by bandwidth utilized.
@@ -8631,7 +8635,7 @@ components:
                     properties:
                       name:
                         type: string
-                        description: File path.
+                        description: URL of the non-image, non-video asset.
                     required: [name]
           required: [byRequests, byBandwidth]
         topImageTransforms:
