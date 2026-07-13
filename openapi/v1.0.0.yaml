@@ -4082,12 +4082,9 @@ paths:
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
-        "429":
-          $ref: "#/components/responses/RateLimitExceeded"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
+        "401": *a1
+        "403": *a2
+        "429": *a3
 
 
 components:
