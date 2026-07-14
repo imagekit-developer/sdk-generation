@@ -3882,7 +3882,7 @@ paths:
           name: startDate
           required: true
           description: >
-            Specify a `startDate` in `YYYY-MM-DD` format. It is interpreted as a UTC calendar day. It should be before the `endDate`. The difference between `startDate` and `endDate` should be less than 90 days.
+            Specify a `startDate` in `YYYY-MM-DD` format, interpreted as a UTC calendar day. It should be before the `endDate`. The difference between `startDate` and `endDate` should be less than 90 days.
           schema:
             type: string
             format: date
@@ -3891,7 +3891,7 @@ paths:
           name: endDate
           required: true
           description: >
-            Specify an `endDate` in `YYYY-MM-DD` format. It is interpreted as a UTC calendar day. It should be after the `startDate`. The difference between `startDate` and `endDate` should be less than 90 days.
+            Specify an `endDate` in `YYYY-MM-DD` format, interpreted as a UTC calendar day. It should be after the `startDate`. The difference between `startDate` and `endDate` should be less than 90 days.
           schema:
             type: string
             format: date
