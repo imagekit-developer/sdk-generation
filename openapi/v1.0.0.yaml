@@ -3340,7 +3340,7 @@ paths:
         - Account Management API
       operationId: get-usage
       summary: Get account usage information
-      description: >
+      description: |
         Get the account usage information between two dates. Note that the API response includes data from the start date while excluding data from the end date. In other words, the data covers the period starting from the specified start date up to, but not including, the end date.
 
         For agency accounts, the response sums usage across the parent account and its child accounts that are billed to the agency.
@@ -3873,7 +3873,7 @@ paths:
     get:
       operationId: get-usage-analytics
       summary: Get usage analytics breakdown
-      description: >
+      description: |
         This API is in beta.
 
         Get the account analytics data between two dates. The response covers the period from the start date to the end date, both dates inclusive. Both dates are interpreted as UTC calendar days.
@@ -8314,7 +8314,7 @@ components:
         generatedAt:
           type: string
           format: date-time
-          description: >
+          description: |
             Date and time when the analytics data was computed. Use this to gauge how fresh the returned data is. The date and time is in ISO8601 format.
         requestCount:
           type: number
