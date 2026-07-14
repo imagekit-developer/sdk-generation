@@ -3870,7 +3870,13 @@ paths:
       operationId: get-usage-analytics
       summary: Get usage analytics breakdown
       description: >
-        Get the account analytics data between two dates. Note that the API response includes data from the start data to the end date. In other words, the data covers the period starting from the specified start date to the end date both inclusive. Dates are interpreted as UTC calendar days
+        This API is in beta.
+
+
+        Get the account analytics data between two dates. The response covers the period from the start date to the end date, both dates inclusive. Both dates are interpreted as UTC calendar days.
+
+
+        The response is cached for 5 minutes per client and date range. Use `generatedAt` to check how fresh the returned data is.
       tags:
         - Account Management API
       parameters:
@@ -3878,7 +3884,7 @@ paths:
           name: startDate
           required: true
           description: >
-            Specify a `startDate` in `YYYY-MM-DD` format. It should be before the `endDate`. The difference between `startDate` and `endDate` should be less than 90 days.
+            Specify a `startDate` in `YYYY-MM-DD` format. It is interpreted as a UTC calendar day. It should be before the `endDate`. The difference between `startDate` and `endDate` should be less than 90 days.
           schema:
             type: string
             format: date
@@ -3886,7 +3892,8 @@ paths:
         - in: query
           name: endDate
           required: true
-          description: Specify a `endDate` in `YYYY-MM-DD` format. It should be after the `startDate`. The difference between `startDate` and `endDate` should be less than 90 days.
+          description: >
+            Specify an `endDate` in `YYYY-MM-DD` format. It is interpreted as a UTC calendar day. It should be after the `startDate`. The difference between `startDate` and `endDate` should be less than 90 days.
           schema:
             type: string
             format: date
@@ -3969,13 +3976,13 @@ paths:
                     - name: image/webp
                       requestCount: 6120033
                       bandwidthBytes: 7943310022
-                deviceType:
+                device:
                   byRequests:
-                    - name: mobile
+                    - name: "Desktop - Apple Mac"
                       requestCount: 11204488
                       bandwidthBytes: 11020448120
                   byBandwidth:
-                    - name: desktop
+                    - name: "Desktop - Linux PC"
                       requestCount: 6811222
                       bandwidthBytes: 10412030448
                 browser:
@@ -3989,14 +3996,14 @@ paths:
                       bandwidthBytes: 14012448821
                 urlEndpoints:
                   byRequests:
-                    - name: default
+                    - name: Default
                       requestCount: 14200110
                       bandwidthBytes: 16820044120
                     - name: ecommerce
                       requestCount: 4242200
                       bandwidthBytes: 5164960192
                   byBandwidth:
-                    - name: default
+                    - name: Default
                       requestCount: 14200110
                       bandwidthBytes: 16820044120
                     - name: ecommerce
@@ -4075,13 +4082,13 @@ paths:
                   message:
                     type: string
                     examples:
-                      - startDate and endDate should be within 90 days.
-                      - startDate and endDate are required in query parameters.
-                      - startDate and endDate should be in format YYYY-MM-DD.
-                      - startDate should be before endDate.
+                      - startDate and endDate should be within 90 days
+                      - startDate and endDate are required in query parameters
+                      - startDate and endDate should be in format YYYY-MM-DD
+                      - startDate should be before endDate
                   help:
                     type: string
-                    example: For support kindly contact us at support@imagekit.io.
+                    example: "For support kindly contact us at support@imagekit.io ."
         "401": *a1
         "403": *a2
         "429": *a3
@@ -8310,7 +8317,7 @@ components:
           description: Total number of requests made during the specified date range.
         bandwidthBytes:
           type: number
-          description: Total bandwidth utilized during the specified date range.
+          description: Total bandwidth, in bytes, utilized during the specified date range.
         statusCodes:
           type: array
           description: Request count grouped by HTTP status code.
@@ -8327,34 +8334,35 @@ components:
             required: [name, requestCount]
         errorReasons:
           type: array
-          description: Request count grouped by error reason code.
+          description: Request count grouped by CDN/origin error reason. This covers failed origin fetches, such as an asset not found at origin or an origin timeout. It is not the HTTP status code returned to the client, see `statusCodes` for that.
           items:
             type: object
             properties:
               name:
                 type: string
-                description: Reason for the error.
+                description: Description of the error reason.
+                example: "ENOENT - Resource not found at any upstream origin"
               requestCount:
                 type: number
-                description: Number of errored requests.
+                description: Number of requests that failed with this error reason.
             required: [name, requestCount]
         top404Assets:
           type: array
-          description: Top request paths returning 404.
+          description: Top URLs that returned a 404 response.
           items:
             type: object
             properties:
               name:
                 type: string
-                description: URLs that returned 404.
+                description: URL that returned a 404 response.
                 example: https://ik.imagekit.io/demo/products/discontinued-sku-4421.jpg
               requestCount:
                 type: number
-                description: Number of requests which returned 404 for this path.
+                description: Number of requests to this URL that returned a 404 response.
             required: [name, requestCount]
         extensions:
           type: array
-          description: Per-extension operation counts. 
+          description: Raw per-extension operation counts for the date range. These are raw operation counts, not billable extension units. For billable usage, use the `/v1/accounts/usage` endpoint.
           items:
             type: object
             properties:
@@ -8364,26 +8372,25 @@ components:
                 example: remove-bg
               operationCount:
                 type: number
-                description: Number of operations performed by this extension.
+                description: Number of times this extension ran during the date range.
             required: [name, operationCount]
         cache:
           type: object
-          description: >
-            Cache hit, miss and error counts.
+          description: CDN cache hit, miss and error counts for the date range.
           properties:
             hitCount:
               type: number
-              description: Number of requests served from cache (cache hits).
+              description: Number of requests served from cache, including full hits and revalidated hits.
             missCount:
               type: number
-              description: Number of requests that were not found in cache (cache misses).
+              description: Number of requests that were not found in cache and had to be fetched from origin.
             errorCount:
               type: number
-              description: Number of errored requests.
+              description: Number of requests where the CDN encountered a cache error or exceeded capacity while serving the response.
           required: [hitCount, missCount, errorCount]
         videoProcessing:
           type: array
-          description: Raw observed transcode output duration by resolution and codec.
+          description: Raw observed video transcode output duration, in seconds, grouped by resolution and codec. These are raw seconds, not billable Video Processing Units (VPU). For billable VPU totals, use the `/v1/accounts/usage` endpoint.
           items:
             type: object
             properties:
@@ -8392,10 +8399,10 @@ components:
                 description: Output resolution tier (e.g. `SD`, `HD`, `4K`).
               codec:
                 type: string
-                description: Video codec (e.g. `h264`, `av1`).
+                description: Video codec used for the output (e.g. `h264`, `av1`).
               durationSeconds:
                 type: number
-                description: Total output duration in seconds for this resolution and codec combination.
+                description: Total output duration, in seconds, for this resolution and codec combination.
             required: [resolution, codec, durationSeconds]
         country:
           type: object
@@ -8461,12 +8468,12 @@ components:
                         description: MIME type (e.g. `image/webp`).
                     required: [name]
           required: [byRequests, byBandwidth]
-        deviceType:
+        device:
           type: object
-          description: CDN traffic grouped by device type.
+          description: CDN traffic grouped by device and operating system (e.g. `Desktop - Apple Mac`, `Smartphone - Apple iPhone`).
           properties:
             byRequests:
-              description: Top device categories sorted by request count.
+              description: Top device/OS combinations sorted by request count.
               type: array
               items:
                 allOf:
@@ -8475,10 +8482,10 @@ components:
                     properties:
                       name:
                         type: string
-                        description: Device category (e.g. `mobile`, `desktop`).
+                        description: Device category combined with operating system or vendor (e.g. `Desktop - Windows PC`).
                     required: [name]
             byBandwidth:
-              description: Top device categories sorted by bandwidth utilized.
+              description: Top device/OS combinations sorted by bandwidth utilized.
               type: array
               items:
                 allOf:
@@ -8487,7 +8494,7 @@ components:
                     properties:
                       name:
                         type: string
-                        description: Device category (e.g. `mobile`, `desktop`).
+                        description: Device category combined with operating system or vendor (e.g. `Desktop - Windows PC`).
                     required: [name]
           required: [byRequests, byBandwidth]
         browser:
@@ -8521,7 +8528,7 @@ components:
           required: [byRequests, byBandwidth]
         urlEndpoints:
           type: object
-          description: CDN traffic grouped by URL endpoint.
+          description: CDN traffic grouped by configured URL endpoint. Traffic that does not match any named URL endpoint pattern is grouped under `Default`.
           properties:
             byRequests:
               description: Top URL endpoints sorted by request count.
@@ -8533,7 +8540,7 @@ components:
                     properties:
                       name:
                         type: string
-                        description: URL endpoint identifier (e.g. `default`).
+                        description: URL endpoint name, or `Default` for traffic that does not match a named endpoint.
                     required: [name]
             byBandwidth:
               description: Top URL endpoints sorted by bandwidth utilized.
@@ -8545,7 +8552,7 @@ components:
                     properties:
                       name:
                         type: string
-                        description: URL endpoint identifier (e.g. `default`).
+                        description: URL endpoint name, or `Default` for traffic that does not match a named endpoint.
                     required: [name]
           required: [byRequests, byBandwidth]
         topImages:
@@ -8765,7 +8772,7 @@ components:
         - videoProcessing
         - country
         - format
-        - deviceType
+        - device
         - browser
         - urlEndpoints
         - topImages
