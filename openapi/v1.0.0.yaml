@@ -8332,7 +8332,7 @@ components:
             required: [name, requestCount]
         errorReasons:
           type: array
-          description: Request count grouped by CDN/origin error reason. This covers failed origin fetches, such as an asset not found at origin or an origin timeout. It is not the HTTP status code returned to the client, see `statusCodes` for that.
+          description: Request count grouped by origin error reason. This covers failed origin fetches, such as an asset not found at origin or an origin timeout. It is not the HTTP status code returned to the client, see `statusCodes` for that.
           items:
             type: object
             properties:
