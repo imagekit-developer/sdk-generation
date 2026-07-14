@@ -3342,6 +3342,8 @@ paths:
       summary: Get account usage information
       description: >
         Get the account usage information between two dates. Note that the API response includes data from the start date while excluding data from the end date. In other words, the data covers the period starting from the specified start date up to, but not including, the end date.
+
+        The response is cached for 6 hours per client, date range and requested metrics.
       parameters:
         - in: query
           name: startDate
@@ -3398,13 +3400,13 @@ paths:
                   message:
                     type: string
                     examples:
-                      - startDate and endDate should be within 90 days.
-                      - startDate and endDate are required in query parameters.
-                      - startDate and endDate should be in format YYYY-MM-DD.
-                      - startDate should be before endDate.
+                      - startDate and endDate should be within 90 days
+                      - startDate and endDate are required in query parameters
+                      - startDate and endDate should be in format YYYY-MM-DD
+                      - startDate should be before endDate
                   help:
                     type: string
-                    example: For support kindly contact us at support@imagekit.io.
+                    example: "For support kindly contact us at support@imagekit.io ."
         "429":
           $ref: "#/components/responses/RateLimitExceeded"
         "401":
