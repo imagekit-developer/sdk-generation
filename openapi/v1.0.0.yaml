@@ -3872,9 +3872,7 @@ paths:
       description: >
         This API is in beta.
 
-
         Get the account analytics data between two dates. The response covers the period from the start date to the end date, both dates inclusive. Both dates are interpreted as UTC calendar days.
-
 
         The response is cached for 5 minutes per client and date range. Use `generatedAt` to check how fresh the returned data is.
       tags:
