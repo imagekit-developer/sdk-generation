@@ -3872,9 +3872,9 @@ paths:
   /v1/accounts/usage-analytics:
     get:
       operationId: get-usage-analytics
-      summary: Get usage analytics breakdown
+      summary: Get usage analytics
       description: |
-        This API is in beta.
+        **Note:** This API is currently in beta.  
 
         Get the account analytics data between two dates. The response covers the period from the start date to the end date, both dates inclusive. Both dates are interpreted as UTC calendar days.
 
