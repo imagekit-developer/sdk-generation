@@ -3926,9 +3926,9 @@ paths:
                   - name: signature-invalid
                     requestCount: 84210
                 top404Assets:
-                  - name: ik.imagekit.io/demo/products/discontinued-sku-4421.jpg
+                  - name: https://ik.imagekit.io/demo/products/discontinued-sku-4421.jpg
                     requestCount: 88210
-                  - name: ik.imagekit.io/demo/img/legacy/logo-old.svg
+                  - name: https://ik.imagekit.io/demo/img/legacy/logo-old.svg
                     requestCount: 17204
                 extensions:
                   - name: remove-bg
@@ -3975,11 +3975,17 @@ paths:
                   byRequests:
                     - name: image/avif
                       requestCount: 10204112
-                      bandwidthBytes: 8122504430
+                      bandwidthBytes: 6122504430
+                    - name: image/webp
+                      requestCount: 6120033
+                      bandwidthBytes: 7943310022
                   byBandwidth:
                     - name: image/webp
                       requestCount: 6120033
                       bandwidthBytes: 7943310022
+                    - name: image/avif
+                      requestCount: 10204112
+                      bandwidthBytes: 6122504430
                 device:
                   byRequests:
                     - name: "Desktop - Apple Mac"
