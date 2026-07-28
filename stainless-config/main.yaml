@@ -96,6 +96,8 @@ resources:
         openapi_uri: '#/components/schemas/SavedExtension'
       ExtensionConfig:
         openapi_uri: '#/components/schemas/ExtensionConfig'
+      NamedTransformation:
+        openapi_uri: '#/components/schemas/NamedTransformation'
       SrcOptions:
         openapi_uri: '#/components/schemas/SrcOptions'
       GetImageAttributesOptions:
@@ -204,6 +206,14 @@ resources:
       get: get /v1/saved-extensions/{id}
       update: patch /v1/saved-extensions/{id}
       delete: delete /v1/saved-extensions/{id}
+
+  namedTransformations:
+    methods:
+      list: get /v1/named-transformations
+      create: post /v1/named-transformations
+      get: get /v1/named-transformations/{id}
+      update: patch /v1/named-transformations/{id}
+      delete: delete /v1/named-transformations/{id}
 
   assets:
     methods:
