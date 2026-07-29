@@ -124,6 +124,11 @@ paths:
                 label:
                   type: string
                   description: Human readable name of the custom metadata field. This should be unique across all non deleted custom metadata fields. This name is displayed as form field label to the users while setting field value on an asset in the media library UI.
+                description:
+                  type: string
+                  maxLength: 500
+                  description: |
+                    Optional description for the custom metadata field. Can be up to 500 characters. This is shown as a hint to the users while setting the field's value on an asset in the media library UI.
                 schema:
                   type: object
                   required:
@@ -520,7 +525,7 @@ paths:
       operationId: update_custom_metadata_field
       summary: Update custom metadata field schema
       description: |
-        Modify the label or validation rules of an existing custom metadata field. Does not change field values on assets.
+        Modify the label, description, or validation rules of an existing custom metadata field. Does not change field values on assets.
         
         **When to use:** Use this to change field definitions (e.g., min/max values, labels). To update field values on assets, use `update_file_details` or `update_metadata_bulk` instead.
       parameters:
@@ -540,6 +545,11 @@ paths:
                 label:
                   type: string
                   description: Human readable name of the custom metadata field. This should be unique across all non deleted custom metadata fields. This name is displayed as form field label to the users while setting field value on an asset in the media library UI. This parameter is required if `schema` is not provided.
+                description:
+                  type: string
+                  maxLength: 500
+                  description: |
+                    Optional description for the custom metadata field. Can be up to 500 characters. Send an empty string to clear an existing description. This is shown as a hint to the users while setting the field's value on an asset in the media library UI.
                 schema:
                   type: object
                   description: |
@@ -630,8 +640,10 @@ paths:
                     type: string
                     examples:
                       - Cannot update a deleted custom metadata fields.
-                      - Either label or schema should be provided.
+                      - Either label, description or schema should be provided.
                       - A custom metadata field with this label already exists.
+                      - description must be a string
+                      - description must be at most 500 characters
                       - Invalid schema object.
                       - Name cannot be updated.
                       - Missing id parameter.
@@ -6253,7 +6265,7 @@ paths:
         Returns all path policies for the account, sorted by last updated (newest first). Path policies enforce rules on specific folder paths — such as required custom metadata fields, validation functions that reject non-compliant uploads, and upload transform functions that modify files during ingestion.
 
         **Two modes:**
-        - **Without `folderPath`:** Returns all path policies (summary view, no function code or full metadata).
+        - **Without `folderPath`:** Returns all path policies (summary view, no function code or full metadata). Pass `include=customMetadataFields` to additionally expand each policy's configured custom metadata fields.
         - **With `folderPath`:** Returns the single nearest ancestor policy that applies to that path (hierarchical lookup), along with its merged custom metadata fields. This is useful to check what rules apply before uploading to a specific folder.
 
         **When to use:** Discover which upload rules and metadata requirements are enforced on specific folders, or list all policies for management purposes.
@@ -6272,6 +6284,17 @@ paths:
             When provided, the response includes at most one policy — the nearest ancestor —
             with `inheritedFrom` and merged `customMetadataFields`.
           example: "/products/images"
+        - in: query
+          name: include
+          required: false
+          schema:
+            type: string
+          description: |
+            Comma-separated list of optional expansions to add to each policy in the list
+            response. Currently the only supported value is `customMetadataFields`, which
+            adds the policy's configured custom metadata fields to every returned item.
+            Unknown tokens are ignored. Applies only when `folderPath` is not provided.
+          example: "customMetadataFields"
       responses:
         "200":
           description: Successfully retrieved path policies.
@@ -10290,6 +10313,11 @@ components:
           type: string
           description: |
             Human readable name of the custom metadata field. This name is displayed as form field label to the users while setting field value on the asset in the media library UI.
+        description:
+          type: string
+          maxLength: 500
+          description: |
+            Optional description of the custom metadata field. Only present when a description has been set. Shown as a hint to the users while setting the field's value on an asset in the media library UI.
         schema:
           type: object
           description: An object that describes the rules for the custom metadata field value.
@@ -11169,10 +11197,9 @@ components:
         Lightweight summary returned by `list_path_policies`.
         Does **not** include folder paths, function code, or full custom metadata.
 
-        When the optional `folderPath` query parameter is provided, the response may
-        additionally include `inheritedFrom` and `customMetadataFields`.
-        The CMF array contains **only the selected fields** for the matched policy
-        (no `isSelected` flag — all returned fields are selected by definition).
+        The optional `customMetadataFields` array is included in two cases (see the property
+        description for the differing item shapes): when listing by `folderPath`, or when
+        listing with `include=customMetadataFields`.
         When the exact folder path matches, `inheritedFrom` is absent.
       allOf:
         - $ref: "#/components/schemas/PathPolicyBase"
@@ -11187,11 +11214,18 @@ components:
             customMetadataFields:
               type: array
               description: |
-                Present only when listing by `folderPath`. Contains only the custom metadata
-                fields selected in the matched policy (not all global fields).
-                Does **not** include `isSelected` — all returned entries are selected.
+                Included in two cases, with different item shapes depending on how it was requested:
+                - **When listing by `folderPath`:** the **merged** custom metadata fields selected
+                  in the matched policy (not all global fields), each augmented with policy-level
+                  overrides (`PathPolicyCustomMetadataFieldMerged`). Does **not** include
+                  `isSelected` — all returned entries are selected.
+                - **When listing with `include=customMetadataFields`** (no `folderPath`): the
+                  policy's **configured** custom metadata field overrides exactly as stored, one
+                  entry per selected field (`PathPolicyCustomMetadataFieldInput`).
               items:
-                $ref: "#/components/schemas/PathPolicyCustomMetadataFieldMerged"
+                oneOf:
+                  - $ref: "#/components/schemas/PathPolicyCustomMetadataFieldMerged"
+                  - $ref: "#/components/schemas/PathPolicyCustomMetadataFieldInput"
 
     PathPolicyDetail:
       title: Path Policy Detail
