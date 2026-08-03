@@ -11197,10 +11197,14 @@ components:
         Lightweight summary returned by `list_path_policies`.
         Does **not** include folder paths, function code, or full custom metadata.
 
-        The optional `customMetadataFields` array is included in two cases (see the property
-        description for the differing item shapes): when listing by `folderPath`, or when
-        listing with `include=customMetadataFields`.
-        When the exact folder path matches, `inheritedFrom` is absent.
+        When the optional `folderPath` query parameter is provided, the response may
+        additionally include `inheritedFrom` and `customMetadataFields`. The CMF array
+        contains **only the selected fields** for the matched policy (no `isSelected`
+        flag - all returned fields are selected by definition). When the exact folder
+        path matches, `inheritedFrom` is absent.
+
+        The `customMetadataFields` array is also included when listing with
+        `include=customMetadataFields`.
       allOf:
         - $ref: "#/components/schemas/PathPolicyBase"
         - type: object
@@ -11214,14 +11218,9 @@ components:
             customMetadataFields:
               type: array
               description: |
-                Included in two cases, with different item shapes depending on how it was requested:
-                - **When listing by `folderPath`:** the **merged** custom metadata fields selected
-                  in the matched policy (not all global fields), each augmented with policy-level
-                  overrides (`PathPolicyCustomMetadataFieldMerged`). Does **not** include
-                  `isSelected` — all returned entries are selected.
-                - **When listing with `include=customMetadataFields`** (no `folderPath`): the
-                  policy's **configured** custom metadata field overrides exactly as stored, one
-                  entry per selected field (`PathPolicyCustomMetadataFieldInput`).
+                Custom metadata fields selected in the matched policy. Present when listing by
+                `folderPath`, or when listing with `include=customMetadataFields`.
+                Does **not** include `isSelected` - all returned entries are selected.
               items:
                 oneOf:
                   - $ref: "#/components/schemas/PathPolicyCustomMetadataFieldMerged"
