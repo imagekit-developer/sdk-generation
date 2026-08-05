@@ -4304,7 +4304,7 @@ paths:
 
         **Note:**
 
-        - If another named transformation, or your account's upload pre-transformation/post-transformation settings, reference this named transformation (via the `n-<name>` token), the request fails with a `409` error and the response body includes a `references` array describing where it is used. Remove those references first, then retry the deletion. This is a best-effort check and cannot detect references baked into your own application code or previously generated URLs.
+        - If another named transformation, or your account's upload pre-transformation/post-transformation settings, reference this named transformation (via the `n-<name>` token), the request fails with a `409` error whose `message` describes what it is referenced by. Remove those references first, then retry the deletion. This is a best-effort check and cannot detect references baked into your own application code or previously generated URLs.
       parameters:
         - *a6
       responses:
@@ -4346,21 +4346,13 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Named transformation "small_thumbnail" is referenced by other settings and cannot be deleted.'
+                    example: 'Named transformation "small_thumbnail" cannot be deleted because it is referenced by named transformation "wrapper_transform".'
                   help:
                     type: string
                     example: For support kindly contact us at support@imagekit.io.
-                  references:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/NamedTransformationReference"
               example:
-                message: 'Named transformation "small_thumbnail" is referenced by other settings and cannot be deleted.'
+                message: 'Named transformation "small_thumbnail" cannot be deleted because it is referenced by named transformation "wrapper_transform".'
                 help: For support kindly contact us at support@imagekit.io.
-                references:
-                  - type: "namedTransformation"
-                    id: "8xQ2z1abc"
-                    name: "wrapper_transform"
         "429": *a3
 
 
@@ -4539,7 +4531,7 @@ components:
               maxLength: 100
             secretKey:
               description: >
-                  Secret key for the bucket. When `useIAMRole` is `true`, send an empty string.
+                Secret key for the bucket. When `useIAMRole` is `true`, send an empty string.
               example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
               type: string
               maxLength: 100
@@ -6354,36 +6346,6 @@ components:
           format: date-time
           description: Timestamp when the named transformation was created.
           example: "2024-01-10T09:00:00.000Z"
-    NamedTransformationReference:
-      title: Named Transformation Reference
-      description: |
-        Describes a location where a named transformation is referenced, which prevents it from being deleted. This is a best-effort check based on scanning other named transformations' transformation strings, and your account's upload pre-transformation and post-transformation settings, for a `n-<name>` token. It cannot detect references baked into your own application code or previously generated URLs.
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - namedTransformation
-            - uploadPreTransformation
-            - uploadPostTransformation
-          description: |
-            The kind of setting referencing this named transformation — another named transformation (`namedTransformation`), your account's upload pre-transformation setting (`uploadPreTransformation`), or one of your account's upload post-transformation settings (`uploadPostTransformation`).
-          example: "namedTransformation"
-        id:
-          type: string
-          description: |
-            `id` of the referencing named transformation. Only present when `type` is `namedTransformation`.
-          example: "8xQ2z1abc"
-        name:
-          type: string
-          description: |
-            `name` of the referencing named transformation. Only present when `type` is `namedTransformation`.
-          example: "wrapper_transform"
-        index:
-          type: integer
-          description: |
-            Index of the referencing entry in the account's upload post-transformation settings array. Only present when `type` is `uploadPostTransformation`.
-          example: 0
     Extensions:
       title: Extensions Array
       type: array
