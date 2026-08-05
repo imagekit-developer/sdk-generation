@@ -4103,6 +4103,258 @@ paths:
         "403": *a2
         "429": *a3
 
+  /v1/named-transformations:
+    get:
+      summary: List named transformations
+      tags:
+        - Account Management API
+        - Named Transformations
+      operationId: list-named-transformations
+      description: |
+        Returns an array of all named transformations configured for your account.
+      responses:
+        "200":
+          description: Array of named transformation objects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NamedTransformation"
+              example:
+                - id: "6bZ9x2ZUx"
+                  name: "small_thumbnail"
+                  transformation: "tr:w-150,h-150,fo-center,cm-resize"
+                  disabled: false
+                  createdAt: "2024-01-10T09:00:00.000Z"
+        "401": *a1
+        "403": *a2
+        "429": *a3
+    post:
+      summary: Create named transformation
+      tags:
+        - Account Management API
+        - Named Transformations
+      operationId: create-named-transformation
+      description: |
+        Creates a new named transformation and returns the created object.
+        
+        Named transformations let you assign a short, reusable name to a complex transformation string, so it can be applied in image and video URLs as `tr:n-<name>` and later updated without changing any existing URLs.
+        
+        Learn more about [named transformations](https://imagekit.io/docs/transformations#named-transformations).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNamedTransformation"
+            example:
+              name: "small_thumbnail"
+              transformation: "tr:w-150,h-150,fo-center,cm-resize"
+              disabled: false
+      responses:
+        "201":
+          description: Named transformation created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NamedTransformation"
+              example:
+                id: "6bZ9x2ZUx"
+                name: "small_thumbnail"
+                transformation: "tr:w-150,h-150,fo-center,cm-resize"
+                disabled: false
+                createdAt: "2024-01-10T09:00:00.000Z"
+        "400":
+          description: Bad request. The request body failed validation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    examples:
+                      - "`name` is required and may contain only alphanumeric characters, '_' or '-'."
+                      - "`transformation` is required and must start with 'tr:'."
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+        "409": &a7
+          description: A named transformation with this name already exists.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "A named transformation with the name 'small_thumbnail' already exists."
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+        "401": *a1
+        "403": *a2
+        "429": *a3
+  "/v1/named-transformations/{id}":
+    get:
+      summary: Get named transformation
+      tags:
+        - Account Management API
+        - Named Transformations
+      operationId: get-named-transformation
+      description: Retrieves the named transformation identified by `id`.
+      parameters:
+        - &a6
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: >
+            Unique identifier of the named transformation. This is the `id` returned when the named transformation was created.
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NamedTransformation"
+              example:
+                id: "6bZ9x2ZUx"
+                name: "small_thumbnail"
+                transformation: "tr:w-150,h-150,fo-center,cm-resize"
+                disabled: false
+                createdAt: "2024-01-10T09:00:00.000Z"
+        "401": *a1
+        "403": *a2
+        "404": &a8
+          description: Named transformation not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Named transformation with id "6bZ9x2ZUx" not found.'
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+        "429": *a3
+    patch:
+      summary: Update named transformation
+      tags:
+        - Account Management API
+        - Named Transformations
+      operationId: update-named-transformation
+      description: |
+        Updates the named transformation identified by `id` and returns the updated object. Only the fields present in the request body are updated; omitted fields are left unchanged.
+      parameters:
+        - *a6
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateNamedTransformation"
+            example:
+              transformation: "tr:w-200,h-200,fo-center,cm-resize"
+      responses:
+        "200":
+          description: Named transformation updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NamedTransformation"
+              example:
+                id: "6bZ9x2ZUx"
+                name: "small_thumbnail"
+                transformation: "tr:w-200,h-200,fo-center,cm-resize"
+                disabled: false
+                createdAt: "2024-01-10T09:00:00.000Z"
+        "400":
+          description: Bad request. The request body failed validation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    examples:
+                      - "`name` may contain only alphanumeric characters, '_' or '-'."
+                      - "`transformation` must start with 'tr:'."
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+        "401": *a1
+        "403": *a2
+        "404": *a8
+        "409": *a7
+        "429": *a3
+    delete:
+      summary: Delete named transformation
+      tags:
+        - Account Management API
+        - Named Transformations
+      operationId: delete-named-transformation
+      description: |
+        Permanently deletes the named transformation identified by `id` and returns the deleted object.
+
+        **Note:**
+
+        - If another named transformation, or your account's upload pre-transformation/post-transformation settings, reference this named transformation (via the `n-<name>` token), the request fails with a `409` error whose `message` describes what it is referenced by. Remove those references first, then retry the deletion. This is a best-effort check and cannot detect references baked into your own application code or previously generated URLs.
+      parameters:
+        - *a6
+      responses:
+        "200":
+          description: Named transformation deleted successfully. Returns the deleted object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NamedTransformation"
+              example:
+                id: "6bZ9x2ZUx"
+                name: "small_thumbnail"
+                transformation: "tr:w-150,h-150,fo-center,cm-resize"
+                disabled: false
+                createdAt: "2024-01-10T09:00:00.000Z"
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad request.
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+        "401": *a1
+        "403": *a2
+        "404": *a8
+        "409":
+          description: |
+            The named transformation is referenced by another named transformation, or by an upload pre-transformation/post-transformation setting, and cannot be deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Named transformation "small_thumbnail" cannot be deleted because it is referenced by named transformation "wrapper_transform".'
+                  help:
+                    type: string
+                    example: For support kindly contact us at support@imagekit.io.
+              example:
+                message: 'Named transformation "small_thumbnail" cannot be deleted because it is referenced by named transformation "wrapper_transform".'
+                help: For support kindly contact us at support@imagekit.io.
+        "429": *a3
+
 
 components:
   schemas:
@@ -4279,7 +4531,7 @@ components:
               maxLength: 100
             secretKey:
               description: >
-                  Secret key for the bucket. When `useIAMRole` is `true`, send an empty string.
+                Secret key for the bucket. When `useIAMRole` is `true`, send an empty string.
               example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
               type: string
               maxLength: 100
@@ -6019,6 +6271,81 @@ components:
           type: string
           format: date-time
           description: Timestamp when the saved extension was last updated.
+    CreateNamedTransformation:
+      title: Create Named Transformation
+      type: object
+      required:
+        - name
+        - transformation
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: "^[0-9a-zA-Z_-]+$"
+          description: |
+            Name of the named transformation. This is the alias used to refer to the transformation string in image and video URLs, for example `tr:n-<name>`. Can only contain alphanumeric characters, `_` and `-`, and must be unique for your account (case-insensitive).
+          example: "small_thumbnail"
+        transformation:
+          type: string
+          minLength: 1
+          description: |
+            The transformation string this name refers to. It must start with `tr:` followed by one or more transformation parameters, for example `tr:w-150,h-150,fo-center,cm-resize`. Learn more about the [transformation syntax](https://imagekit.io/docs/transformations).
+          example: "tr:w-150,h-150,fo-center,cm-resize"
+        disabled:
+          type: boolean
+          default: false
+          description: |
+            Whether this named transformation is disabled. Set to `true` to temporarily disable it without deleting it — requests using a disabled named transformation fail at delivery time.
+    UpdateNamedTransformation:
+      title: Update Named Transformation
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: "^[0-9a-zA-Z_-]+$"
+          description: |
+            Updated name of the named transformation. Can only contain alphanumeric characters, `_` and `-`, and must be unique for your account (case-insensitive).
+          example: "small_thumbnail_v2"
+        transformation:
+          type: string
+          minLength: 1
+          description: |
+            Updated transformation string. It must start with `tr:` followed by one or more transformation parameters.
+          example: "tr:w-200,h-200,fo-center,cm-resize"
+        disabled:
+          type: boolean
+          description: Whether this named transformation is disabled.
+    NamedTransformation:
+      title: Named Transformation
+      description: |
+        A named transformation is an alias for an actual transformation string, allowing you to apply and later update complex transformations without changing your image or video URLs. Learn more about [named transformations](https://imagekit.io/docs/transformations#named-transformations).
+      type: object
+      properties:
+        id:
+          type: string
+          description: |
+            Unique identifier of the named transformation. This is generated by ImageKit when you create a new named transformation.
+          example: "6bZ9x2ZUx"
+        name:
+          type: string
+          description: Name of the named transformation, used as `tr:n-<name>` in image and video URLs.
+          example: "small_thumbnail"
+        transformation:
+          type: string
+          description: The transformation string this name refers to.
+          example: "tr:w-150,h-150,fo-center,cm-resize"
+        disabled:
+          type: boolean
+          description: Whether this named transformation is currently disabled.
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the named transformation was created.
+          example: "2024-01-10T09:00:00.000Z"
     Extensions:
       title: Extensions Array
       type: array
